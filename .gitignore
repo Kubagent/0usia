@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next/
+out/
+
+# Production
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Large files and archives - not needed for v4 website
+v3\ duplicate/
+v3-archive/
+"v3 duplicate"/
+
+# Build artifacts and cache
+.next/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Agent outputs
+agent-outputs/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Vercel/Cloudflare hosting
+.vercel/
+.wrangler/

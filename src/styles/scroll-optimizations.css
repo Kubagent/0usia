@@ -1,0 +1,354 @@
+/**
+ * Advanced Scroll Performance Optimizations for Ovsia V4
+ * 
+ * These CSS rules are specifically tuned for 60fps scroll performance
+ * while maintaining the "one flick = one section" behavior and preserving
+ * Hero section animations.
+ */
+
+/* === SCROLL CONTAINER OPTIMIZATIONS === */
+.optimized-scroll-container {
+  /* Native scroll-snap for hardware acceleration */
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  
+  /* iOS Safari optimizations */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  
+  /* Force GPU acceleration */
+  transform: translateZ(0);
+  will-change: scroll-position;
+  
+  /* Prevent paint layers from being recomposited */
+  backface-visibility: hidden;
+  perspective: 1000px;
+  
+  /* Optimize scrollbar rendering */
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+}
+
+/* Modern browsers scrollbar styling */
+.optimized-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.optimized-scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.optimized-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.optimized-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* === SECTION OPTIMIZATIONS === */
+.scroll-snap-section {
+  /* Precise scroll-snap alignment */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  
+  /* Optimize paint performance */
+  contain: layout style paint;
+  content-visibility: auto;
+  
+  /* GPU acceleration for transitions */
+  transform: translateZ(0);
+  will-change: transform;
+  
+  /* Prevent layout thrashing */
+  position: relative;
+  isolation: isolate;
+}
+
+/* Hero section specific optimizations */
+.hero-section {
+  /* Allow natural scrolling within Hero */
+  scroll-snap-align: start;
+  min-height: 100vh;
+  height: auto;
+  
+  /* Optimize for background color animations */
+  contain: layout paint;
+  transform: translateZ(0);
+  
+  /* Prepare for Framer Motion animations */
+  will-change: background-color;
+}
+
+/* Standard sections (locked to viewport) */
+.standard-section {
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  
+  /* Prevent content overflow */
+  overflow: hidden;
+  
+  /* Optimize for fixed-height content */
+  contain: size layout style paint;
+}
+
+/* === PERFORMANCE CRITICAL ANIMATIONS === */
+
+/* Framer Motion optimization overrides */
+.hero-section [data-framer-motion] {
+  /* Force GPU acceleration for animated elements */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  
+  /* Optimize for color and filter animations */
+  will-change: background-color, filter;
+}
+
+/* Navigation indicators optimization */
+.scroll-indicators {
+  /* Fixed positioning optimization */
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%) translateZ(0);
+  
+  /* Prevent repaints during scroll */
+  will-change: auto;
+  contain: layout style paint;
+  
+  /* Smooth transitions */
+  transition: opacity 0.3s ease;
+}
+
+.scroll-indicators button {
+  /* GPU-accelerated transforms */
+  transform: translateZ(0);
+  will-change: transform, background-color;
+  
+  /* Optimize click interactions */
+  touch-action: manipulation;
+  user-select: none;
+  
+  /* Prevent layout shifts */
+  contain: layout style;
+}
+
+/* === CONTENT OPTIMIZATIONS === */
+
+/* Optimize rotating capability cards */
+.rotating-capability-cards {
+  /* Prepare for rotation animations */
+  transform: translateZ(0);
+  will-change: transform;
+  
+  /* Optimize for smooth transitions */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Three-item carousel optimizations */
+.three-item-carousel {
+  /* GPU acceleration for slide transitions */
+  transform: translateZ(0);
+  will-change: transform;
+  
+  /* Prevent paint layers from shifting */
+  contain: layout style paint;
+}
+
+/* Split-screen CTA optimizations */
+.split-screen-cta {
+  /* Optimize for layout stability */
+  contain: layout style;
+  transform: translateZ(0);
+}
+
+/* === MOBILE-SPECIFIC OPTIMIZATIONS === */
+
+@media (max-width: 768px) {
+  .optimized-scroll-container {
+    /* Enhanced touch scrolling */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    
+    /* Prevent zoom on double-tap */
+    touch-action: pan-y;
+    
+    /* Optimize for mobile GPU */
+    transform: translate3d(0, 0, 0);
+  }
+  
+  .scroll-snap-section {
+    /* Mobile viewport handling */
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height */
+  }
+  
+  .hero-section {
+    /* Mobile Hero optimization */
+    min-height: 100vh;
+    min-height: 100dvh;
+    
+    /* Prevent iOS Safari bounce */
+    overscroll-behavior-y: none;
+  }
+  
+  /* Reduce animations on lower-end devices */
+  @media (prefers-reduced-motion: reduce) {
+    .optimized-scroll-container {
+      scroll-behavior: auto;
+    }
+    
+    .scroll-snap-section {
+      transition: none;
+    }
+    
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* === HIGH-DPI DISPLAY OPTIMIZATIONS === */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .scroll-snap-section {
+    /* Optimize for retina displays */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  /* Ensure crisp logo rendering on high-DPI */
+  .hero-section img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* === DARK MODE OPTIMIZATIONS === */
+
+@media (prefers-color-scheme: dark) {
+  .optimized-scroll-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .optimized-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .optimized-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* === PERFORMANCE DEBUG UTILITIES === */
+
+/* Development-only performance visualization */
+@media screen and (min-width: 1024px) {
+  .debug-performance .scroll-snap-section {
+    border: 2px solid rgba(0, 255, 0, 0.3);
+    position: relative;
+  }
+  
+  .debug-performance .scroll-snap-section::before {
+    content: 'Section ' counter(section-counter);
+    counter-increment: section-counter;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 255, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 1000;
+  }
+  
+  .debug-performance {
+    counter-reset: section-counter;
+  }
+}
+
+/* === CRITICAL RENDERING PATH OPTIMIZATIONS === */
+
+/* Prevent FOUC (Flash of Unstyled Content) */
+.optimized-scroll-container {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.optimized-scroll-container.loaded {
+  opacity: 1;
+}
+
+/* Preload critical styles */
+.hero-section,
+.standard-section {
+  /* Ensure immediate paint for first contentful paint */
+  content-visibility: auto;
+  contain-intrinsic-size: 100vh;
+}
+
+/* === INTERSECTION OBSERVER OPTIMIZATIONS === */
+
+/* Optimize elements that use Intersection Observer */
+.scroll-snap-section[data-observed] {
+  /* Prepare for visibility changes */
+  contain: layout style paint;
+  content-visibility: auto;
+  
+  /* Optimize for observer calculations */
+  transform: translateZ(0);
+}
+
+/* === MEMORY OPTIMIZATION === */
+
+/* Prevent memory leaks from animations */
+.scroll-snap-section:not(.active) * {
+  /* Pause animations in non-visible sections */
+  animation-play-state: paused;
+}
+
+.scroll-snap-section.active * {
+  animation-play-state: running;
+}
+
+/* === ACCESSIBILITY OPTIMIZATIONS === */
+
+/* Respect user preferences */
+@media (prefers-reduced-motion: reduce) {
+  .optimized-scroll-container {
+    scroll-behavior: auto;
+  }
+  
+  .scroll-snap-section {
+    scroll-snap-type: none;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .scroll-indicators button {
+    border: 2px solid;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+  
+  .scroll-indicators button:hover {
+    background: Highlight;
+    color: HighlightText;
+  }
+}

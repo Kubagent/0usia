@@ -1,0 +1,217 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+
+/**
+ * Hyper Minimalist Full Screen Footer
+ * 
+ * Features:
+ * - Full screen black background
+ * - Centered minimalist content
+ * - Beautiful MAIL button with header font
+ * - Berlin time display
+ * - LinkedIn only
+ * - Sexy typography
+ * 
+ * Usage:
+ * <Footer />
+ */
+
+interface FooterProps {
+  className?: string;
+}
+
+// Utility function to get Berlin time
+const getBerlinTime = (): string => {
+  try {
+    const now = new Date();
+    return now.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'Europe/Berlin'
+    });
+  } catch (error) {
+    // Fallback to simple time format if Berlin timezone fails
+    const now = new Date();
+    return now.toTimeString().slice(0, 8);
+  }
+};
+
+const Footer: React.FC<FooterProps> = ({ className = '' }) => {
+  const [currentYear] = useState(new Date().getFullYear());
+  const [berlinTime, setBerlinTime] = useState<string>('');
+  const [mounted, setMounted] = useState(false);
+
+  // Initialize time on mount to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+    setBerlinTime(getBerlinTime());
+    
+    const interval = setInterval(() => {
+      setBerlinTime(getBerlinTime());
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleMailClick = () => {
+    window.location.href = 'mailto:contact@ovsia.com';
+  };
+
+  return (
+    <motion.footer
+      className={`min-h-screen w-full bg-black text-white relative px-6 ${className}`}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+    >
+      {/* Split Universe Layout */}
+      <div className="min-h-screen flex flex-col">
+        
+        {/* Top Section - LinkedIn Icon */}
+        <motion.div
+          className="absolute top-12 right-12"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <motion.a
+            href="https://linkedin.com/company/ovsia"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-white transition-colors duration-300 block"
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Connect with us on LinkedIn"
+          >
+            <svg 
+              width="48" 
+              height="48" 
+              fill="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+          </motion.a>
+        </motion.div>
+
+        {/* Main Split Content Area */}
+        <div className="flex-1 grid lg:grid-cols-2 gap-12 lg:gap-0 min-h-screen">
+          
+          {/* Left Half - Stay in Ousia */}
+          <motion.div
+            className="flex items-center justify-center lg:justify-end lg:pr-12"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <motion.h2
+              className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none text-center lg:text-right"
+              animate={{ 
+                opacity: [1, 0.7, 1] 
+              }}
+              transition={{ 
+                duration: 4, 
+                ease: "easeInOut", 
+                repeat: Infinity 
+              }}
+            >
+              Stay in Ousia
+            </motion.h2>
+          </motion.div>
+
+          {/* Right Half - Berlin Time */}
+          {mounted && (
+            <motion.div
+              className="flex items-center justify-center lg:justify-start lg:pl-12"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <motion.div
+                className="text-center lg:text-left"
+                key={berlinTime}
+                initial={{ opacity: 0.8 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.p
+                  className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none"
+                  aria-label={`Current time in Berlin: ${berlinTime}`}
+                >
+                  Berlin:
+                </motion.p>
+                <motion.p
+                  className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none mt-2"
+                >
+                  {berlinTime}
+                </motion.p>
+              </motion.div>
+            </motion.div>
+          )}
+
+        </div>
+
+        {/* Bottom Center Bridge - MAIL Button */}
+        <motion.div
+          className="absolute bottom-32 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          viewport={{ once: true }}
+        >
+          <motion.button
+            onClick={handleMailClick}
+            className="text-xl md:text-2xl font-light tracking-tight text-gray-300 hover:text-white transition-colors duration-300 border-b border-transparent hover:border-gray-300 pb-1 bg-transparent cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Send us an email"
+          >
+            MAIL
+          </motion.button>
+        </motion.div>
+
+        {/* Legal Footer - Bottom Edge */}
+        <motion.div
+          className="absolute bottom-6 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1 }}
+          viewport={{ once: true }}
+        >
+          <div className="text-center">
+            <p className="text-gray-500 text-sm font-light mb-2">
+              © {currentYear} Ovsia
+            </p>
+            <div className="flex space-x-6 text-xs">
+              <motion.a
+                href="/privacy"
+                className="text-gray-500 hover:text-gray-300 transition-colors duration-300"
+                whileHover={{ y: -1 }}
+              >
+                Privacy
+              </motion.a>
+              <motion.a
+                href="/terms"
+                className="text-gray-500 hover:text-gray-300 transition-colors duration-300"
+                whileHover={{ y: -1 }}
+              >
+                Terms
+              </motion.a>
+            </div>
+          </div>
+        </motion.div>
+
+      </div>
+    </motion.footer>
+  );
+};
+
+export default Footer;
