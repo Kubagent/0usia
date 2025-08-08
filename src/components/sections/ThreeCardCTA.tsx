@@ -39,11 +39,35 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setSubmitted(true);
-    setIsSubmitting(false);
+    try {
+      // Prepare form data
+      const submitData = new FormData();
+      submitData.append('name', formData.name);
+      submitData.append('email', formData.email);
+      if (formData.phone) submitData.append('phone', formData.phone);
+      if (formData.message) submitData.append('message', formData.message);
+      submitData.append('formType', modalType === 'partnership' ? 'Partnership' : modalType === 'project' ? 'Project' : 'Investment');
+      if (formData.attachment) submitData.append('attachment', formData.attachment);
+
+      // Submit to API
+      const response = await fetch('/api/contact/submit', {
+        method: 'POST',
+        body: submitData,
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error?.message || 'Failed to submit form');
+      }
+
+      setSubmitted(true);
+    } catch (error: any) {
+      console.error('Form submission error:', error);
+      alert(`Error submitting form: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getFormConfig = () => {

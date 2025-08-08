@@ -246,12 +246,90 @@ export interface ContentFetchResult<T> {
   source: 'notion' | 'fallback' | 'cache';
 }
 
+// Contact submission data structure
+export interface NotionContactSubmission {
+  id: string;
+  properties: {
+    Name: {
+      title: NotionRichTextProperty[];
+    };
+    Email: {
+      email: string;
+    };
+    Phone: {
+      phone_number: string;
+    };
+    Message: {
+      rich_text: NotionRichTextProperty[];
+    };
+    Attachment: {
+      files: NotionFileProperty[];
+    };
+    'Form Type': {
+      select: NotionSelectProperty;
+    };
+    Status: {
+      select: NotionSelectProperty;
+    };
+    'Assigned To': {
+      people: Array<{
+        id: string;
+        name: string;
+        avatar_url: string;
+      }>;
+    };
+    Priority: {
+      select: NotionSelectProperty;
+    };
+    'Internal Notes': {
+      rich_text: NotionRichTextProperty[];
+    };
+    Submitted: {
+      created_time: string;
+    };
+  };
+}
+
+// Processed contact submission content
+export interface ContactSubmissionContent {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  attachment: string;
+  formType: 'Partnership' | 'Project' | 'Investment';
+  status: 'New' | 'In Progress' | 'Responded' | 'Closed';
+  assignedTo: string[];
+  priority: 'Low' | 'Medium' | 'High';
+  internalNotes: string;
+  submitted: string;
+}
+
+// Form submission request types
+export interface ContactFormData {
+  name: string;
+  email: string;
+  phone?: string;
+  message?: string;
+  formType: 'Partnership' | 'Project' | 'Investment';
+  attachment?: File;
+}
+
+export interface ContactSubmissionResult {
+  success: boolean;
+  submissionId?: string;
+  error?: NotionError;
+  timestamp: string;
+}
+
 // Database configuration
 export interface NotionDatabaseConfig {
   ventures: string;
   capabilities: string;
   siteCopy: string;
   assets: string;
+  contactSubmissions: string;
 }
 
 // Content validation types

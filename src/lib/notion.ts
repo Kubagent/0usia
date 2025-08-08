@@ -11,10 +11,13 @@ import type {
   NotionCapability,
   NotionSiteCopy,
   NotionAsset,
+  NotionContactSubmission,
   NotionDatabaseResponse,
   NotionError,
   ContentFetchResult,
-  NotionDatabaseConfig
+  NotionDatabaseConfig,
+  ContactFormData,
+  ContactSubmissionResult
 } from '@/types/notion';
 
 // Initialize Notion client
@@ -28,6 +31,7 @@ export const NOTION_DATABASES: NotionDatabaseConfig = {
   capabilities: process.env.NOTION_CAPABILITIES_DB_ID || '',
   siteCopy: process.env.NOTION_SITE_COPY_DB_ID || '',
   assets: process.env.NOTION_ASSETS_DB_ID || '',
+  contactSubmissions: process.env.NOTION_CONTACT_DB_ID || '',
 };
 
 /**
@@ -296,4 +300,227 @@ export function extractNumberProperty(number: any): number {
  */
 export function extractUrlProperty(url: any): string {
   return url || '';
+}
+
+/**
+ * CONTACT FORM SUBMISSION FUNCTIONS
+ */
+
+/**
+ * Submit contact form to Notion database
+ */
+export async function submitContactForm(formData: ContactFormData): Promise<ContactSubmissionResult> {
+  try {
+    if (!NOTION_DATABASES.contactSubmissions) {
+      throw new Error('Contact submissions database ID is not configured');
+    }
+
+    // Prepare the properties for Notion page creation
+    const properties: any = {
+      Name: {
+        title: [
+          {
+            text: {
+              content: formData.name,
+            },
+          },
+        ],
+      },
+      Email: {
+        email: formData.email,
+      },
+      'Form Type': {
+        select: {
+          name: formData.formType,
+        },
+      },
+      Status: {
+        select: {
+          name: 'New',
+        },
+      },
+      Priority: {
+        select: {
+          name: 'Medium',
+        },
+      },
+    };
+
+    // Add phone if provided
+    if (formData.phone) {
+      properties.Phone = {
+        phone_number: formData.phone,
+      };
+    }
+
+    // Add message if provided
+    if (formData.message) {
+      properties.Message = {
+        rich_text: [
+          {
+            text: {
+              content: formData.message,
+            },
+          },
+        ],
+      };
+    }
+
+    // Handle file attachment if provided
+    if (formData.attachment) {
+      // For now, we'll note that a file was attached
+      // In a full implementation, you'd upload to Notion or external storage first
+      properties['Internal Notes'] = {
+        rich_text: [
+          {
+            text: {
+              content: `File attachment: ${formData.attachment.name} (${Math.round(formData.attachment.size / 1024)}KB)`,
+            },
+          },
+        ],
+      };
+    }
+
+    // Create the page in Notion
+    const response = await notion.pages.create({
+      parent: {
+        database_id: NOTION_DATABASES.contactSubmissions,
+      },
+      properties,
+    });
+
+    return {
+      success: true,
+      submissionId: response.id,
+      timestamp: new Date().toISOString(),
+    };
+
+  } catch (error: any) {
+    console.error('Error submitting contact form to Notion:', error);
+    
+    const notionError: NotionError = {
+      code: error.code || 'SUBMISSION_ERROR',
+      message: error.message || 'Failed to submit contact form',
+      status: error.status || 500,
+    };
+
+    return {
+      success: false,
+      error: notionError,
+      timestamp: new Date().toISOString(),
+    };
+  }
+}
+
+/**
+ * Fetch contact submissions (for admin use)
+ */
+export async function fetchContactSubmissions(
+  status?: 'New' | 'In Progress' | 'Responded' | 'Closed',
+  limit?: number
+): Promise<ContentFetchResult<NotionContactSubmission[]>> {
+  try {
+    if (!NOTION_DATABASES.contactSubmissions) {
+      throw new Error('Contact submissions database ID is not configured');
+    }
+
+    const filter = status ? {
+      property: 'Status',
+      select: {
+        equals: status,
+      },
+    } : undefined;
+
+    const response = await notion.databases.query({
+      database_id: NOTION_DATABASES.contactSubmissions,
+      filter,
+      sorts: [
+        {
+          property: 'Submitted',
+          direction: 'descending',
+        },
+      ],
+      page_size: limit || 100,
+    });
+
+    return {
+      data: response.results as NotionContactSubmission[],
+      error: null,
+      timestamp: new Date().toISOString(),
+      source: 'notion',
+    };
+
+  } catch (error: any) {
+    console.error('Error fetching contact submissions from Notion:', error);
+    
+    const notionError: NotionError = {
+      code: error.code || 'FETCH_ERROR',
+      message: error.message || 'Failed to fetch contact submissions',
+      status: error.status || 500,
+    };
+
+    return {
+      data: null,
+      error: notionError,
+      timestamp: new Date().toISOString(),
+      source: 'notion',
+    };
+  }
+}
+
+/**
+ * Update contact submission status
+ */
+export async function updateContactSubmissionStatus(
+  submissionId: string,
+  status: 'New' | 'In Progress' | 'Responded' | 'Closed',
+  internalNotes?: string
+): Promise<ContactSubmissionResult> {
+  try {
+    const properties: any = {
+      Status: {
+        select: {
+          name: status,
+        },
+      },
+    };
+
+    if (internalNotes) {
+      properties['Internal Notes'] = {
+        rich_text: [
+          {
+            text: {
+              content: internalNotes,
+            },
+          },
+        ],
+      };
+    }
+
+    await notion.pages.update({
+      page_id: submissionId,
+      properties,
+    });
+
+    return {
+      success: true,
+      submissionId,
+      timestamp: new Date().toISOString(),
+    };
+
+  } catch (error: any) {
+    console.error('Error updating contact submission status:', error);
+    
+    const notionError: NotionError = {
+      code: error.code || 'UPDATE_ERROR',
+      message: error.message || 'Failed to update contact submission',
+      status: error.status || 500,
+    };
+
+    return {
+      success: false,
+      error: notionError,
+      timestamp: new Date().toISOString(),
+    };
+  }
 }
