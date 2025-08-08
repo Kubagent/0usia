@@ -2,6 +2,236 @@
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
+// Contact Form Modal Component
+interface ContactFormModalProps {
+  modalType: 'partnership' | 'project' | 'investment' | null;
+  onClose: () => void;
+}
+
+function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+    attachment: null as File | null
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.size <= 10 * 1024 * 1024) { // 10MB limit
+      setFormData(prev => ({ ...prev, attachment: file }));
+    } else if (file) {
+      alert('File size must be less than 10MB');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    setSubmitted(true);
+    setIsSubmitting(false);
+  };
+
+  const getFormConfig = () => {
+    switch (modalType) {
+      case 'partnership':
+        return {
+          title: 'Start Partnership',
+          fields: ['name', 'email', 'phone', 'message', 'attachment'],
+          attachmentLabel: 'Attachment (optional, max 10MB)'
+        };
+      case 'project':
+        return {
+          title: 'Start Project',
+          fields: ['name', 'email', 'phone', 'message', 'attachment'],
+          attachmentLabel: 'Project brief (optional, max 10MB)'
+        };
+      case 'investment':
+        return {
+          title: 'Submit Pitch',
+          fields: ['name', 'email', 'attachment'],
+          attachmentLabel: 'Pitch deck (required, max 10MB)',
+          required: ['name', 'email', 'attachment']
+        };
+      default:
+        return { title: '', fields: [] };
+    }
+  };
+
+  const config = getFormConfig();
+
+  if (submitted) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <motion.div 
+          className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-light mb-4">Thank You!</h3>
+            <p className="text-gray-600 mb-6">
+              We've received your {modalType === 'investment' ? 'pitch' : 'inquiry'} and will be in touch soon.
+            </p>
+            <button
+              onClick={onClose}
+              className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <motion.div 
+        className="bg-white rounded-2xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-2xl font-light">{config.title}</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {config.fields.includes('name') && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Name {config.required?.includes('name') && <span className="text-red-500">*</span>}
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required={config.required?.includes('name')}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors"
+                placeholder="Your full name"
+              />
+            </div>
+          )}
+
+          {config.fields.includes('email') && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email {config.required?.includes('email') && <span className="text-red-500">*</span>}
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required={config.required?.includes('email')}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors"
+                placeholder="your@email.com"
+              />
+            </div>
+          )}
+
+          {config.fields.includes('phone') && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors"
+                placeholder="+1 (555) 123-4567"
+              />
+            </div>
+          )}
+
+          {config.fields.includes('message') && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleInputChange}
+                rows={4}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors resize-none"
+                placeholder="Tell us about your project or inquiry..."
+              />
+            </div>
+          )}
+
+          {config.fields.includes('attachment') && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {config.attachmentLabel} {config.required?.includes('attachment') && <span className="text-red-500">*</span>}
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  name="attachment"
+                  onChange={handleFileChange}
+                  required={config.required?.includes('attachment')}
+                  accept=".pdf,.doc,.docx,.ppt,.pptx,.zip"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-100 file:text-black hover:file:bg-gray-200"
+                />
+                {formData.attachment && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    Selected: {formData.attachment.name} ({Math.round(formData.attachment.size / 1024)}KB)
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-4 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex-1 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {isSubmitting ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                'Submit'
+              )}
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
 interface CTACard {
   id: string;
   title: string;
@@ -23,18 +253,17 @@ const ctaCards: CTACard[] = [
   },
   {
     id: 'support',
-    title: 'Get Support',
-    description: 'Have a quick question or want to discuss an idea?',
-    buttonText: 'Contact Support',
-    action: 'mailto',
-    bgColor: 'dark',
-    mailtoEmail: 'support@ovsia.com'
+    title: 'Start Project',
+    description: 'Have a project you want to bring to life?',
+    buttonText: 'Start Project',
+    action: 'modal',
+    bgColor: 'dark'
   },
   {
     id: 'investment',
     title: 'Seek Investment',
-    description: 'Looking for financing for your project?',
-    buttonText: 'Get Money',
+    description: 'Looking for financing for your venture?',
+    buttonText: 'Submit Pitch',
     action: 'investment',
     bgColor: 'medium'
   }
@@ -42,20 +271,17 @@ const ctaCards: CTACard[] = [
 
 export default function ThreeCardCTA() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<'partnership' | 'investment' | null>(null);
+  const [modalType, setModalType] = useState<'partnership' | 'project' | 'investment' | null>(null);
 
   const handleCardAction = useCallback((card: CTACard) => {
-    switch (card.action) {
-      case 'modal':
+    switch (card.id) {
+      case 'partner':
         setModalType('partnership');
         setIsModalOpen(true);
         break;
-      case 'mailto':
-        if (card.mailtoEmail) {
-          const subject = encodeURIComponent('Support Request');
-          const body = encodeURIComponent('Hi there,\n\nI have a question about...\n\nBest regards');
-          window.location.href = `mailto:${card.mailtoEmail}?subject=${subject}&body=${body}`;
-        }
+      case 'support':
+        setModalType('project');
+        setIsModalOpen(true);
         break;
       case 'investment':
         setModalType('investment');
@@ -72,26 +298,26 @@ export default function ThreeCardCTA() {
   const getCardStyles = (bgColor: string) => {
     switch (bgColor) {
       case 'light':
-        return 'bg-gradient-to-br from-gray-50 to-white text-gray-900';
+        return 'bg-white border border-gray-200/30 text-black';
       case 'dark':
-        return 'bg-gradient-to-br from-gray-900 to-gray-800 text-white';
+        return 'bg-black border border-gray-800/30 text-white';
       case 'medium':
-        return 'bg-gradient-to-br from-gray-600 to-gray-700 text-white';
+        return 'bg-gray-100 border border-gray-300/30 text-black';
       default:
-        return 'bg-white text-gray-900';
+        return 'bg-white text-black';
     }
   };
 
   const getButtonStyles = (bgColor: string) => {
     switch (bgColor) {
       case 'light':
-        return 'bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-300';
+        return 'bg-black text-white hover:bg-gray-900 focus:ring-2 focus:ring-gray-200';
       case 'dark':
-        return 'bg-white text-gray-900 hover:bg-gray-100 focus:ring-white focus:ring-opacity-50';
+        return 'bg-white text-black hover:bg-gray-100 focus:ring-2 focus:ring-gray-800';
       case 'medium':
-        return 'bg-white text-gray-900 hover:bg-gray-100 focus:ring-white focus:ring-opacity-50';
+        return 'bg-black text-white hover:bg-gray-900 focus:ring-2 focus:ring-gray-200';
       default:
-        return 'bg-gray-900 text-white hover:bg-gray-800';
+        return 'bg-black text-white hover:bg-gray-900';
     }
   };
 
@@ -195,30 +421,8 @@ export default function ThreeCardCTA() {
         </div>
       </section>
 
-      {/* Simple Modal Placeholder - You can integrate your existing modal logic here */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
-            <div className="text-center">
-              <h3 className="text-2xl font-light mb-4">
-                {modalType === 'partnership' ? 'Partnership Inquiry' : 'Investment Request'}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                {modalType === 'partnership' 
-                  ? 'Thank you for your interest in partnering with us. Our team will be in touch soon.'
-                  : 'Thank you for your interest in investment opportunities. Our team will review your request.'
-                }
-              </p>
-              <button
-                onClick={closeModal}
-                className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Contact Form Modal */}
+      {isModalOpen && <ContactFormModal modalType={modalType} onClose={closeModal} />}
     </>
   );
 }

@@ -100,19 +100,19 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
           </motion.a>
         </motion.div>
 
-        {/* Main Split Content Area */}
-        <div className="flex-1 grid lg:grid-cols-2 gap-12 lg:gap-0 min-h-screen">
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col justify-center items-center min-h-screen px-6 lg:px-12">
           
-          {/* Left Half - Stay in Ousia */}
+          {/* Stay in Ousia - Top, smaller, Cormorant font */}
           <motion.div
-            className="flex items-center justify-center lg:justify-end lg:pr-12"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mb-16"
+            initial={{ opacity: 0, y: -30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
             <motion.h2
-              className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none text-center lg:text-right"
+              className="text-4xl md:text-5xl lg:text-6xl font-cormorant tracking-wide leading-tight text-center"
               animate={{ 
                 opacity: [1, 0.7, 1] 
               }}
@@ -126,57 +126,62 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             </motion.h2>
           </motion.div>
 
-          {/* Right Half - Berlin Time */}
-          {mounted && (
+          {/* Main Content - Mail Button and Berlin Time Side by Side */}
+          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+            
+            {/* Left - MAIL Button (same size as Berlin timer) */}
             <motion.div
-              className="flex items-center justify-center lg:justify-start lg:pl-12"
-              initial={{ opacity: 0, x: 50 }}
+              className="flex items-center"
+              initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              <motion.div
-                className="text-center lg:text-left"
-                key={berlinTime}
-                initial={{ opacity: 0.8 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
+              <motion.button
+                onClick={handleMailClick}
+                className="text-[14rem] md:text-[16rem] lg:text-[18rem] font-light tracking-tight text-gray-300 hover:text-white transition-colors duration-300 bg-transparent cursor-pointer leading-none"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Send us an email"
               >
-                <motion.p
-                  className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none"
-                  aria-label={`Current time in Berlin: ${berlinTime}`}
-                >
-                  Berlin:
-                </motion.p>
-                <motion.p
-                  className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none mt-2"
-                >
-                  {berlinTime}
-                </motion.p>
-              </motion.div>
+                MAIL
+              </motion.button>
             </motion.div>
-          )}
+
+            {/* Right - Berlin Time */}
+            {mounted && (
+              <motion.div
+                className="flex items-center"
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <motion.div
+                  className="text-center lg:text-left"
+                  key={berlinTime}
+                  initial={{ opacity: 0.8 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.p
+                    className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none"
+                    aria-label={`Current time in Berlin: ${berlinTime}`}
+                  >
+                    Berlin:
+                  </motion.p>
+                  <motion.p
+                    className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none mt-2"
+                  >
+                    {berlinTime}
+                  </motion.p>
+                </motion.div>
+              </motion.div>
+            )}
+
+          </div>
 
         </div>
-
-        {/* Bottom Center Bridge - MAIL Button */}
-        <motion.div
-          className="absolute bottom-32 left-1/2 transform -translate-x-1/2"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <motion.button
-            onClick={handleMailClick}
-            className="text-xl md:text-2xl font-light tracking-tight text-gray-300 hover:text-white transition-colors duration-300 border-b border-transparent hover:border-gray-300 pb-1 bg-transparent cursor-pointer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Send us an email"
-          >
-            MAIL
-          </motion.button>
-        </motion.div>
 
         {/* Legal Footer - Bottom Edge */}
         <motion.div
