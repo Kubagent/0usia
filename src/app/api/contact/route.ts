@@ -1,21 +1,20 @@
 /**
  * Contact Form API Endpoint
  * 
- * Handles contact form submissions with Mailchimp integration
+ * Handles contact form submissions with Resend email integration
  * 
  * Features:
  * - Form validation (server-side)
  * - Rate limiting and spam protection
- * - Mailchimp integration for lead capture
+ * - Resend email integration for notifications
  * - GDPR compliance
- * - File upload handling
  * - Error handling and logging
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { validateContactForm, detectSpamPatterns, validateHoneypot, sanitizeString, sanitizeEmail } from '@/lib/validation';
 import { checkMultipleRateLimits, RATE_LIMIT_CONFIGS, getClientIP, logRateLimitEvent } from '@/lib/rate-limit';
-import { mailchimpAPI, MailchimpAPIError } from '@/lib/mailchimp';
+import { emailService, EmailError } from '@/lib/email';
 
 // Request body interface
 interface ContactFormRequest {
@@ -27,6 +26,7 @@ interface ContactFormRequest {
   marketingConsent?: boolean;
   honeypot?: string; // Spam protection field
   source?: string;
+  formType?: string;
 }
 
 // Response interfaces
@@ -35,7 +35,7 @@ interface ContactFormResponse {
   message: string;
   data?: {
     submissionId?: string;
-    mailchimpId?: string;
+    emailId?: string;
   };
 }
 
@@ -93,6 +93,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       gdprConsent: Boolean(body.gdprConsent),
       marketingConsent: Boolean(body.marketingConsent),
       source: body.source ? sanitizeString(body.source) : 'contact_form',
+      formType: body.formType ? sanitizeString(body.formType) : 'Contact',
     };
 
     // Validate form data
@@ -112,6 +113,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           error: 'VALIDATION_ERROR',
           message: 'Please check your information and try again',
           details: validation.errors,
+        },
+        { status: 400 }
+      );
+    }
+
+    // GDPR Compliance: Privacy policy consent is required
+    if (!sanitizedData.gdprConsent) {
+      return NextResponse.json<ContactFormErrorResponse>(
+        {
+          success: false,
+          error: 'CONSENT_REQUIRED',
+          message: 'You must accept the privacy policy to continue',
+          details: {
+            gdprConsent: 'Privacy policy consent is required',
+          },
         },
         { status: 400 }
       );
@@ -168,52 +184,47 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return rateLimitResult.response;
     }
 
-    // Submit to Mailchimp
-    let mailchimpResponse;
+    // Check if email service is configured
+    if (!emailService.isConfigured()) {
+      console.error('Email service is not configured');
+      return NextResponse.json<ContactFormErrorResponse>(
+        {
+          success: false,
+          error: 'SERVICE_UNAVAILABLE',
+          message: 'Contact form service is temporarily unavailable. Please try again later.',
+        },
+        { status: 503 }
+      );
+    }
+
+    // Send email notification
+    let emailResponse;
     try {
-      mailchimpResponse = await mailchimpAPI.submitContactForm({
+      emailResponse = await emailService.sendContactFormEmail({
         name: sanitizedData.name,
         email: sanitizedData.email,
         company: sanitizedData.company,
         message: sanitizedData.message,
-        gdprConsent: sanitizedData.gdprConsent,
-        marketingConsent: sanitizedData.marketingConsent,
+        source: sanitizedData.source,
+        formType: sanitizedData.formType,
       });
     } catch (error) {
-      if (error instanceof MailchimpAPIError) {
-        // Handle specific Mailchimp errors
-        if (error.isMemberExistsError()) {
-          // Member already exists - this is actually OK for contact forms
-          console.log('Contact form submitted for existing Mailchimp member:', {
-            email: sanitizedData.email.substring(0, 3) + '****', // Partial email for privacy
-            timestamp: new Date().toISOString(),
-          });
-        } else if (error.isInvalidEmailError()) {
-          return NextResponse.json<ContactFormErrorResponse>(
-            {
-              success: false,
-              error: 'INVALID_EMAIL',
-              message: 'Please enter a valid email address',
-            },
-            { status: 400 }
-          );
-        } else {
-          console.error('Mailchimp API error:', {
-            type: error.type,
-            status: error.status,
-            detail: error.detail,
-            timestamp: new Date().toISOString(),
-          });
+      if (error instanceof EmailError) {
+        console.error('Email sending error:', {
+          code: error.code,
+          status: error.status,
+          message: error.message,
+          timestamp: new Date().toISOString(),
+        });
 
-          return NextResponse.json<ContactFormErrorResponse>(
-            {
-              success: false,
-              error: 'MAILCHIMP_ERROR',
-              message: error.getUserFriendlyMessage(),
-            },
-            { status: 500 }
-          );
-        }
+        return NextResponse.json<ContactFormErrorResponse>(
+          {
+            success: false,
+            error: 'EMAIL_ERROR',
+            message: error.getUserFriendlyMessage(),
+          },
+          { status: error.status }
+        );
       } else {
         console.error('Contact form submission error:', error);
         return NextResponse.json<ContactFormErrorResponse>(
@@ -234,6 +245,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       messageLength: sanitizedData.message.length,
       marketingConsent: sanitizedData.marketingConsent,
       source: sanitizedData.source,
+      formType: sanitizedData.formType,
+      emailId: emailResponse.id,
       processingTime: Date.now() - startTime,
     });
 
@@ -244,7 +257,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         message: 'Thank you for your message! We\'ll get back to you soon.',
         data: {
           submissionId: `contact_${Date.now()}`,
-          mailchimpId: mailchimpResponse?.id,
+          emailId: emailResponse.id,
         },
       },
       { status: 200 }
@@ -265,17 +278,46 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 }
 
 /**
- * Handle GET requests (not allowed)
+ * Handle GET requests - return service status
  */
-export async function GET(): Promise<NextResponse> {
-  return NextResponse.json(
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  // Rate limit GET requests too
+  const rateLimitResult = await checkMultipleRateLimits(req, [
     {
-      success: false,
-      error: 'METHOD_NOT_ALLOWED',
-      message: 'GET method not supported for this endpoint',
+      name: 'GLOBAL_API',
+      config: RATE_LIMIT_CONFIGS.GLOBAL_API,
     },
-    { status: 405 }
-  );
+  ]);
+
+  if (!rateLimitResult.allowed && rateLimitResult.response) {
+    return rateLimitResult.response;
+  }
+
+  try {
+    const configStatus = emailService.getConfigStatus();
+    
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Contact form service is available',
+        data: {
+          serviceAvailable: true,
+          emailConfigured: configStatus.configured,
+          canAcceptSubmissions: configStatus.configured,
+        },
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'INTERNAL_ERROR',
+        message: 'An unexpected error occurred',
+      },
+      { status: 500 }
+    );
+  }
 }
 
 /**

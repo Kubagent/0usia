@@ -14,7 +14,10 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
     email: '',
     phone: '',
     message: '',
-    attachment: null as File | null
+    attachment: null as File | null,
+    gdprConsent: false,
+    marketingConsent: false,
+    honeypot: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -37,6 +40,19 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate GDPR consent
+    if (!formData.gdprConsent) {
+      alert('You must accept the privacy policy to continue');
+      return;
+    }
+
+    // Special validation for investment forms (require attachment)
+    if (modalType === 'investment' && !formData.attachment) {
+      alert('Please attach your pitch deck for investment inquiries');
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -47,6 +63,9 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
       if (formData.phone) submitData.append('phone', formData.phone);
       if (formData.message) submitData.append('message', formData.message);
       submitData.append('formType', modalType === 'partnership' ? 'Partnership' : modalType === 'project' ? 'Project' : 'Investment');
+      submitData.append('gdprConsent', formData.gdprConsent.toString());
+      submitData.append('marketingConsent', formData.marketingConsent.toString());
+      submitData.append('honeypot', formData.honeypot); // Anti-spam field
       if (formData.attachment) submitData.append('attachment', formData.attachment);
 
       // Submit to API
@@ -58,7 +77,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
       const result = await response.json();
 
       if (!result.success) {
-        throw new Error(result.error?.message || 'Failed to submit form');
+        throw new Error(result.message || 'Failed to submit form');
       }
 
       setSubmitted(true);
@@ -70,7 +89,12 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
     }
   };
 
-  const getFormConfig = () => {
+  const getFormConfig = (): {
+    title: string;
+    fields: string[];
+    attachmentLabel?: string;
+    required?: string[];
+  } => {
     switch (modalType) {
       case 'partnership':
         return {
@@ -230,6 +254,72 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
             </div>
           )}
 
+          {/* Anti-spam honeypot field (hidden) */}
+          <input
+            type="text"
+            name="honeypot"
+            value={formData.honeypot}
+            onChange={(e) => setFormData(prev => ({ ...prev, honeypot: e.target.value }))}
+            style={{ display: 'none' }}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+
+          {/* GDPR Consent Section */}
+          <div className="space-y-4 pt-4 border-t border-gray-200">
+            <h4 className="text-sm font-medium text-gray-900">
+              Privacy & Consent
+            </h4>
+            
+            {/* Privacy Policy Consent (Required) */}
+            <div>
+              <label className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  checked={formData.gdprConsent}
+                  onChange={(e) => setFormData(prev => ({ ...prev, gdprConsent: e.target.checked }))}
+                  className="mt-1 h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+                  required
+                />
+                <div className="text-sm">
+                  <span className="text-gray-700">
+                    I agree to the{' '}
+                    <a
+                      href="/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-black underline hover:text-gray-700"
+                    >
+                      Privacy Policy
+                    </a>{' '}
+                    and consent to the processing of my personal data for the purpose of handling my inquiry. *
+                  </span>
+                </div>
+              </label>
+            </div>
+
+            {/* Marketing Consent (Optional) */}
+            <div>
+              <label className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  checked={formData.marketingConsent}
+                  onChange={(e) => setFormData(prev => ({ ...prev, marketingConsent: e.target.checked }))}
+                  className="mt-1 h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+                />
+                <div className="text-sm">
+                  <span className="text-gray-700">
+                    I would like to receive updates about your services and industry insights via email. You can unsubscribe at any time.
+                  </span>
+                </div>
+              </label>
+            </div>
+
+            <div className="text-xs text-gray-500">
+              * Required field. We respect your privacy and will only use your data as described in our Privacy Policy.
+            </div>
+          </div>
+
           <div className="flex gap-4 pt-4">
             <button
               type="button"
@@ -371,7 +461,7 @@ export default function ThreeCardCTA() {
 
   return (
     <>
-      <section className="min-h-screen bg-white flex items-center justify-center py-20">
+      <section className="min-h-screen flex items-center justify-center py-20">
         <div className="w-full max-w-7xl mx-auto px-4">
           {/* Section Title */}
           <motion.div

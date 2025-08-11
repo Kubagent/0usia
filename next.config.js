@@ -11,6 +11,9 @@ const nextConfig = {
     optimizePackageImports: ['framer-motion'],
   },
 
+  // Server optimizations
+  serverExternalPackages: [],
+
   // Image optimization
   images: {
     domains: ['notion.so'],
@@ -21,9 +24,13 @@ const nextConfig = {
 
   // Performance optimizations
   poweredByHeader: false,
-
+  generateEtags: true,
+  
   // Compression
   compress: true,
+  
+  // Optimize build output
+  productionBrowserSourceMaps: false,
 
   // Security headers
   async headers() {

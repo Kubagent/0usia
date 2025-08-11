@@ -1,0 +1,20 @@
+# Cloudflare Pages Redirects Configuration
+
+# Handle Next.js routing - this ensures all routes work properly
+# The order of these rules matters!
+
+# API routes - preserve as-is
+/api/* /api/:splat 200
+
+# Static assets - preserve as-is  
+/_next/* /_next/:splat 200
+/images/* /images/:splat 200
+/favicon.ico /favicon.ico 200
+
+# For single-page applications, redirect all non-asset requests to index.html
+# This allows client-side routing to work properly
+/* /index.html 200
+
+# Legacy redirects (add any old URLs that need redirecting)
+# /old-page /new-page 301
+# /contact-us /contact 301

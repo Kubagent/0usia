@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useOptimizedScrollLock, PerformanceMetric } from '@/hooks/useOptimizedScrollLock';
+import { BackgroundTransitionManager } from './BackgroundTransitionManager';
+import { SectionTransitionManager } from './SectionTransitionManager';
 
 export interface OptimizedScrollContainerProps {
   children: React.ReactNode;
@@ -12,6 +14,10 @@ export interface OptimizedScrollContainerProps {
   showIndicators?: boolean;
   /** Callback when section changes */
   onSectionChange?: (sectionIndex: number) => void;
+  /** Enable background transitions */
+  enableBackgroundTransitions?: boolean;
+  /** Enable section transitions */
+  enableSectionTransitions?: boolean;
   /** Custom indicator component */
   IndicatorComponent?: React.ComponentType<{
     isActive: boolean;
@@ -32,11 +38,17 @@ export default function OptimizedScrollContainer({
   showDebug = false,
   showIndicators = true,
   onSectionChange,
+  enableBackgroundTransitions = true,
+  enableSectionTransitions = true,
   IndicatorComponent,
   onPerformanceMetric,
 }: OptimizedScrollContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetric[]>([]);
+  
+  // Section transition state management
+  const [previousSection, setPreviousSection] = useState<number>(0);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
 
   // Count sections from children
   const sections = React.Children.toArray(children);
@@ -77,12 +89,28 @@ export default function OptimizedScrollContainer({
     }
   }, [registerSection, children]);
 
-  // Call onSectionChange when current section changes
+  // Handle section changes and manage transition state
   useEffect(() => {
-    if (onSectionChange) {
-      onSectionChange(state.currentSection);
+    if (state.currentSection !== previousSection) {
+      // Start transition
+      setIsTransitioning(true);
+      
+      // Call parent callback
+      if (onSectionChange) {
+        onSectionChange(state.currentSection);
+      }
+      
+      // Update previous section after brief delay
+      const transitionTimeout = setTimeout(() => {
+        setPreviousSection(state.currentSection);
+        setIsTransitioning(false);
+      }, 100);
+      
+      return () => {
+        clearTimeout(transitionTimeout);
+      };
     }
-  }, [state.currentSection, onSectionChange]);
+  }, [state.currentSection, previousSection, onSectionChange]);
 
   // Add loaded class to prevent FOUC
   useEffect(() => {
@@ -146,6 +174,43 @@ export default function OptimizedScrollContainer({
 
   return (
     <div className="relative">
+      {/* Background Transition Manager - manages global background colors */}
+      {enableBackgroundTransitions && (
+        <BackgroundTransitionManager
+          currentSection={state.currentSection}
+          totalSections={sectionCount}
+          enableProfiling={showDebug}
+          onTransitionComplete={(sectionIndex) => {
+            if (showDebug) {
+              console.log(`[OptimizedScrollContainer] Background transitioned to section ${sectionIndex}`);
+            }
+          }}
+        />
+      )}
+
+      {/* Section Transition Manager - manages unique transition effects between sections */}
+      {enableSectionTransitions && (
+        <SectionTransitionManager
+          currentSection={state.currentSection}
+          previousSection={previousSection}
+          totalSections={sectionCount}
+          isTransitioning={isTransitioning}
+          scrollVelocity={0} // TODO: Get from scroll hook if available
+          enableProfiling={showDebug}
+          onTransitionStart={(fromSection, toSection) => {
+            if (showDebug) {
+              console.log(`[OptimizedScrollContainer] Section transition started: ${fromSection} → ${toSection}`);
+            }
+          }}
+          onTransitionComplete={(toSection) => {
+            if (showDebug) {
+              console.log(`[OptimizedScrollContainer] Section transition completed: ${toSection}`);
+            }
+            setIsTransitioning(false);
+          }}
+        />
+      )}
+
       {/* Main container with optimized CSS scroll-snap */}
       <div
         ref={containerRef}

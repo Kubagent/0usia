@@ -1,0 +1,89 @@
+/**
+ * Section Transition Optimizations
+ * 
+ * GPU-accelerated CSS for smooth, 60fps section transitions
+ * Lightweight animations that enhance the user experience
+ */
+
+/* Force GPU acceleration for smooth transitions */
+.section-fade-transition {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+
+/* Optimize for 60fps performance */
+.section-fade-transition * {
+  backface-visibility: hidden;
+}
+
+/* Smooth color transitions for section wrappers */
+.section-wrapper {
+  transform: translateZ(0);
+  will-change: background-color;
+  transition: background-color 0.6s ease-in-out;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .section-fade-transition,
+  .section-wrapper {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+  
+  .section-fade-transition * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High performance mode for devices with good hardware */
+@media (min-width: 1024px) and (min-resolution: 2dppx) {
+  .section-fade-transition {
+    perspective: 2000px;
+  }
+}
+
+/* Battery optimization for mobile devices */
+@media (max-width: 768px) {
+  .section-fade-transition {
+    perspective: 500px;
+  }
+  
+  /* Simpler animations on mobile for better performance */
+  .section-fade-mobile-optimized {
+    animation-duration: 0.5s !important;
+    transition-duration: 0.5s !important;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .section-wrapper {
+    /* Slightly more aggressive GPU acceleration for dark backgrounds */
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* High contrast mode accessibility */
+@media (prefers-contrast: high) {
+  .section-fade-transition {
+    /* Ensure transitions don't interfere with high contrast */
+    filter: none !important;
+  }
+}
+
+/* Print styles - disable all animations */
+@media print {
+  .section-fade-transition,
+  .section-wrapper {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

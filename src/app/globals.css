@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import performance optimizations */
+@import '../styles/scroll-optimizations.css';
+@import '../styles/section-transitions.css';
+
 :root {
   --font-cormorant: 'Cormorant Garamond', serif;
   --font-space-grotesk: 'Space Grotesk', sans-serif;

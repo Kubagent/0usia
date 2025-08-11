@@ -2,6 +2,7 @@
 
 import { Hero, Footer, ExpertiseShowcase, VenturesCarousel, ThreeCardCTA } from '@/components/sections';
 import RotatingWordAnimation from '@/components/RotatingWordAnimation';
+import OptimizedScrollContainer from '@/components/OptimizedScrollContainer';
 import type { SiteContent } from '@/types/notion';
 import { transformSiteContentForComponents, createFallbackTransformation } from '@/lib/content-transformers';
 
@@ -46,12 +47,22 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
   }
 
   return (
-    <div className="ovsia-scroll-container">
-      {/* Section 1: Hero - Preserves natural scroll animations */}
+    <OptimizedScrollContainer
+      showDebug={process.env.NODE_ENV === 'development'}
+      showIndicators={true}
+      enableBackgroundTransitions={true}
+      enableSectionTransitions={true}
+      onSectionChange={(sectionIndex) => {
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[Page] Section changed to: ${sectionIndex + 1}`);
+        }
+      }}
+    >
+      {/* Section 1: Hero - White background with white→black transition */}
       <Hero />
       
-      {/* Section 2: Your [Rotating Word] Actualized */}
-      <section className="min-h-screen bg-black flex items-center justify-center relative">
+      {/* Section 2: Your [Rotating Word] Actualized - Black background */}
+      <div className="min-h-screen flex items-center justify-center relative bg-black">
         <div className="text-center text-white px-4">
           <h1 className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-cormorant leading-tight tracking-wide">
             <span className="block mb-4">Your</span>
@@ -63,21 +74,29 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
             <span className="block">Actualized</span>
           </h1>
         </div>
-      </section>
+      </div>
       
-      {/* Section 3: Expertise */}
-      <ExpertiseShowcase />
+      {/* Section 3: Expertise - White background */}
+      <div className="bg-white">
+        <ExpertiseShowcase />
+      </div>
       
-      {/* Section 4: Proof of Ousia */}
-      <VenturesCarousel />
+      {/* Section 4: Proof of Ousia - Black background */}
+      <div className="bg-black">
+        <VenturesCarousel />
+      </div>
       
-      {/* Section 5: Choose Your Path */}
-      <ThreeCardCTA />
+      {/* Section 5: Choose Your Path - White background */}
+      <div className="bg-white">
+        <ThreeCardCTA />
+      </div>
       
-      {/* Section 6: Stay in Ousia */}
-      <Footer />
+      {/* Section 6: Stay in Ousia - Black background */}
+      <div className="bg-black">
+        <Footer />
+      </div>
       
       {children}
-    </div>
+    </OptimizedScrollContainer>
   );
 }

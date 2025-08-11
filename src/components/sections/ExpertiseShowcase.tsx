@@ -89,7 +89,7 @@ export default function ExpertiseShowcase() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   return (
-    <section className="relative min-h-screen bg-white flex items-center justify-center py-20">
+    <section className="relative min-h-screen flex items-center justify-center py-20">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Title - Minimal */}
         <div className="text-center mb-16">

@@ -21,11 +21,10 @@ export const ENV_VARS = {
   NOTION_FALLBACK_ENABLED: 'NOTION_FALLBACK_ENABLED',
   NOTION_BUILD_VALIDATION: 'NOTION_BUILD_VALIDATION',
   
-  // Mailchimp Configuration
-  MAILCHIMP_API_KEY: 'MAILCHIMP_API_KEY',
-  MAILCHIMP_SERVER: 'MAILCHIMP_SERVER',
-  MAILCHIMP_AUDIENCE_ID: 'MAILCHIMP_AUDIENCE_ID',
-  MAILCHIMP_CONTACT_LIST_ID: 'MAILCHIMP_CONTACT_LIST_ID',
+  // Resend Email Configuration
+  RESEND_API_KEY: 'RESEND_API_KEY',
+  RESEND_FROM_EMAIL: 'RESEND_FROM_EMAIL',
+  RESEND_TO_EMAIL: 'RESEND_TO_EMAIL',
   
   // Rate Limiting Configuration
   RATE_LIMIT_MAX_REQUESTS: 'RATE_LIMIT_MAX_REQUESTS',
@@ -71,11 +70,10 @@ export interface NotionConfig {
   isValidConfig: boolean;
 }
 
-export interface MailchimpConfig {
+export interface EmailConfig {
   apiKey: string;
-  server: string;
-  audienceId: string;
-  contactListId?: string;
+  fromEmail: string;
+  toEmail: string;
   isValidConfig: boolean;
 }
 
@@ -90,7 +88,7 @@ export interface SecurityConfig {
 
 export interface AppConfig {
   notion: NotionConfig;
-  mailchimp: MailchimpConfig;
+  email: EmailConfig;
   rateLimit: RateLimitConfig;
   security: SecurityConfig;
   environment: 'development' | 'production' | 'test';
@@ -145,31 +143,31 @@ export function loadNotionConfig(): NotionConfig {
 }
 
 /**
- * Load and validate Mailchimp configuration from environment variables
+ * Load and validate Email configuration from environment variables
  */
-export function loadMailchimpConfig(): MailchimpConfig {
+export function loadEmailConfig(): EmailConfig {
   const env = process.env;
   
-  const config: MailchimpConfig = {
-    apiKey: env[ENV_VARS.MAILCHIMP_API_KEY] || '',
-    server: env[ENV_VARS.MAILCHIMP_SERVER] || '',
-    audienceId: env[ENV_VARS.MAILCHIMP_AUDIENCE_ID] || '',
-    contactListId: env[ENV_VARS.MAILCHIMP_CONTACT_LIST_ID] || undefined,
+  const config: EmailConfig = {
+    apiKey: env[ENV_VARS.RESEND_API_KEY] || '',
+    fromEmail: env[ENV_VARS.RESEND_FROM_EMAIL] || 'noreply@ovsia.com',
+    toEmail: env[ENV_VARS.RESEND_TO_EMAIL] || 'hello@ovsia.com',
     isValidConfig: false,
   };
   
-  // Validate Mailchimp configuration
+  // Validate Email configuration
   // Allow placeholder values during build
   const hasPlaceholders = config.apiKey === 'placeholder-key' ||
-                         config.server === 'placeholder-server' ||
-                         config.audienceId === 'placeholder-audience-id';
+                         config.fromEmail === 'placeholder-from@example.com' ||
+                         config.toEmail === 'placeholder-to@example.com';
   
   config.isValidConfig = hasPlaceholders || !!(
     config.apiKey &&
-    config.server &&
-    config.audienceId &&
-    config.apiKey.includes('-') &&
-    config.server.length > 0
+    config.fromEmail &&
+    config.toEmail &&
+    config.apiKey.startsWith('re_') &&
+    config.fromEmail.includes('@') &&
+    config.toEmail.includes('@')
   );
   
   return config;
@@ -207,7 +205,7 @@ export function loadAppConfig(): AppConfig {
   
   return {
     notion: loadNotionConfig(),
-    mailchimp: loadMailchimpConfig(),
+    email: loadEmailConfig(),
     rateLimit: loadRateLimitConfig(),
     security: loadSecurityConfig(),
     environment: nodeEnv,
@@ -313,11 +311,24 @@ NOTION_CAPABILITIES_DB_ID=your_capabilities_database_id_here
 NOTION_SITE_COPY_DB_ID=your_site_copy_database_id_here
 NOTION_ASSETS_DB_ID=your_assets_database_id_here
 
+# Resend Email Service Configuration (required for contact forms)
+# Get your API key from https://resend.com/api-keys
+RESEND_API_KEY=re_your_resend_api_key_here
+RESEND_FROM_EMAIL=noreply@yourdomain.com
+RESEND_TO_EMAIL=hello@yourdomain.com
+
 # Optional Configuration
 # NOTION_CACHE_ENABLED=true           # Enable content caching (default: true in production)
 # NOTION_CACHE_TTL=3600000            # Cache time-to-live in milliseconds (default: 1 hour)
 # NOTION_FALLBACK_ENABLED=true        # Enable fallback content (default: true)
 # NOTION_BUILD_VALIDATION=true        # Validate content at build time (default: true)
+
+# Rate Limiting Configuration (optional)
+# RATE_LIMIT_MAX_REQUESTS=10          # Max requests per window (default: 10)
+# RATE_LIMIT_WINDOW_MS=60000          # Window in milliseconds (default: 1 minute)
+
+# Security Configuration (optional)
+# ALLOWED_ORIGINS=localhost:3000,*.yourdomain.com  # Comma-separated allowed origins
 
 # Development vs Production Notes:
 # - Development: Cache disabled, detailed logging, reports generated
@@ -392,14 +403,13 @@ export function logConfigStatus(config: NotionConfig): void {
  * Export configuration instances
  */
 export const notionConfig = loadNotionConfig();
-export const mailchimpConfig = loadMailchimpConfig();
+export const emailConfig = loadEmailConfig();
 export const appConfig = loadAppConfig();
 
 // Main configuration export for convenience
 export const env = {
   ...process.env,
-  MAILCHIMP_API_KEY: process.env.MAILCHIMP_API_KEY || '',
-  MAILCHIMP_SERVER: process.env.MAILCHIMP_SERVER || '',
-  MAILCHIMP_AUDIENCE_ID: process.env.MAILCHIMP_AUDIENCE_ID || '',
-  MAILCHIMP_CONTACT_LIST_ID: process.env.MAILCHIMP_CONTACT_LIST_ID || '',
+  RESEND_API_KEY: process.env.RESEND_API_KEY || '',
+  RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL || 'noreply@ovsia.com',
+  RESEND_TO_EMAIL: process.env.RESEND_TO_EMAIL || 'hello@ovsia.com',
 };

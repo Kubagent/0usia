@@ -1,0 +1,26 @@
+# Cloudflare Pages Configuration for Ovsia V4
+name = "ovsia-v4"
+compatibility_date = "2024-11-20"
+pages_build_output_dir = ".next"
+
+[env.production]
+name = "ovsia-v4"
+
+[env.preview]
+name = "ovsia-v4-preview"
+
+# Build configuration will be handled via Cloudflare Pages dashboard
+# Build command: npm run build
+# Build output directory: .next
+# Root directory: (leave empty)
+
+# Environment variables to be configured in Cloudflare Pages dashboard:
+# NODE_ENV=production
+# RESEND_API_KEY=your_resend_api_key_here
+# RESEND_FROM_EMAIL=noreply@yourdomain.com  
+# RESEND_TO_EMAIL=hello@yourdomain.com
+# NOTION_TOKEN=your_notion_token (optional)
+# NOTION_VENTURES_DB_ID=your_ventures_db_id (optional)
+# NOTION_CAPABILITIES_DB_ID=your_capabilities_db_id (optional)
+# NOTION_SITE_COPY_DB_ID=your_site_copy_db_id (optional)
+# NOTION_ASSETS_DB_ID=your_assets_db_id (optional)

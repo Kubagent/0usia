@@ -1,28 +1,32 @@
 /**
  * Background Transition Manager Component
  * 
- * A centralized system for managing smooth background color transitions across
- * multiple sections with scroll-triggered animations. Optimized for performance
- * with hardware acceleration and proper cleanup.
+ * Enhanced centralized system for managing smooth background color transitions across
+ * all sections with OptimizedScrollContainer integration. Provides seamless transitions
+ * with scroll-triggered animations, optimized for 60fps performance.
  * 
  * Features:
+ * - Integrates with OptimizedScrollContainer scroll events
  * - Manages global background state across all sections
- * - Scroll-triggered smooth transitions between black/white
- * - Performance monitoring and optimization
- * - Intersection Observer for efficient section detection
- * - Framer Motion integration for hardware-accelerated animations
+ * - Smooth transitions between alternating black/white pattern
+ * - Performance monitoring and GPU acceleration
+ * - Hero section special handling (preserves its built-in transition)
  * - Accessibility support with reduced motion preferences
+ * - Memory efficient with proper cleanup
+ * 
+ * Section Pattern:
+ * 1. Hero: White → Black (built-in transition)
+ * 2. Essence Manifesto: Black
+ * 3. Core Capabilities: White
+ * 4. Proof of Ousia: Black
+ * 5. Choose Your Path: White
+ * 6. Stay in Ousia: Black
  * 
  * @example
  * ```tsx
  * <BackgroundTransitionManager
- *   sections={[
- *     { id: 'hero', backgroundColor: '#ffffff' },
- *     { id: 'about', backgroundColor: '#000000' },
- *     { id: 'services', backgroundColor: '#ffffff' }
- *   ]}
- *   transitionDuration={0.8}
- *   easing="easeInOut"
+ *   currentSection={2}
+ *   onTransitionComplete={(sectionIndex) => console.log('Transitioned to', sectionIndex)}
  * />
  * ```
  */
@@ -32,25 +36,11 @@
 import React, { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 
-export interface SectionConfig {
-  /** Unique identifier for the section */
-  id: string;
-  /** Target background color for this section */
-  backgroundColor: string;
-  /** Optional custom transition timing */
-  transitionTiming?: {
-    /** When to start transition (0-1, relative to section visibility) */
-    start: number;
-    /** When to complete transition (0-1, relative to section visibility) */
-    end: number;
-  };
-  /** Optional section-specific easing */
-  easing?: string | number[];
-}
-
 export interface BackgroundTransitionManagerProps {
-  /** Array of section configurations */
-  sections: SectionConfig[];
+  /** Current active section index (0-based) */
+  currentSection: number;
+  /** Total number of sections */
+  totalSections?: number;
   /** Global transition duration in seconds */
   transitionDuration?: number;
   /** Global easing function */
@@ -61,6 +51,8 @@ export interface BackgroundTransitionManagerProps {
   respectReducedMotion?: boolean;
   /** Custom CSS class for the background container */
   className?: string;
+  /** Callback when transition completes */
+  onTransitionComplete?: (sectionIndex: number) => void;
   /** Children components */
   children?: React.ReactNode;
 }
@@ -73,20 +65,36 @@ interface PerformanceMetrics {
 }
 
 /**
+ * Section color configuration following the Ovsia design pattern:
+ * White → Black → White → Black → White → Black
+ */
+const SECTION_COLORS = [
+  '#ffffff', // 0: Hero - White (transitions to black internally)
+  '#000000', // 1: Essence Manifesto - Black  
+  '#ffffff', // 2: Core Capabilities - White
+  '#000000', // 3: Proof of Ousia - Black
+  '#ffffff', // 4: Choose Your Path - White
+  '#000000'  // 5: Stay in Ousia - Black
+] as const;
+
+/**
  * Background Transition Manager - Handles global background transitions
+ * Integrates with OptimizedScrollContainer for section-based transitions
  */
 export const BackgroundTransitionManager: React.FC<BackgroundTransitionManagerProps> = ({
-  sections,
+  currentSection,
+  totalSections = 6,
   transitionDuration = 0.8,
   easing = [0.25, 0.46, 0.45, 0.94], // Custom cubic-bezier for smooth transitions
   enableProfiling = false,
   respectReducedMotion = true,
   className = '',
+  onTransitionComplete,
   children
 }) => {
-  // Motion values for background color and current section
-  const backgroundColor = useMotionValue(sections[0]?.backgroundColor || '#ffffff');
-  const currentSectionIndex = useRef(0);
+  // Motion values for background color
+  const backgroundColor = useMotionValue(SECTION_COLORS[0] as string);
+  const previousSectionIndex = useRef(0);
   
   // Performance monitoring state
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
@@ -113,36 +121,43 @@ export const BackgroundTransitionManager: React.FC<BackgroundTransitionManagerPr
   // Create spring animation for smooth background transitions
   const springConfig = useMemo(() => ({
     duration: prefersReducedMotion ? 0.1 : transitionDuration,
-    ease: prefersReducedMotion ? 'linear' : easing
+    ease: prefersReducedMotion ? 'linear' : easing,
+    // Optimize spring physics for color transitions
+    stiffness: 100,
+    damping: 30,
+    mass: 1
   }), [transitionDuration, easing, prefersReducedMotion]);
 
   const backgroundSpring = useSpring(backgroundColor, springConfig);
 
-  // Intersection Observer for efficient section detection
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
-
   /**
-   * Handle section visibility changes with performance monitoring
+   * Handle section changes from OptimizedScrollContainer
+   * This is called whenever the active section changes
    */
-  const handleSectionChange = useCallback((sectionId: string, isVisible: boolean, intersectionRatio: number) => {
-    const sectionIndex = sections.findIndex(s => s.id === sectionId);
-    if (sectionIndex === -1) return;
+  const handleSectionChange = useCallback((sectionIndex: number) => {
+    // Clamp section index to valid range
+    const clampedIndex = Math.max(0, Math.min(sectionIndex, totalSections - 1));
+    const targetColor = SECTION_COLORS[clampedIndex] || '#ffffff';
 
-    const section = sections[sectionIndex];
-    
-    // Determine if we should transition based on intersection ratio
-    const timing = section.transitionTiming || { start: 0.1, end: 0.9 };
-    const shouldTransition = intersectionRatio >= timing.start;
-
-    if (shouldTransition && currentSectionIndex.current !== sectionIndex) {
+    // Only transition if section actually changed
+    if (previousSectionIndex.current !== clampedIndex) {
       // Start performance tracking
       if (enableProfiling) {
         performanceRef.current.transitionStartTime = performance.now();
       }
 
-      currentSectionIndex.current = sectionIndex;
-      backgroundColor.set(section.backgroundColor);
+      // Special handling for Hero section (index 0)
+      // Hero handles its own white->black transition, so we only manage 
+      // the background for other sections
+      if (clampedIndex === 0) {
+        // For Hero, set initial white background but let Hero handle the transition
+        backgroundColor.set('#ffffff');
+      } else {
+        // For all other sections, perform smooth transition
+        backgroundColor.set(targetColor);
+      }
+
+      previousSectionIndex.current = clampedIndex;
 
       // Update metrics
       if (enableProfiling) {
@@ -157,51 +172,29 @@ export const BackgroundTransitionManager: React.FC<BackgroundTransitionManagerPr
         }));
       }
 
+      // Call completion callback
+      if (onTransitionComplete) {
+        onTransitionComplete(clampedIndex);
+      }
+
       // Debug logging in development
       if (process.env.NODE_ENV === 'development') {
-        console.log(`Background transition: ${sectionId} -> ${section.backgroundColor}`, {
-          intersectionRatio,
+        console.log(`[BackgroundTransition] Section ${clampedIndex} -> ${targetColor}`, {
+          previousSection: previousSectionIndex.current,
           transitionTime: enableProfiling ? 
             performance.now() - performanceRef.current.transitionStartTime : 
             'N/A'
         });
       }
     }
-  }, [sections, backgroundColor, enableProfiling]);
+  }, [backgroundColor, enableProfiling, onTransitionComplete, totalSections]);
 
   /**
-   * Register section element for intersection observation
+   * Effect to handle section changes from parent component
    */
-  const registerSection = useCallback((sectionId: string, element: HTMLElement | null) => {
-    if (!element) {
-      sectionRefs.current.delete(sectionId);
-      return;
-    }
-
-    sectionRefs.current.set(sectionId, element);
-
-    // Create observer if it doesn't exist
-    if (!observerRef.current) {
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          entries.forEach(entry => {
-            const sectionId = entry.target.getAttribute('data-section-id');
-            if (sectionId) {
-              handleSectionChange(sectionId, entry.isIntersecting, entry.intersectionRatio);
-            }
-          });
-        },
-        {
-          threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-          rootMargin: '-10% 0px -10% 0px' // Trigger transitions slightly before full visibility
-        }
-      );
-    }
-
-    // Add data attribute for identification
-    element.setAttribute('data-section-id', sectionId);
-    observerRef.current.observe(element);
-  }, [handleSectionChange]);
+  useEffect(() => {
+    handleSectionChange(currentSection);
+  }, [currentSection, handleSectionChange]);
 
   /**
    * Performance monitoring effect
@@ -242,33 +235,39 @@ export const BackgroundTransitionManager: React.FC<BackgroundTransitionManagerPr
   }, [enableProfiling]);
 
   /**
-   * Cleanup effect
+   * Initialize background color on mount
    */
   useEffect(() => {
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
+    const initialColor = SECTION_COLORS[currentSection] || '#ffffff';
+    backgroundColor.set(initialColor);
+    previousSectionIndex.current = currentSection;
+  }, []); // Only run on mount
 
   return (
     <>
-      {/* Fixed background layer */}
+      {/* Fixed background layer with optimized styling */}
       <motion.div
         className={`fixed inset-0 -z-10 ${className}`}
         style={{
           backgroundColor: backgroundSpring,
-          willChange: 'background-color'
+          willChange: 'background-color',
+          // GPU acceleration and optimization
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden',
+          // Ensure it's truly behind everything
+          zIndex: -100
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
       />
       
       {/* Performance overlay (development only) */}
       {enableProfiling && process.env.NODE_ENV === 'development' && (
-        <div className="fixed top-4 right-4 bg-black/80 text-white p-2 rounded text-xs font-mono z-50">
+        <div className="fixed top-20 right-4 bg-black/80 text-white p-3 rounded-lg text-xs font-mono z-50 min-w-[200px]">
+          <div className="font-bold mb-2 text-sm">Background Transitions</div>
+          <div>Current Section: {currentSection}</div>
+          <div>Target Color: {SECTION_COLORS[currentSection] || 'unknown'}</div>
           <div>FPS: {metrics.frameRate.toFixed(1)}</div>
           <div>Transitions: {metrics.transitionCount}</div>
           <div>Avg Time: {metrics.averageTransitionTime.toFixed(2)}ms</div>
@@ -278,52 +277,40 @@ export const BackgroundTransitionManager: React.FC<BackgroundTransitionManagerPr
         </div>
       )}
 
-      {/* Content wrapper with section registration context */}
-      <BackgroundTransitionContext.Provider value={{ registerSection }}>
+      {/* Content wrapper */}
+      <div className="relative z-0">
         {children}
-      </BackgroundTransitionContext.Provider>
+      </div>
     </>
   );
 };
 
 /**
- * Context for section registration
+ * Utility function to get section color by index
  */
-const BackgroundTransitionContext = React.createContext<{
-  registerSection: (sectionId: string, element: HTMLElement | null) => void;
-}>({
-  registerSection: () => {}
-});
-
-/**
- * Hook for components to register themselves for background transitions
- */
-export const useBackgroundTransitionSection = (sectionId: string) => {
-  const { registerSection } = React.useContext(BackgroundTransitionContext);
-  
-  const sectionRef = useCallback((element: HTMLElement | null) => {
-    registerSection(sectionId, element);
-  }, [sectionId, registerSection]);
-
-  return { sectionRef };
+export const getSectionColor = (sectionIndex: number): string => {
+  return SECTION_COLORS[sectionIndex] || '#ffffff';
 };
 
 /**
- * HOC for automatic section registration
+ * Hook to get the current background color for a section
  */
-export const withBackgroundTransition = <P extends object>(
-  Component: React.ComponentType<P>,
-  sectionId: string
-) => {
-  return React.forwardRef<HTMLElement, P>((props, ref) => {
-    const { sectionRef } = useBackgroundTransitionSection(sectionId);
-    
-    return (
-      <div ref={sectionRef}>
-        <Component {...(props as P)} />
-      </div>
-    );
-  });
+export const useCurrentSectionColor = (sectionIndex: number): string => {
+  return useMemo(() => getSectionColor(sectionIndex), [sectionIndex]);
+};
+
+/**
+ * Legacy compatibility - deprecated hook for backward compatibility
+ * @deprecated Use the new centralized BackgroundTransitionManager instead
+ */
+export const useBackgroundTransitionSection = (sectionId: string) => {
+  console.warn('useBackgroundTransitionSection is deprecated. Use the new BackgroundTransitionManager system.');
+  
+  const sectionRef = useCallback((element: HTMLElement | null) => {
+    // No-op for backward compatibility
+  }, [sectionId]);
+
+  return { sectionRef };
 };
 
 export default BackgroundTransitionManager;

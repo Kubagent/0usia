@@ -63,7 +63,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
   return (
     <motion.footer
-      className={`min-h-screen w-full bg-black text-white relative px-6 ${className}`}
+      className={`min-h-screen w-full text-white relative px-6 ${className}`}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}

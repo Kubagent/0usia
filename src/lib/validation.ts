@@ -412,6 +412,10 @@ export function validateNewsletterSubscription(data: NewsletterValidationData, c
  * Sanitize string input to prevent XSS and other issues
  */
 export function sanitizeString(input: string): string {
+  if (!input || typeof input !== 'string') {
+    return '';
+  }
+  
   return input
     .trim()
     .replace(/[<>]/g, '') // Remove HTML tags
@@ -425,6 +429,10 @@ export function sanitizeString(input: string): string {
  * Sanitize email address
  */
 export function sanitizeEmail(email: string): string {
+  if (!email || typeof email !== 'string') {
+    return '';
+  }
+  
   return email
     .trim()
     .toLowerCase()

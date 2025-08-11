@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 interface Venture {
   id: string;
@@ -11,47 +12,55 @@ interface Venture {
   description?: string;
 }
 
-// Sample venture data - replace with your actual ventures
+// Actual venture data with real logos
 const venturesData: Venture[] = [
   {
-    id: 'venture-1',
-    name: 'Venture Alpha',
-    tagline: 'Revolutionizing digital experiences',
-    logoUrl: '/ventures/alpha-logo.svg',
-    websiteUrl: 'https://venturealpha.com',
-    description: 'Leading innovation in digital transformation'
+    id: 'violca',
+    name: 'Violca',
+    tagline: 'Visual Innovation Platform',
+    logoUrl: '/venture-logos/Violca-logo.png',
+    websiteUrl: 'https://violca.com',
+    description: 'Transforming visual experiences through technology'
   },
   {
-    id: 'venture-2',
-    name: 'Venture Beta',
-    tagline: 'Sustainable technology solutions',
-    logoUrl: '/ventures/beta-logo.svg',
-    websiteUrl: 'https://venturebeta.com',
-    description: 'Building the future of sustainable tech'
+    id: 'wojcistics',
+    name: 'Wojcistics',
+    tagline: 'Logistics Optimization',
+    logoUrl: '/venture-logos/WOJCISTICS.png',
+    websiteUrl: 'https://wojcistics.com',
+    description: 'Revolutionary supply chain solutions'
   },
   {
-    id: 'venture-3',
-    name: 'Venture Gamma',
-    tagline: 'AI-powered business intelligence',
-    logoUrl: '/ventures/gamma-logo.svg',
-    websiteUrl: 'https://venturegamma.com',
-    description: 'Transforming data into actionable insights'
+    id: 'fix',
+    name: 'Fix',
+    tagline: 'Problem Resolution Platform',
+    logoUrl: '/venture-logos/fix.png',
+    websiteUrl: 'https://fix-platform.com',
+    description: 'Streamlining problem resolution processes'
   },
   {
-    id: 'venture-4',
-    name: 'Venture Delta',
-    tagline: 'Next-generation financial services',
-    logoUrl: '/ventures/delta-logo.svg',
-    websiteUrl: 'https://venturedelta.com',
-    description: 'Reimagining financial technology'
+    id: 'libelo',
+    name: 'Libelo',
+    tagline: 'Freedom & Innovation',
+    logoUrl: '/venture-logos/libelo.png',
+    websiteUrl: 'https://libelo.com',
+    description: 'Empowering digital freedom through innovation'
   },
   {
-    id: 'venture-5',
-    name: 'Venture Epsilon',
-    tagline: 'Healthcare innovation platform',
-    logoUrl: '/ventures/epsilon-logo.svg',
-    websiteUrl: 'https://ventureepsilon.com',
-    description: 'Advancing healthcare through technology'
+    id: 'objects-gallery',
+    name: 'Objects Gallery',
+    tagline: 'Curated Design Collection',
+    logoUrl: '/venture-logos/objects_gallery.png',
+    websiteUrl: 'https://objectsgallery.com',
+    description: 'Discovering exceptional design objects'
+  },
+  {
+    id: 'substans',
+    name: 'Substans',
+    tagline: 'Substance & Strategy',
+    logoUrl: '/venture-logos/substans.png',
+    websiteUrl: 'https://substans.com',
+    description: 'Strategic consulting with substance'
   }
 ];
 
@@ -107,7 +116,7 @@ export default function VenturesCarousel() {
   const { prev, current, next, prevIndex, nextIndex } = getVisibleVentures();
 
   return (
-    <section className="relative min-h-screen bg-black flex items-center justify-center py-20">
+    <section className="relative min-h-screen flex items-center justify-center py-20">
       <div className="max-w-7xl mx-auto px-6 w-full">
         {/* Section Title */}
         <motion.div
@@ -160,10 +169,14 @@ export default function VenturesCarousel() {
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="w-32 h-32 bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/40 transition-all duration-300">
-                <div className="text-white/60 group-hover:text-white/80 text-sm text-center px-3 leading-tight transition-colors duration-300">
-                  {prev.name}
-                </div>
+              <div className="w-32 h-32 bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/40 transition-all duration-300 p-4">
+                <Image
+                  src={prev.logoUrl}
+                  alt={prev.name}
+                  width={96}
+                  height={96}
+                  className="max-w-full max-h-full object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                />
               </div>
             </motion.div>
 
@@ -176,11 +189,15 @@ export default function VenturesCarousel() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
             >
-              {/* Logo Placeholder - Much Bigger */}
-              <div className="w-64 h-64 mx-auto mb-8 bg-white/10 border-2 border-white/30 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/50 transition-all duration-300 group-hover:scale-105">
-                <div className="text-white/80 group-hover:text-white text-lg text-center px-6 leading-tight transition-colors duration-300">
-                  {current.name}
-                </div>
+              {/* Current Venture Logo */}
+              <div className="w-64 h-64 mx-auto mb-8 bg-white/10 border-2 border-white/30 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/50 transition-all duration-300 group-hover:scale-105 p-8">
+                <Image
+                  src={current.logoUrl}
+                  alt={current.name}
+                  width={192}
+                  height={192}
+                  className="max-w-full max-h-full object-contain filter invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                />
               </div>
 
               {/* Venture Info */}
@@ -216,10 +233,14 @@ export default function VenturesCarousel() {
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="w-32 h-32 bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/40 transition-all duration-300">
-                <div className="text-white/60 group-hover:text-white/80 text-sm text-center px-3 leading-tight transition-colors duration-300">
-                  {next.name}
-                </div>
+              <div className="w-32 h-32 bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/40 transition-all duration-300 p-4">
+                <Image
+                  src={next.logoUrl}
+                  alt={next.name}
+                  width={96}
+                  height={96}
+                  className="max-w-full max-h-full object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                />
               </div>
             </motion.div>
 

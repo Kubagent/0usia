@@ -444,7 +444,7 @@ export async function fetchContactSubmissions(
     });
 
     return {
-      data: response.results as NotionContactSubmission[],
+      data: response.results as unknown as NotionContactSubmission[],
       error: null,
       timestamp: new Date().toISOString(),
       source: 'notion',

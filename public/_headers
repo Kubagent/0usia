@@ -1,0 +1,39 @@
+# Cloudflare Pages Headers Configuration
+# These headers enhance security, performance, and caching
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff  
+  Referrer-Policy: origin-when-cross-origin
+  X-XSS-Protection: 1; mode=block
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  
+# Cache static assets for 1 year
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache images for 1 week
+/images/*
+  Cache-Control: public, max-age=604800
+
+# API routes - no cache
+/api/*
+  Cache-Control: no-store, no-cache, must-revalidate
+  
+# Font files - cache for 1 year
+*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS and JS files from Next.js - cache for 1 year  
+*.css
+  Cache-Control: public, max-age=31536000, immutable
+  
+*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Root pages - cache for 1 hour
+/
+  Cache-Control: public, max-age=3600, s-maxage=3600

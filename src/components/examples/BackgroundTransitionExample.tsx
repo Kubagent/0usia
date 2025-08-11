@@ -230,7 +230,8 @@ export const BackgroundTransitionExample: React.FC = () => {
     <div className="relative">
       {/* Background Transition Manager - Controls global background */}
       <BackgroundTransitionManager
-        sections={SECTION_CONFIG}
+        currentSection={0}
+        totalSections={4}
         transitionDuration={0.8}
         easing={[0.25, 0.46, 0.45, 0.94]}
         enableProfiling={process.env.NODE_ENV === 'development'}

@@ -147,6 +147,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
           marketingConsent: formData.marketingConsent,
           honeypot: formData.honeypot, // Anti-spam field
           source: 'split_screen_cta',
+          formType: 'Contact',
         }),
       });
 

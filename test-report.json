@@ -1,0 +1,146 @@
+{
+  "timestamp": "2025-08-11T20:59:12.158Z",
+  "testsSummary": {
+    "total": 36,
+    "passed": 28,
+    "failed": 2,
+    "warnings": 6
+  },
+  "issues": [
+    {
+      "priority": "high",
+      "component": "Email Service",
+      "description": "Email service is not configured",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.446Z"
+    },
+    {
+      "priority": "high",
+      "component": "Integration",
+      "description": "Scroll container NOT integrated - section snapping disabled",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.615Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Section Loading",
+      "description": "Hero section content may be missing",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:15.592Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Section Loading",
+      "description": "Rotating section content may be missing",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:15.593Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Performance",
+      "description": "Slow load time: 3426ms",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:15.593Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Contact Form",
+      "description": "Contact form service unavailable (expected if email not configured)",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.457Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Form Validation",
+      "description": "Missing required fields: Expected status 400, got 500",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.590Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Environment",
+      "description": "Environment variable not documented: NOTION_DATABASE_ID",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.616Z"
+    }
+  ],
+  "sections": [],
+  "performance": {
+    "loadTime": 3426,
+    "responseTime": 853
+  },
+  "summary": {
+    "totalTests": 36,
+    "passed": 28,
+    "failed": 2,
+    "warnings": 6,
+    "passRate": 78,
+    "overallStatus": "HIGH_ISSUES"
+  },
+  "recommendations": [
+    "🔧 Integrate OptimizedScrollContainer into main page for section snapping",
+    "📧 Configure Resend email service for contact forms",
+    "⚡ Optimize page load time - consider image optimization and code splitting",
+    "🧪 Run manual user testing to verify animations and interactions",
+    "📱 Test mobile responsiveness across different devices",
+    "🔍 Perform browser compatibility testing (Chrome, Firefox, Safari, Edge)"
+  ],
+  "prioritizedIssues": [
+    {
+      "priority": "high",
+      "component": "Email Service",
+      "description": "Email service is not configured",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.446Z"
+    },
+    {
+      "priority": "high",
+      "component": "Integration",
+      "description": "Scroll container NOT integrated - section snapping disabled",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.615Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Section Loading",
+      "description": "Hero section content may be missing",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:15.592Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Section Loading",
+      "description": "Rotating section content may be missing",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:15.593Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Performance",
+      "description": "Slow load time: 3426ms",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:15.593Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Contact Form",
+      "description": "Contact form service unavailable (expected if email not configured)",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.457Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Form Validation",
+      "description": "Missing required fields: Expected status 400, got 500",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.590Z"
+    },
+    {
+      "priority": "medium",
+      "component": "Environment",
+      "description": "Environment variable not documented: NOTION_DATABASE_ID",
+      "details": null,
+      "timestamp": "2025-08-11T20:59:16.616Z"
+    }
+  ]
+}
