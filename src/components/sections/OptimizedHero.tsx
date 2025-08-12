@@ -91,7 +91,7 @@ export default function OptimizedHero() {
           className='select-none drop-shadow-xl'
         >
           <Image
-            src='/ousia_logo.png'
+            src='/0usia_black.png'
             alt='Ovsia Logo'
             width={600}
             height={600}

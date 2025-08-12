@@ -51,7 +51,7 @@ describe('Hero Component', () => {
     
     const logo = screen.getByAltText('Ovsia Logo');
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute('src', '/ousia_logo.png');
+    expect(logo).toHaveAttribute('src', '/0usia_black.png');
     expect(logo).toHaveAttribute('width', '600');
     expect(logo).toHaveAttribute('height', '600');
   });

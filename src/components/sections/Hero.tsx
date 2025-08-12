@@ -1,121 +1,113 @@
-'use client';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { motion, useScroll, useTransform } from 'framer-motion';
+"use client";
+import { useRef, useEffect } from "react";
+import Image from "next/image";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useScrollWillChange } from "@/hooks/useWillChange";
+import { createOptimizedSpring, createOptimizedOpacityTransform } from "@/utils/animationOptimizations";
 
 export default function Hero() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [mounted, setMounted] = useState(false);
-
-  // Use framer-motion scroll progress
-  const { scrollYProgress } = useScroll();
-
-  // Client-side mount guard
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Manual scroll tracking as fallback
-  useEffect(() => {
-    if (!mounted) return;
-
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const progress = Math.min(scrollTop / windowHeight, 1);
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [mounted]);
-
-  // Framer Motion transforms with precise timing
-  const motionBackgroundColor = useTransform(
-    scrollYProgress,
-    [0, 0.4], // Background transition from 0-40% scroll
-    ['#ffffff', '#000000']
-  );
-
-  const motionLogoFilter = useTransform(
-    scrollYProgress,
-    [0.1, 0.5], // Logo inversion from 10-50% scroll
-    ['invert(0)', 'invert(1)']
-  );
-
-  // CSS fallback calculations with precise timing
-  const fallbackBgProgress = Math.min(scrollProgress * 2.5, 1); // Background over first 40%
-  const fallbackBgColor = scrollProgress < 0.4 ? 
-    `rgb(${Math.floor(255 * (1 - fallbackBgProgress))}, ${Math.floor(255 * (1 - fallbackBgProgress))}, ${Math.floor(255 * (1 - fallbackBgProgress))})` : 
-    '#000000';
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const willChange = useScrollWillChange(true);
   
-  const logoProgress = Math.max(0, Math.min((scrollProgress - 0.1) / 0.4, 1)); // Logo from 10% to 50%
-  const fallbackLogoFilter = `invert(${logoProgress})`;
+  // Track scroll progress
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+    layoutEffect: false
+  });
+  
+  // Optimized spring for smooth background transition
+  const springProgress = createOptimizedSpring(scrollYProgress, 'cinematic');
+  
+  // Background fades from white to black with optimized transform
+  const bgColor = useTransform(
+    springProgress,
+    [0, 0.4], // Complete transition in first 40% of scroll
+    ["#ffffff", "#000000"]
+  );
 
-  if (!mounted) {
-    // SSR fallback
-    return (
-      <section className="relative h-screen flex items-center justify-center bg-white">
-        <div className="relative z-10">
+  // Optimized opacity for logo inversion
+  const logoOpacity = createOptimizedOpacityTransform(
+    springProgress,
+    [0, 0.2, 0.4],
+    [1, 0.8, 0]
+  );
+
+  const logoInvertOpacity = createOptimizedOpacityTransform(
+    springProgress,
+    [0, 0.2, 0.4],
+    [0, 0.2, 1]
+  );
+
+  useEffect(() => {
+    console.log('Hero mounted - V3 implementation restored');
+
+    const unsubscribe = scrollYProgress.on('change', value => {
+      console.log('Hero scroll progress:', value);
+      console.log('Background color should be:', value <= 0.4 ? `transitioning (${(value/0.4*100).toFixed(1)}%)` : 'black');
+      console.log('Spring progress:', springProgress.get());
+      console.log('BgColor:', bgColor.get());
+    });
+
+    if (willChange.ref.current) {
+      willChange.startAnimation();
+    }
+    
+    return () => {
+      willChange.endAnimation();
+      unsubscribe();
+    };
+  }, [willChange, scrollYProgress]);
+
+  return (
+    <motion.section
+      ref={(node) => {
+        // @ts-ignore - Callback ref assignment
+        sectionRef.current = node;
+        // @ts-ignore - Callback ref assignment
+        willChange.ref.current = node;
+      }}
+      className="relative min-h-screen flex items-center justify-center animate-gpu"
+      style={{ 
+        background: bgColor,
+        willChange: 'background-color',
+      }}
+    >
+      {/* Logo with optimized double-render technique for smooth inversion */}
+      <div className="relative">
+        {/* Black logo - fades out */}
+        <motion.div
+          style={{ opacity: logoOpacity }}
+          className="select-none drop-shadow-xl animate-gpu"
+        >
           <Image
-            src="/ousia_logo.png"
+            src="/0usia_black.png"
             alt="Ovsia Logo"
             width={600}
             height={600}
             priority
-            className="max-w-full h-auto"
           />
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <>
-      {/* Framer Motion version with CSS fallback */}
-      <motion.section
-        className="relative h-screen flex items-center justify-center"
-        style={{ 
-          backgroundColor: motionBackgroundColor,
-          minHeight: '100vh',
-          position: 'relative'
-        }}
-      >
-        {/* CSS Fallback layer for browsers that don't support framer-motion */}
-        <div 
-          className="absolute inset-0 transition-colors duration-500 ease-out"
-          style={{ 
-            backgroundColor: fallbackBgColor,
-            zIndex: 1
-          }}
-        />
+        </motion.div>
         
-        <div className="relative z-10 flex items-center justify-center">
-          {/* Framer Motion logo with CSS fallback */}
-          <motion.div
-            style={{ 
-              filter: motionLogoFilter,
-              WebkitFilter: motionLogoFilter
-            }}
-            className="select-none transform-gpu transition-all duration-500 ease-out"
-          >
-            <Image
-              src="/ousia_logo.png"
-              alt="Ovsia Logo"
-              width={600}
-              height={600}
-              priority
-              className="max-w-full h-auto"
-              style={{
-                // CSS fallback for older browsers or framer-motion issues
-                filter: fallbackLogoFilter,
-                WebkitFilter: fallbackLogoFilter,
-                transition: 'filter 0.5s ease-out, -webkit-filter 0.5s ease-out'
-              }}
-            />
-          </motion.div>
-        </div>
-      </motion.section>
-    </>
+        {/* White logo - fades in */}
+        <motion.div
+          style={{ 
+            opacity: logoInvertOpacity,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+          className="select-none drop-shadow-xl animate-gpu"
+        >
+          <Image
+            src="/0usia_white.png"
+            alt="Ovsia Logo White"
+            width={600}
+            height={600}
+            priority
+          />
+        </motion.div>
+      </div>
+    </motion.section>
   );
 }

@@ -174,7 +174,7 @@ export const EnhancedHero: React.FC<EnhancedHeroProps> = ({
           }}
         >
           <Image
-            src="/ousia_logo.png"
+            src="/0usia_black.png"
             alt={logoAlt}
             width={logoSize}
             height={logoSize}

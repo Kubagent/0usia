@@ -47,17 +47,7 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
   }
 
   return (
-    <OptimizedScrollContainer
-      showDebug={process.env.NODE_ENV === 'development'}
-      showIndicators={true}
-      enableBackgroundTransitions={true}
-      enableSectionTransitions={true}
-      onSectionChange={(sectionIndex) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[Page] Section changed to: ${sectionIndex + 1}`);
-        }
-      }}
-    >
+    <div className="min-h-screen">
       {/* Section 1: Hero - White background with white→black transition */}
       <Hero />
       
@@ -97,6 +87,6 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
       </div>
       
       {children}
-    </OptimizedScrollContainer>
+    </div>
   );
 }

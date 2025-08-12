@@ -58,7 +58,7 @@ export default function SimpleHero() {
       <section className="relative h-screen flex items-center justify-center bg-white">
         <div className="relative z-10">
           <Image
-            src="/ousia_logo.png"
+            src="/0usia_black.png"
             alt="Ovsia Logo"
             width={600}
             height={600}
@@ -108,7 +108,7 @@ export default function SimpleHero() {
             className="select-none transform-gpu transition-all duration-500 ease-out"
           >
             <Image
-              src="/ousia_logo.png"
+              src="/0usia_black.png"
               alt="Ovsia Logo"
               width={600}
               height={600}
