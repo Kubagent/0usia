@@ -374,7 +374,7 @@ const ThreeItemCarousel: React.FC<ThreeItemCarouselProps> = ({
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.1, duration: 0.5 }}
-                className={`text-lg md:text-xl mb-4 font-space ${currentItem.textColor} opacity-80`}
+                className={`text-xl md:text-2xl mb-4 font-space ${currentItem.textColor} opacity-80`}
               >
                 {currentItem.subtitle}
               </motion.p>
@@ -384,7 +384,7 @@ const ThreeItemCarousel: React.FC<ThreeItemCarouselProps> = ({
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className={`text-4xl md:text-6xl lg:text-7xl font-bold mb-6 font-reckless ${currentItem.textColor}`}
+                className={`text-5xl md:text-7xl lg:text-8xl font-bold mb-6 font-cormorant ${currentItem.textColor}`}
               >
                 {currentItem.title}
               </motion.h2>
@@ -394,7 +394,7 @@ const ThreeItemCarousel: React.FC<ThreeItemCarouselProps> = ({
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                className={`text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-cormorant ${currentItem.textColor} opacity-90`}
+                className={`text-xl md:text-2xl leading-relaxed max-w-2xl mx-auto font-cormorant ${currentItem.textColor} opacity-90`}
               >
                 {currentItem.description}
               </motion.p>
@@ -512,7 +512,7 @@ const ThreeItemCarousel: React.FC<ThreeItemCarouselProps> = ({
 
               {/* Overlay Content */}
               <div className="relative">
-                <h3 className="text-3xl font-bold mb-4 font-reckless text-gray-900">
+                <h3 className="text-4xl font-bold mb-4 font-cormorant text-gray-900">
                   {overlayItem.overlayContent?.title}
                 </h3>
                 
@@ -523,7 +523,7 @@ const ThreeItemCarousel: React.FC<ThreeItemCarouselProps> = ({
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="text-gray-700 leading-relaxed font-cormorant text-lg"
+                      className="text-gray-700 leading-relaxed font-cormorant text-xl"
                     >
                       {detail}
                     </motion.p>

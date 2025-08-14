@@ -136,8 +136,8 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-2xl font-light mb-4">Thank You!</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-3xl font-cormorant mb-4">Thank You!</h3>
+            <p className="text-lg text-gray-600 mb-6">
               We've received your {modalType === 'investment' ? 'pitch' : 'inquiry'} and will be in touch soon.
             </p>
             <button
@@ -160,7 +160,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
         animate={{ opacity: 1, scale: 1 }}
       >
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-light">{config.title}</h3>
+          <h3 className="text-3xl font-cormorant">{config.title}</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -171,7 +171,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
           {config.fields.includes('name') && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-base font-medium text-gray-700 mb-2">
                 Name {config.required?.includes('name') && <span className="text-red-500">*</span>}
               </label>
               <input
@@ -188,7 +188,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
 
           {config.fields.includes('email') && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-base font-medium text-gray-700 mb-2">
                 Email {config.required?.includes('email') && <span className="text-red-500">*</span>}
               </label>
               <input
@@ -205,7 +205,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
 
           {config.fields.includes('phone') && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+              <label className="block text-base font-medium text-gray-700 mb-2">Phone</label>
               <input
                 type="tel"
                 name="phone"
@@ -219,7 +219,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
 
           {config.fields.includes('message') && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+              <label className="block text-base font-medium text-gray-700 mb-2">Message</label>
               <textarea
                 name="message"
                 value={formData.message}
@@ -233,7 +233,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
 
           {config.fields.includes('attachment') && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-base font-medium text-gray-700 mb-2">
                 {config.attachmentLabel} {config.required?.includes('attachment') && <span className="text-red-500">*</span>}
               </label>
               <div className="relative">
@@ -246,7 +246,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-100 file:text-black hover:file:bg-gray-200"
                 />
                 {formData.attachment && (
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-base text-gray-600 mt-1">
                     Selected: {formData.attachment.name} ({Math.round(formData.attachment.size / 1024)}KB)
                   </p>
                 )}
@@ -267,7 +267,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
 
           {/* GDPR Consent Section */}
           <div className="space-y-4 pt-4 border-t border-gray-200">
-            <h4 className="text-sm font-medium text-gray-900">
+            <h4 className="text-base font-medium text-gray-900">
               Privacy & Consent
             </h4>
             
@@ -281,7 +281,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
                   className="mt-1 h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
                   required
                 />
-                <div className="text-sm">
+                <div className="text-base">
                   <span className="text-gray-700">
                     I agree to the{' '}
                     <a
@@ -307,7 +307,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
                   onChange={(e) => setFormData(prev => ({ ...prev, marketingConsent: e.target.checked }))}
                   className="mt-1 h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
                 />
-                <div className="text-sm">
+                <div className="text-base">
                   <span className="text-gray-700">
                     I would like to receive updates about your services and industry insights via email. You can unsubscribe at any time.
                   </span>
@@ -315,7 +315,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
               </label>
             </div>
 
-            <div className="text-xs text-gray-500">
+            <div className="text-sm text-gray-500">
               * Required field. We respect your privacy and will only use your data as described in our Privacy Policy.
             </div>
           </div>
@@ -412,13 +412,13 @@ export default function ThreeCardCTA() {
   const getCardStyles = (bgColor: string) => {
     switch (bgColor) {
       case 'light':
-        return 'bg-white border border-gray-200/30 text-black';
+        return 'bg-gradient-to-br from-white/80 to-gray-50/60 border border-gray-200/30 text-black';
       case 'dark':
-        return 'bg-black border border-gray-800/30 text-white';
+        return 'bg-gradient-to-br from-black/90 to-gray-900/80 border border-gray-800/30 text-white';
       case 'medium':
-        return 'bg-gray-100 border border-gray-300/30 text-black';
+        return 'bg-gradient-to-br from-gray-100/90 to-gray-200/60 border border-gray-300/30 text-black';
       default:
-        return 'bg-white text-black';
+        return 'bg-gradient-to-br from-white/80 to-gray-50/60 text-black';
     }
   };
 
@@ -471,17 +471,17 @@ export default function ThreeCardCTA() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-5xl md:text-6xl font-light tracking-tight text-black mb-4">
+            <h2 className="text-6xl md:text-7xl font-cormorant tracking-tight text-black mb-4">
               Choose Your Path
             </h2>
-            <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto">
+            <p className="text-2xl text-gray-600 font-light max-w-2xl mx-auto">
               Every journey begins with a single step. Which path calls to you?
             </p>
           </motion.div>
 
           {/* Three Cards Layout */}
           <motion.div 
-            className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+            className="grid lg:grid-cols-3 gap-28 max-w-6xl mx-auto items-center justify-items-center"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -492,29 +492,31 @@ export default function ThreeCardCTA() {
                 key={card.id}
                 className={`
                   flex flex-col justify-between min-h-[400px] p-8 lg:p-12 
+                  aspect-square rounded-full
                   ${getCardStyles(card.bgColor)}
+                  backdrop-blur-sm
                   transition-all duration-300 hover:scale-105 hover:shadow-xl
                   cursor-pointer group
                 `}
                 variants={cardVariants}
                 onClick={() => handleCardAction(card)}
               >
-                <div>
-                  <h3 className="text-3xl lg:text-4xl font-light mb-6 leading-tight">
+                <div className="text-center flex flex-col items-center justify-center h-full">
+                  <h3 className="text-3xl lg:text-4xl font-cormorant mb-4 leading-tight">
                     {card.title}
                   </h3>
-                  <p className="text-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[200px]">
                     {card.description}
                   </p>
                 </div>
 
                 <motion.button
                   className={`
-                    inline-flex items-center justify-center px-8 py-4 rounded-lg 
-                    font-medium text-lg transition-all duration-300 
+                    inline-flex items-center justify-center px-6 py-3 rounded-lg 
+                    font-medium text-base transition-all duration-300 
                     transform group-hover:scale-105 focus:outline-none focus:ring-4 
                     ${getButtonStyles(card.bgColor)}
-                    mt-8 w-full md:w-auto
+                    mt-6 w-auto mx-auto
                   `}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -525,7 +527,7 @@ export default function ThreeCardCTA() {
                   aria-label={`${card.buttonText} - ${card.description}`}
                 >
                   {card.buttonText}
-                  <svg className="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </motion.button>

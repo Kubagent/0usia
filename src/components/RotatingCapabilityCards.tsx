@@ -220,17 +220,17 @@ const RotatingCapabilityCards: React.FC<RotatingCapabilityCardsProps> = ({
                     </div>
                     
                     {/* Title */}
-                    <h3 className="text-2xl md:text-3xl font-bold mb-4 font-space">
+                    <h3 className="text-3xl md:text-4xl font-bold mb-4 font-cormorant">
                       {card.title}
                     </h3>
                     
                     {/* Description */}
-                    <p className="text-sm md:text-base leading-relaxed font-cormorant opacity-80">
+                    <p className="text-base md:text-lg leading-relaxed font-cormorant opacity-80">
                       {card.description}
                     </p>
                     
                     {/* Click indicator */}
-                    <div className="mt-6 text-xs opacity-70">
+                    <div className="mt-6 text-sm opacity-70">
                       Click to learn more
                     </div>
                   </div>
@@ -271,7 +271,7 @@ const RotatingCapabilityCards: React.FC<RotatingCapabilityCardsProps> = ({
         </AnimatePresence>
 
         {/* Keyboard Instructions */}
-        <div className="absolute top-4 right-4 text-xs text-gray-500 hidden md:block">
+        <div className="absolute top-4 right-4 text-sm text-gray-500 hidden md:block">
           Use ← → keys to navigate, Enter to select
         </div>
       </div>

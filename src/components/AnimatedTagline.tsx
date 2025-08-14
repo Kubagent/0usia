@@ -83,8 +83,42 @@ const AnimatedTagline: React.FC<AnimatedTaglineProps> = ({
   };
 
   return (
-    <div className={`text-center ${className}`}>
-      <div className="text-4xl md:text-5xl lg:text-6xl font-cormorant text-white leading-tight">
+    <div className={`relative text-center ${className}`}>
+      {/* Animated Geometric Background SVG - TEST */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+        <motion.div
+          className="w-96 h-96 border-2 border-red-500 bg-white/10"
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: [0, 1, 1, 0],
+          }}
+          transition={{
+            duration: 20,
+            times: [0, 0.5, 0.5, 1],
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <svg
+            width="100%"
+            height="100%" 
+            viewBox="0 0 400 400"
+            className="w-full h-full"
+          >
+            <g stroke="white" strokeWidth="2" fill="none">
+              {/* Simple geometric test pattern */}
+              <rect x="50" y="50" width="300" height="300" />
+              <line x1="50" y1="50" x2="350" y2="350"/>
+              <line x1="350" y1="50" x2="50" y2="350"/>
+              <circle cx="200" cy="200" r="100" />
+              <line x1="200" y1="100" x2="200" y2="300"/>
+              <line x1="100" y1="200" x2="300" y2="200"/>
+            </g>
+          </svg>
+        </motion.div>
+      </div>
+
+      <div className="text-5xl md:text-6xl lg:text-7xl font-cormorant text-white leading-tight relative z-10">
         <span>We get your </span>
         <span className="relative inline-block min-w-[200px] md:min-w-[250px]">
           <AnimatePresence mode="wait">
@@ -123,7 +157,7 @@ const AnimatedTagline: React.FC<AnimatedTaglineProps> = ({
       </div>
       
       {/* Progress indicator dots */}
-      <div className="flex justify-center space-x-2 mt-8">
+      <div className="flex justify-center space-x-2 mt-8 relative z-10">
         {words.map((_, index) => (
           <motion.div
             key={index}

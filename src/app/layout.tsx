@@ -16,13 +16,18 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'Ovsia - From 0 → 1, We Make Essence Real',
+  title: 'ousia',
   description:
     'Venture studio building the impossible. Strategy, AI Operations, and Capital for transformational ventures.',
   keywords: 'venture studio, AI operations, strategy, capital, innovation',
   authors: [{ name: 'Ovsia Team' }],
+  icons: {
+    icon: '/0usia_black.png',
+    shortcut: '/0usia_black.png',
+    apple: '/0usia_black.png',
+  },
   openGraph: {
-    title: 'Ovsia - From 0 → 1, We Make Essence Real',
+    title: 'ousia',
     description:
       'Venture studio building the impossible. Strategy, AI Operations, and Capital for transformational ventures.',
     type: 'website',
@@ -30,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ovsia - From 0 → 1, We Make Essence Real',
+    title: 'ousia',
     description:
       'Venture studio building the impossible. Strategy, AI Operations, and Capital for transformational ventures.',
   },

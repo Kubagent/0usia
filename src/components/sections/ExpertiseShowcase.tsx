@@ -12,6 +12,7 @@ import { useState } from 'react';
 interface ExpertiseCard {
   id: string;
   title: string;
+  overlayTitle: string;
   description: string;
   details: string[];
 }
@@ -19,7 +20,8 @@ interface ExpertiseCard {
 const expertiseData: ExpertiseCard[] = [
   {
     id: 'strategic-vision',
-    title: 'Strategic Vision',
+    title: 'Strategic\nVision',
+    overlayTitle: 'Strategic Vision',
     description: 'We see patterns others miss and craft the narratives that define them. Strategic visioning, brand identity, organizational values, and the foundational belief systems that drive long-term success.',
     details: [
       'Market pattern recognition',
@@ -30,7 +32,8 @@ const expertiseData: ExpertiseCard[] = [
   },
   {
     id: 'ai-operations',
-    title: 'AI Operations',
+    title: 'AI\nOperations',
+    overlayTitle: 'AI Operations',
     description: 'Advanced AI integration. Machine learning systems, automation workflows, intelligent decision support.',
     details: [
       'Machine learning implementation',
@@ -41,7 +44,8 @@ const expertiseData: ExpertiseCard[] = [
   },
   {
     id: 'capital-optimization',
-    title: 'Capital Optimization',
+    title: 'Capital\nOptimization',
+    overlayTitle: 'Capital Optimization',
     description: 'Smart capital deployment. Investment strategies, resource allocation, financial engineering.',
     details: [
       'Investment strategy development',
@@ -52,7 +56,8 @@ const expertiseData: ExpertiseCard[] = [
   },
   {
     id: 'technology-leadership',
-    title: 'Technology Leadership',
+    title: 'Technology\nLeadership',
+    overlayTitle: 'Technology Leadership',
     description: 'Cutting-edge technical implementation. Architecture design, scalable systems, innovation execution.',
     details: [
       'System architecture design',
@@ -63,7 +68,8 @@ const expertiseData: ExpertiseCard[] = [
   },
   {
     id: 'partnership-dynamics',
-    title: 'Partnership Dynamics',
+    title: 'Partnership\nDynamics',
+    overlayTitle: 'Partnership Dynamics',
     description: 'Strategic relationship building. Ecosystem development, collaborative frameworks, mutual growth.',
     details: [
       'Ecosystem development',
@@ -74,7 +80,8 @@ const expertiseData: ExpertiseCard[] = [
   },
   {
     id: 'market-intelligence',
-    title: 'Market Intelligence',
+    title: 'Market\nIntelligence',
+    overlayTitle: 'Market Intelligence',
     description: 'Deep market understanding. Trend analysis, opportunity identification, competitive intelligence.',
     details: [
       'Market trend analysis',
@@ -93,7 +100,7 @@ export default function ExpertiseShowcase() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Title - Minimal */}
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-light tracking-tight text-black">
+          <h2 className="text-6xl md:text-7xl font-cormorant tracking-tight text-black">
             Expertise
           </h2>
         </div>
@@ -102,7 +109,7 @@ export default function ExpertiseShowcase() {
         <div className="relative">
           {/* Background Grid - All Cards */}
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-16 max-w-6xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-3 gap-16 md:gap-20 max-w-7xl mx-auto"
             animate={{ 
               opacity: hoveredCard ? 0.2 : 1,
               scale: hoveredCard ? 0.95 : 1 
@@ -121,16 +128,17 @@ export default function ExpertiseShowcase() {
               >
                 <motion.div
                   className="
-                    w-full h-full rounded-full 
-                    bg-gradient-to-br from-gray-50/30 to-gray-100/20
-                    border border-gray-200/60
+                    w-full h-full 
+                    bg-gradient-to-br from-gray-50/60 to-gray-100/40
+                    border border-gray-200/80
                     flex items-center justify-center text-center p-8
                     backdrop-blur-sm
                   "
+                  style={{clipPath: 'polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)'}}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="text-xl md:text-2xl lg:text-3xl font-light tracking-tight text-black leading-tight">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-cormorant tracking-tight text-black leading-tight whitespace-pre-line">
                     {card.title}
                   </h3>
                 </motion.div>
@@ -180,16 +188,16 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3 
-                          className="text-2xl md:text-3xl lg:text-4xl font-light text-black mb-3 tracking-tight"
+                          className="text-3xl md:text-4xl lg:text-5xl font-cormorant text-black mb-3 tracking-tight"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
                         >
-                          {card.title}
+                          {card.overlayTitle}
                         </motion.h3>
                         
                         <motion.p 
-                          className="text-base md:text-lg text-gray-700 mb-5 leading-relaxed max-w-lg"
+                          className="text-lg md:text-xl text-gray-700 mb-5 leading-relaxed max-w-lg"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.15 }}
@@ -198,7 +206,7 @@ export default function ExpertiseShowcase() {
                         </motion.p>
 
                         <motion.div 
-                          className="grid grid-cols-1 gap-2 text-sm md:text-base text-gray-600"
+                          className="grid grid-cols-1 gap-2 text-base md:text-lg text-gray-600"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}

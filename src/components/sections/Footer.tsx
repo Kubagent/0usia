@@ -103,7 +103,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col justify-center items-center min-h-screen px-6 lg:px-12">
           
-          {/* Stay in Ousia - Top, smaller, Cormorant font */}
+          {/* Stay in Ousia - Top, increased size, Cormorant font */}
           <motion.div
             className="mb-16"
             initial={{ opacity: 0, y: -30 }}
@@ -112,7 +112,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             viewport={{ once: true }}
           >
             <motion.h2
-              className="text-4xl md:text-5xl lg:text-6xl font-cormorant tracking-wide leading-tight text-center"
+              className="text-6xl md:text-7xl lg:text-8xl font-cormorant tracking-wide leading-tight text-center relative"
               animate={{ 
                 opacity: [1, 0.7, 1] 
               }}
@@ -122,14 +122,16 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 repeat: Infinity 
               }}
             >
-              Stay in Ousia
+              Stay in <span className="relative inline-block">
+                <span className="relative inline-block">O<span className="absolute top-1/2 left-1/2 w-2 h-2 md:w-3 md:h-3 lg:w-4 lg:h-4 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2"></span></span>usia
+              </span>
             </motion.h2>
           </motion.div>
 
           {/* Main Content - Mail Button and Berlin Time Side by Side */}
           <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
             
-            {/* Left - MAIL Button (same size as Berlin timer) */}
+            {/* Left - MAIL Button (reduced size) */}
             <motion.div
               className="flex items-center"
               initial={{ opacity: 0, x: -50 }}
@@ -139,7 +141,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             >
               <motion.button
                 onClick={handleMailClick}
-                className="text-[14rem] md:text-[16rem] lg:text-[18rem] font-light tracking-tight text-gray-300 hover:text-white transition-colors duration-300 bg-transparent cursor-pointer leading-none"
+                className="text-[14rem] md:text-[16rem] lg:text-[18rem] font-cormorant tracking-tight text-gray-300 hover:text-white transition-colors duration-300 bg-transparent cursor-pointer leading-none"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Send us an email"
@@ -148,7 +150,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               </motion.button>
             </motion.div>
 
-            {/* Right - Berlin Time */}
+            {/* Right - Berlin Time (reduced size, no flickering) */}
             {mounted && (
               <motion.div
                 className="flex items-center"
@@ -157,25 +159,20 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 viewport={{ once: true }}
               >
-                <motion.div
-                  className="text-center lg:text-left"
-                  key={berlinTime}
-                  initial={{ opacity: 0.8 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <motion.p
-                    className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none"
+                <div className="text-center lg:text-left">
+                  <p
+                    className="text-6xl md:text-7xl lg:text-8xl font-cormorant tracking-tight leading-none"
                     aria-label={`Current time in Berlin: ${berlinTime}`}
                   >
                     Berlin:
-                  </motion.p>
-                  <motion.p
-                    className="text-7xl md:text-8xl lg:text-9xl font-light tracking-tight leading-none mt-2"
+                  </p>
+                  <p
+                    className="text-6xl md:text-7xl lg:text-8xl font-cormorant tracking-tight leading-none mt-2 tabular-nums"
+                    style={{ minWidth: '400px' }}
                   >
                     {berlinTime}
-                  </motion.p>
-                </motion.div>
+                  </p>
+                </div>
               </motion.div>
             )}
 
@@ -192,10 +189,10 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
           viewport={{ once: true }}
         >
           <div className="text-center">
-            <p className="text-gray-500 text-sm font-light mb-2">
+            <p className="text-gray-500 text-base font-light mb-2">
               © {currentYear} Ovsia
             </p>
-            <div className="flex space-x-6 text-xs">
+            <div className="flex space-x-6 text-sm">
               <motion.a
                 href="/privacy"
                 className="text-gray-500 hover:text-gray-300 transition-colors duration-300"

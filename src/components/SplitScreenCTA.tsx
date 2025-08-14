@@ -290,15 +290,15 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
               variants={itemVariants}
             >
               <div className="max-w-md mx-auto lg:mx-0">
-                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 font-space leading-tight">
+                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 font-cormorant leading-tight">
                   {leftTitle}
                 </h2>
-                <p className="text-lg text-gray-600 mb-8 font-cormorant leading-relaxed">
+                <p className="text-xl text-gray-600 mb-8 font-cormorant leading-relaxed">
                   {leftDescription}
                 </p>
                 <motion.button
                   onClick={openModal}
-                  className="inline-flex items-center px-8 py-4 bg-gray-900 text-white rounded-lg font-space font-medium text-lg hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300"
+                  className="inline-flex items-center px-8 py-4 bg-gray-900 text-white rounded-lg font-space font-medium text-xl hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label={`Open form to ${leftButtonText.toLowerCase()}`}
@@ -317,15 +317,15 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
               variants={itemVariants}
             >
               <div className="max-w-md mx-auto lg:mx-0">
-                <h2 className="text-3xl lg:text-4xl font-bold mb-6 font-space leading-tight">
+                <h2 className="text-4xl lg:text-5xl font-bold mb-6 font-cormorant leading-tight">
                   {rightTitle}
                 </h2>
-                <p className="text-lg text-gray-300 mb-8 font-cormorant leading-relaxed">
+                <p className="text-xl text-gray-300 mb-8 font-cormorant leading-relaxed">
                   {rightDescription}
                 </p>
                 <motion.button
                   onClick={handleMailto}
-                  className="inline-flex items-center px-8 py-4 bg-white text-gray-900 rounded-lg font-space font-medium text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-50"
+                  className="inline-flex items-center px-8 py-4 bg-white text-gray-900 rounded-lg font-space font-medium text-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-50"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label={`${rightButtonText} to ${mailtoEmail}`}
@@ -364,7 +364,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
               {/* Header */}
               <div className="px-8 py-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-2xl font-bold text-gray-900 font-space">
+                  <h3 className="text-3xl font-bold text-gray-900 font-cormorant">
                     Start Your Project
                   </h3>
                   <button
@@ -383,7 +383,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
               <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 overflow-y-auto max-h-[70vh]">
                 {/* Name Field */}
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 font-space">
+                  <label htmlFor="name" className="block text-base font-medium text-gray-700 mb-2 font-space">
                     Name *
                   </label>
                   <input
@@ -391,14 +391,14 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                     id="name"
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className={`w-full px-4 py-3 border rounded-lg font-cormorant text-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 border rounded-lg font-cormorant text-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all ${
                       errors.name ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="Your full name"
                     aria-describedby={errors.name ? "name-error" : undefined}
                   />
                   {errors.name && (
-                    <p id="name-error" className="mt-1 text-sm text-red-600" role="alert">
+                    <p id="name-error" className="mt-1 text-base text-red-600" role="alert">
                       {errors.name}
                     </p>
                   )}
@@ -406,7 +406,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
 
                 {/* Email Field */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 font-space">
+                  <label htmlFor="email" className="block text-base font-medium text-gray-700 mb-2 font-space">
                     Email *
                   </label>
                   <input
@@ -414,14 +414,14 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                     id="email"
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                    className={`w-full px-4 py-3 border rounded-lg font-cormorant text-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 border rounded-lg font-cormorant text-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all ${
                       errors.email ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="your.email@company.com"
                     aria-describedby={errors.email ? "email-error" : undefined}
                   />
                   {errors.email && (
-                    <p id="email-error" className="mt-1 text-sm text-red-600" role="alert">
+                    <p id="email-error" className="mt-1 text-base text-red-600" role="alert">
                       {errors.email}
                     </p>
                   )}
@@ -429,7 +429,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
 
                 {/* Company Field */}
                 <div>
-                  <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2 font-space">
+                  <label htmlFor="company" className="block text-base font-medium text-gray-700 mb-2 font-space">
                     Company
                   </label>
                   <input
@@ -437,14 +437,14 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                     id="company"
                     value={formData.company}
                     onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-cormorant text-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg font-cormorant text-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all"
                     placeholder="Your company name"
                   />
                 </div>
 
                 {/* Message Field */}
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2 font-space">
+                  <label htmlFor="message" className="block text-base font-medium text-gray-700 mb-2 font-space">
                     Project Details *
                   </label>
                   <textarea
@@ -452,14 +452,14 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                     rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                    className={`w-full px-4 py-3 border rounded-lg font-cormorant text-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all resize-none ${
+                    className={`w-full px-4 py-3 border rounded-lg font-cormorant text-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all resize-none ${
                       errors.message ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="Tell us about your project, goals, timeline, and any specific requirements..."
                     aria-describedby={errors.message ? "message-error" : undefined}
                   />
                   {errors.message && (
-                    <p id="message-error" className="mt-1 text-sm text-red-600" role="alert">
+                    <p id="message-error" className="mt-1 text-base text-red-600" role="alert">
                       {errors.message}
                     </p>
                   )}
@@ -467,7 +467,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
 
                 {/* File Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2 font-space">
+                  <label className="block text-base font-medium text-gray-700 mb-2 font-space">
                     Attach Files (Optional)
                   </label>
                   <div
@@ -493,10 +493,10 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                         <svg className="mx-auto h-8 w-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <p className="text-sm font-medium text-gray-900 font-space">
+                        <p className="text-base font-medium text-gray-900 font-space">
                           {formData.file.name}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-sm text-gray-500">
                           {(formData.file.size / 1024 / 1024).toFixed(2)} MB
                         </p>
                         <button
@@ -505,7 +505,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                             e.stopPropagation();
                             setFormData(prev => ({ ...prev, file: undefined }));
                           }}
-                          className="text-sm text-red-600 hover:text-red-800"
+                          className="text-base text-red-600 hover:text-red-800"
                         >
                           Remove file
                         </button>
@@ -516,10 +516,10 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
                         <div>
-                          <p className="text-sm font-medium text-gray-900 font-space">
+                          <p className="text-base font-medium text-gray-900 font-space">
                             Click to upload or drag and drop
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm text-gray-500">
                             PDF, DOC, images up to 10MB
                           </p>
                         </div>
@@ -541,7 +541,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
 
                 {/* GDPR Consent Section */}
                 <div className="space-y-4 pt-4 border-t border-gray-200">
-                  <h4 className="text-sm font-medium text-gray-900 font-space">
+                  <h4 className="text-base font-medium text-gray-900 font-space">
                     Privacy & Consent
                   </h4>
                   
@@ -557,7 +557,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                         }`}
                         required
                       />
-                      <div className="text-sm">
+                      <div className="text-base">
                         <span className="text-gray-700 font-cormorant">
                           I agree to the{' '}
                           <a
@@ -573,7 +573,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                       </div>
                     </label>
                     {errors.gdprConsent && (
-                      <p className="mt-1 text-sm text-red-600" role="alert">
+                      <p className="mt-1 text-base text-red-600" role="alert">
                         {errors.gdprConsent}
                       </p>
                     )}
@@ -588,7 +588,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                         onChange={(e) => setFormData(prev => ({ ...prev, marketingConsent: e.target.checked }))}
                         className="mt-1 h-4 w-4 text-gray-900 focus:ring-gray-500 border-gray-300 rounded"
                       />
-                      <div className="text-sm">
+                      <div className="text-base">
                         <span className="text-gray-700 font-cormorant">
                           I would like to receive updates about your services and industry insights via email. You can unsubscribe at any time.
                         </span>
@@ -596,7 +596,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                     </label>
                   </div>
 
-                  <div className="text-xs text-gray-500 font-cormorant">
+                  <div className="text-sm text-gray-500 font-cormorant">
                     * Required field. We respect your privacy and will only use your data as described in our Privacy Policy.
                   </div>
                 </div>
@@ -624,7 +624,7 @@ const SplitScreenCTA: React.FC<SplitScreenCTAProps> = ({
                         )}
                       </div>
                       <div className="ml-3">
-                        <p className="text-sm font-medium font-space">
+                        <p className="text-base font-medium font-space">
                           {submitMessage}
                         </p>
                       </div>

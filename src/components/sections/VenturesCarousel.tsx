@@ -59,7 +59,7 @@ const venturesData: Venture[] = [
     name: 'Substans',
     tagline: 'Substance & Strategy',
     logoUrl: '/venture-logos/substans.png',
-    websiteUrl: 'https://substans.com',
+    websiteUrl: 'https://www.substans.art',
     description: 'Strategic consulting with substance'
   }
 ];
@@ -126,11 +126,11 @@ export default function VenturesCarousel() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-5xl md:text-6xl font-light tracking-tight text-white mb-4">
+          <h2 className="text-6xl md:text-7xl font-cormorant tracking-tight text-white mb-4">
             Proof of Ousia
           </h2>
-          <p className="text-xl text-gray-400 font-light max-w-2xl mx-auto">
-            Ventures we've helped bring to life
+          <p className="text-2xl text-gray-400 font-light max-w-2xl mx-auto">
+            Ventures we've brought to life
           </p>
         </motion.div>
 
@@ -169,13 +169,16 @@ export default function VenturesCarousel() {
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="w-32 h-32 bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/40 transition-all duration-300 p-4">
+              <div 
+                className="w-42 h-42 aspect-square bg-gradient-to-br from-white/12 to-white/8 backdrop-blur-sm flex items-center justify-center group-hover:from-white/18 group-hover:to-white/12 transition-all duration-300 p-5"
+                style={{clipPath: 'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)'}}
+              >
                 <Image
                   src={prev.logoUrl}
                   alt={prev.name}
-                  width={96}
-                  height={96}
-                  className="max-w-full max-h-full object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                  width={120}
+                  height={120}
+                  className="w-24 h-24 object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                 />
               </div>
             </motion.div>
@@ -190,13 +193,16 @@ export default function VenturesCarousel() {
               transition={{ duration: 0.4 }}
             >
               {/* Current Venture Logo */}
-              <div className="w-64 h-64 mx-auto mb-8 bg-white/10 border-2 border-white/30 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/50 transition-all duration-300 group-hover:scale-105 p-8">
+              <div 
+                className="w-80 h-80 aspect-square mx-auto mb-8 bg-gradient-to-br from-white/15 to-white/10 backdrop-blur-sm flex items-center justify-center group-hover:from-white/22 group-hover:to-white/15 transition-all duration-300 group-hover:scale-105 p-10"
+                style={{clipPath: 'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)'}}
+              >
                 <Image
                   src={current.logoUrl}
                   alt={current.name}
-                  width={192}
-                  height={192}
-                  className="max-w-full max-h-full object-contain filter invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                  width={240}
+                  height={240}
+                  className="w-48 h-48 object-contain filter invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
                 />
               </div>
 
@@ -210,15 +216,15 @@ export default function VenturesCarousel() {
                   transition={{ duration: 0.3 }}
                   className="space-y-4"
                 >
-                  <h3 className="text-3xl md:text-4xl font-light text-white tracking-tight">
+                  <h3 className="text-4xl md:text-5xl font-cormorant text-white tracking-tight">
                     {current.name}
                   </h3>
-                  <p className="text-gray-400 text-xl font-light max-w-md mx-auto leading-relaxed">
+                  <p className="text-gray-400 text-2xl font-light max-w-md mx-auto leading-relaxed">
                     {current.tagline}
                   </p>
                   
                   {/* Visit Website Hint */}
-                  <div className="text-sm text-white/40 group-hover:text-white/60 transition-colors duration-300 mt-6">
+                  <div className="text-base text-white/40 group-hover:text-white/60 transition-colors duration-300 mt-6">
                     Click to visit website
                   </div>
                 </motion.div>
@@ -233,13 +239,16 @@ export default function VenturesCarousel() {
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="w-32 h-32 bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/40 transition-all duration-300 p-4">
+              <div 
+                className="w-42 h-42 aspect-square bg-gradient-to-br from-white/12 to-white/8 backdrop-blur-sm flex items-center justify-center group-hover:from-white/18 group-hover:to-white/12 transition-all duration-300 p-5"
+                style={{clipPath: 'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)'}}
+              >
                 <Image
                   src={next.logoUrl}
                   alt={next.name}
-                  width={96}
-                  height={96}
-                  className="max-w-full max-h-full object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                  width={120}
+                  height={120}
+                  className="w-24 h-24 object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                 />
               </div>
             </motion.div>

@@ -47,7 +47,7 @@ const FALLBACK_VENTURES: VentureContent[] = [
       users: '1M+',
       growth: '250% YoY'
     },
-    siteUrl: 'https://substans.com',
+    siteUrl: 'https://www.substans.art',
     sortOrder: 2,
   },
   {
