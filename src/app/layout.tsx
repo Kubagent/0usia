@@ -16,10 +16,10 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'ousia',
+  title: '0usia -> 1',
   description:
-    'Venture studio building the impossible. Strategy, AI Operations, and Capital for transformational ventures.',
-  keywords: 'venture studio, AI operations, strategy, capital, innovation',
+    '0usia brings your vision, virtue and venture to life. Narrative, innovation and partnerships to create long-term value. Stay in Ousia.',
+  keywords: 'ventures, GTM, AI, operations, capital, innovation, start-up, enactivism, life',
   authors: [{ name: 'Ovsia Team' }],
   icons: {
     icon: '/0usia_black.png',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ousia',
     description:
-      'Venture studio building the impossible. Strategy, AI Operations, and Capital for transformational ventures.',
+      '0usia brings your vision, virtue and venture to life. Narrative, innovation and partnerships to create long-term value. Stay in Ousia.',
     type: 'website',
     locale: 'en_US',
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'ousia',
     description:
-      'Venture studio building the impossible. Strategy, AI Operations, and Capital for transformational ventures.',
+      '0usia brings your vision, virtue and venture to life. Narrative, innovation and partnerships to create long-term value. Stay in Ousia.',
   },
 };
 

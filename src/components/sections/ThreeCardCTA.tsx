@@ -491,13 +491,13 @@ export default function ThreeCardCTA() {
               <motion.div
                 key={card.id}
                 className={`
-                  flex flex-col justify-between min-h-[300px] sm:min-h-[350px] md:min-h-[400px] p-6 sm:p-8 lg:p-12 
+                  flex flex-col justify-between p-6 sm:p-8 lg:p-12 
                   aspect-square rounded-full
                   ${getCardStyles(card.bgColor)}
                   backdrop-blur-sm
                   transition-all duration-300 hover:scale-105 hover:shadow-xl
                   cursor-pointer group
-                  w-full max-w-sm mx-auto
+                  w-full h-full max-w-sm mx-auto
                   ${index === 1 && 'md:col-span-2 lg:col-span-1'}
                 `}
                 variants={cardVariants}

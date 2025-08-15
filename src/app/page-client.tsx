@@ -54,7 +54,7 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
       {/* Section 2: Your [Rotating Word] Actualized - Black background */}
       <div className="min-h-screen flex items-center justify-center relative bg-black">
         <div className="text-center text-white px-4 sm:px-6 md:px-8">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl 3xl:text-[10rem] font-cormorant leading-tight tracking-wide">
+          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11rem] 3xl:text-[12rem] font-cormorant leading-tight tracking-wide">
             <span className="block mb-2 sm:mb-3 md:mb-4">Your</span>
             <RotatingWordAnimation 
               words={['Venture', 'Vision', 'Virtue']}
