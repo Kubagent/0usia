@@ -3,6 +3,10 @@ name = "ovsia-v4"
 compatibility_date = "2024-11-20"
 pages_build_output_dir = ".next"
 
+# Exclude cache files from deployment
+[build]
+command = "npm run build && find .next/cache -name '*.pack' -size +20M -delete || true"
+
 [env.production]
 name = "ovsia-v4"
 

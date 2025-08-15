@@ -31,7 +31,7 @@ const nextConfig = {
   
   // Optimize build output
   productionBrowserSourceMaps: false,
-
+  
   // Security headers
   async headers() {
     return [
@@ -55,13 +55,20 @@ const nextConfig = {
     ];
   },
 
-  // Bundle analyzer (optional)
-  ...(process.env.ANALYZE === 'true' && {
-    webpack: config => {
+  // Webpack configuration with cache disabling for production
+  webpack: (config, { dev, isServer }) => {
+    if (!dev) {
+      // Disable caching in production builds for Cloudflare Pages
+      config.cache = false;
+    }
+    
+    // Bundle analyzer configuration
+    if (process.env.ANALYZE === 'true') {
       config.resolve.fallback = { fs: false, path: false };
-      return config;
-    },
-  }),
+    }
+    
+    return config;
+  },
 };
 
 module.exports = nextConfig;
