@@ -16,6 +16,6 @@ find .next -size +20M -delete || true
 
 # Show final build output size
 echo "📊 Final build size:"
-du -sh .next/
+du -sh out/
 
 echo "✅ Cloudflare Pages build completed successfully!"

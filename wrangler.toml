@@ -1,7 +1,7 @@
 # Cloudflare Pages Configuration for Ovsia V4
 name = "ovsia-v4"
 compatibility_date = "2024-11-20"
-pages_build_output_dir = ".next"
+pages_build_output_dir = "out"
 
 [env.production]
 name = "ovsia-v4"
@@ -10,11 +10,10 @@ name = "ovsia-v4"
 name = "ovsia-v4-preview"
 
 # Build configuration for Cloudflare Pages dashboard:
-# Framework preset: Next.js (Full Stack)
+# Framework preset: Next.js (Static HTML Export)
 # Build command: npm run build:cf
-# Build output directory: .next
+# Build output directory: out
 # Root directory: (leave empty)
-# Environment: Node.js
 # Root directory: (leave empty)
 
 # Environment variables to be configured in Cloudflare Pages dashboard:

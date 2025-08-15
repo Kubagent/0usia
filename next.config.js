@@ -30,10 +30,9 @@ const nextConfig = {
   // Optimize build output
   productionBrowserSourceMaps: false,
   
-  // Keep server-side rendering for API routes
-  // output: 'export', // Disabled because we have API routes
-  
-  // Cloudflare Pages compatibility
+  // Static export for Cloudflare Pages
+  output: 'export',
+  trailingSlash: true,
   
   // Security headers
   async headers() {
