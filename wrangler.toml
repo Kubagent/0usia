@@ -3,19 +3,17 @@ name = "ovsia-v4"
 compatibility_date = "2024-11-20"
 pages_build_output_dir = ".next"
 
-# Exclude cache files from deployment
-[build]
-command = "bash scripts/cloudflare-build.sh"
-
 [env.production]
 name = "ovsia-v4"
 
 [env.preview]
 name = "ovsia-v4-preview"
 
-# Build configuration will be handled via Cloudflare Pages dashboard
-# Build command: npm run build
+# Build configuration for Cloudflare Pages dashboard:
+# Build command: npm run build:cf
 # Build output directory: .next
+# Root directory: (leave empty)
+# Environment: Node.js
 # Root directory: (leave empty)
 
 # Environment variables to be configured in Cloudflare Pages dashboard:
