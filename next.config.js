@@ -33,6 +33,8 @@ const nextConfig = {
   // Keep server-side rendering for API routes
   // output: 'export', // Disabled because we have API routes
   
+  // Cloudflare Pages compatibility
+  
   // Security headers
   async headers() {
     return [
