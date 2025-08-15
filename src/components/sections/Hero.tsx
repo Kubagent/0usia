@@ -86,6 +86,7 @@ export default function Hero() {
             width={600}
             height={600}
             priority
+            className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] xl:w-[600px] xl:h-[600px]"
           />
         </motion.div>
         
@@ -105,6 +106,7 @@ export default function Hero() {
             width={600}
             height={600}
             priority
+            className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] xl:w-[600px] xl:h-[600px]"
           />
         </motion.div>
       </div>

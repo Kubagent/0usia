@@ -5,6 +5,7 @@
 /* Import performance optimizations */
 @import '../styles/scroll-optimizations.css';
 @import '../styles/section-transitions.css';
+@import '../styles/mobile-optimizations.css';
 
 :root {
   --font-cormorant: 'Cormorant Garamond', serif;

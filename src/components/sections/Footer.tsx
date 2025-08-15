@@ -74,14 +74,14 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         
         {/* Top Section - LinkedIn Icon */}
         <motion.div
-          className="absolute top-12 right-12"
+          className="absolute top-6 right-6 sm:top-8 sm:right-8 md:top-12 md:right-12"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
           <motion.a
-            href="https://linkedin.com/company/ovsia"
+            href="https://www.linkedin.com/company/0usia"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-white transition-colors duration-300 block"
@@ -90,8 +90,9 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             aria-label="Connect with us on LinkedIn"
           >
             <svg 
-              width="48" 
-              height="48" 
+              width="32" 
+              height="32" 
+              className="sm:w-10 sm:h-10 md:w-12 md:h-12"
               fill="currentColor" 
               viewBox="0 0 24 24"
             >
@@ -101,18 +102,18 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         </motion.div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col justify-center items-center min-h-screen px-6 lg:px-12">
+        <div className="flex-1 flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 lg:px-12">
           
           {/* Stay in Ousia - Top, increased size, Cormorant font */}
           <motion.div
-            className="mb-16"
+            className="mb-8 sm:mb-12 md:mb-16"
             initial={{ opacity: 0, y: -30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
             <motion.h2
-              className="text-6xl md:text-7xl lg:text-8xl font-cormorant tracking-wide leading-tight text-center relative"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-cormorant tracking-wide leading-tight text-center relative"
               animate={{ 
                 opacity: [1, 0.7, 1] 
               }}
@@ -123,13 +124,13 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               }}
             >
               Stay in <span className="relative inline-block">
-                <span className="relative inline-block">O<span className="absolute top-1/2 left-1/2 w-2 h-2 md:w-3 md:h-3 lg:w-4 lg:h-4 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2"></span></span>usia
+                <span className="relative inline-block">O<span className="absolute top-1/2 left-1/2 w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-3 md:h-3 lg:w-4 lg:h-4 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2"></span></span>usia
               </span>
             </motion.h2>
           </motion.div>
 
           {/* Main Content - Mail Button and Berlin Time Side by Side */}
-          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+          <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-12 md:gap-16 lg:gap-24">
             
             {/* Left - MAIL Button (reduced size) */}
             <motion.div
@@ -141,7 +142,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             >
               <motion.button
                 onClick={handleMailClick}
-                className="text-[14rem] md:text-[16rem] lg:text-[18rem] font-cormorant tracking-tight text-gray-300 hover:text-white transition-colors duration-300 bg-transparent cursor-pointer leading-none"
+                className="text-5xl sm:text-7xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] 3xl:text-[18rem] font-cormorant tracking-tight text-gray-300 hover:text-white transition-colors duration-300 bg-transparent cursor-pointer leading-none"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Send us an email"
@@ -161,14 +162,14 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               >
                 <div className="text-center lg:text-left">
                   <p
-                    className="text-6xl md:text-7xl lg:text-8xl font-cormorant tracking-tight leading-none"
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-cormorant tracking-tight leading-none"
                     aria-label={`Current time in Berlin: ${berlinTime}`}
                   >
                     Berlin:
                   </p>
                   <p
-                    className="text-6xl md:text-7xl lg:text-8xl font-cormorant tracking-tight leading-none mt-2 tabular-nums"
-                    style={{ minWidth: '400px' }}
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-cormorant tracking-tight leading-none mt-1 sm:mt-2 tabular-nums"
+                    style={{ minWidth: 'auto' }}
                   >
                     {berlinTime}
                   </p>
@@ -182,17 +183,17 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
         {/* Legal Footer - Bottom Edge */}
         <motion.div
-          className="absolute bottom-6 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1 }}
           viewport={{ once: true }}
         >
           <div className="text-center">
-            <p className="text-gray-500 text-base font-light mb-2">
+            <p className="text-gray-500 text-sm sm:text-base font-light mb-2">
               © {currentYear} Ovsia
             </p>
-            <div className="flex space-x-6 text-sm">
+            <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm">
               <motion.a
                 href="/privacy"
                 className="text-gray-500 hover:text-gray-300 transition-colors duration-300"

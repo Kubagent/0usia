@@ -120,16 +120,16 @@ export default function VenturesCarousel() {
       <div className="max-w-7xl mx-auto px-6 w-full">
         {/* Section Title */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-6xl md:text-7xl font-cormorant tracking-tight text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
             Proof of Ousia
           </h2>
-          <p className="text-2xl text-gray-400 font-light max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-400 font-light max-w-2xl mx-auto px-4">
             Ventures we've brought to life
           </p>
         </motion.div>
@@ -140,26 +140,26 @@ export default function VenturesCarousel() {
           {/* Navigation Arrows */}
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-2 -translate-x-12"
+            className="absolute left-2 sm:left-4 md:-left-12 top-1/2 -translate-y-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-3 md:p-2 bg-white/10 md:bg-transparent rounded-full md:rounded-none backdrop-blur-sm md:backdrop-blur-none"
             aria-label="Previous venture"
           >
-            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg width="20" height="20" className="md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-2 translate-x-12"
+            className="absolute right-2 sm:right-4 md:-right-12 top-1/2 -translate-y-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-3 md:p-2 bg-white/10 md:bg-transparent rounded-full md:rounded-none backdrop-blur-sm md:backdrop-blur-none"
             aria-label="Next venture"
           >
-            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg width="20" height="20" className="md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5l7 7-7 7" />
             </svg>
           </button>
 
           {/* Ventures Display */}
-          <div className="flex items-center justify-between max-w-6xl mx-auto py-12">
+          <div className="flex items-center justify-between max-w-6xl mx-auto py-8 sm:py-10 md:py-12 px-4 sm:px-0">
             
             {/* Previous Venture - Left Side */}
             <motion.div
@@ -170,7 +170,7 @@ export default function VenturesCarousel() {
               transition={{ duration: 0.2 }}
             >
               <div 
-                className="w-42 h-42 aspect-square bg-gradient-to-br from-white/12 to-white/8 backdrop-blur-sm flex items-center justify-center group-hover:from-white/18 group-hover:to-white/12 transition-all duration-300 p-5"
+                className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-42 lg:h-42 aspect-square bg-gradient-to-br from-white/12 to-white/8 backdrop-blur-sm flex items-center justify-center group-hover:from-white/18 group-hover:to-white/12 transition-all duration-300 p-3 sm:p-4 md:p-5"
                 style={{clipPath: 'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)'}}
               >
                 <Image
@@ -178,7 +178,7 @@ export default function VenturesCarousel() {
                   alt={prev.name}
                   width={120}
                   height={120}
-                  className="w-24 h-24 object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                  className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                 />
               </div>
             </motion.div>
@@ -194,7 +194,7 @@ export default function VenturesCarousel() {
             >
               {/* Current Venture Logo */}
               <div 
-                className="w-80 h-80 aspect-square mx-auto mb-8 bg-gradient-to-br from-white/15 to-white/10 backdrop-blur-sm flex items-center justify-center group-hover:from-white/22 group-hover:to-white/15 transition-all duration-300 group-hover:scale-105 p-10"
+                className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 aspect-square mx-auto mb-6 sm:mb-8 bg-gradient-to-br from-white/15 to-white/10 backdrop-blur-sm flex items-center justify-center group-hover:from-white/22 group-hover:to-white/15 transition-all duration-300 group-hover:scale-105 p-6 sm:p-8 md:p-10"
                 style={{clipPath: 'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)'}}
               >
                 <Image
@@ -202,7 +202,7 @@ export default function VenturesCarousel() {
                   alt={current.name}
                   width={240}
                   height={240}
-                  className="w-48 h-48 object-contain filter invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                  className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 xl:w-48 xl:h-48 object-contain filter invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
                 />
               </div>
 
@@ -216,15 +216,15 @@ export default function VenturesCarousel() {
                   transition={{ duration: 0.3 }}
                   className="space-y-4"
                 >
-                  <h3 className="text-4xl md:text-5xl font-cormorant text-white tracking-tight">
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-cormorant text-white tracking-tight">
                     {current.name}
                   </h3>
-                  <p className="text-gray-400 text-2xl font-light max-w-md mx-auto leading-relaxed">
+                  <p className="text-gray-400 text-lg sm:text-xl md:text-2xl font-light max-w-md mx-auto leading-relaxed px-2">
                     {current.tagline}
                   </p>
                   
                   {/* Visit Website Hint */}
-                  <div className="text-base text-white/40 group-hover:text-white/60 transition-colors duration-300 mt-6">
+                  <div className="text-sm sm:text-base text-white/40 group-hover:text-white/60 transition-colors duration-300 mt-4 sm:mt-6">
                     Click to visit website
                   </div>
                 </motion.div>
@@ -240,7 +240,7 @@ export default function VenturesCarousel() {
               transition={{ duration: 0.2 }}
             >
               <div 
-                className="w-42 h-42 aspect-square bg-gradient-to-br from-white/12 to-white/8 backdrop-blur-sm flex items-center justify-center group-hover:from-white/18 group-hover:to-white/12 transition-all duration-300 p-5"
+                className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-42 lg:h-42 aspect-square bg-gradient-to-br from-white/12 to-white/8 backdrop-blur-sm flex items-center justify-center group-hover:from-white/18 group-hover:to-white/12 transition-all duration-300 p-3 sm:p-4 md:p-5"
                 style={{clipPath: 'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)'}}
               >
                 <Image
@@ -248,7 +248,7 @@ export default function VenturesCarousel() {
                   alt={next.name}
                   width={120}
                   height={120}
-                  className="w-24 h-24 object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                  className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain filter invert opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                 />
               </div>
             </motion.div>

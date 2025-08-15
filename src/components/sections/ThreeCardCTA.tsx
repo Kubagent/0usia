@@ -155,12 +155,12 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <motion.div 
-        className="bg-white rounded-2xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-3xl font-cormorant">{config.title}</h3>
+        <div className="flex justify-between items-center mb-4 sm:mb-6">
+          <h3 className="text-2xl sm:text-3xl font-cormorant">{config.title}</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -168,7 +168,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {config.fields.includes('name') && (
             <div>
               <label className="block text-base font-medium text-gray-700 mb-2">
@@ -465,23 +465,23 @@ export default function ThreeCardCTA() {
         <div className="w-full max-w-7xl mx-auto px-4">
           {/* Section Title */}
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-12 md:mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-6xl md:text-7xl font-cormorant tracking-tight text-black mb-4">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant tracking-tight text-black mb-2 sm:mb-4">
               Choose Your Path
             </h2>
-            <p className="text-2xl text-gray-600 font-light max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 font-light max-w-2xl mx-auto px-4">
               Every journey begins with a single step. Which path calls to you?
             </p>
           </motion.div>
 
           {/* Three Cards Layout */}
           <motion.div 
-            className="grid lg:grid-cols-3 gap-28 max-w-6xl mx-auto items-center justify-items-center"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 md:gap-16 lg:gap-20 xl:gap-28 max-w-6xl mx-auto items-center justify-items-center px-4"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -491,32 +491,34 @@ export default function ThreeCardCTA() {
               <motion.div
                 key={card.id}
                 className={`
-                  flex flex-col justify-between min-h-[400px] p-8 lg:p-12 
+                  flex flex-col justify-between min-h-[300px] sm:min-h-[350px] md:min-h-[400px] p-6 sm:p-8 lg:p-12 
                   aspect-square rounded-full
                   ${getCardStyles(card.bgColor)}
                   backdrop-blur-sm
                   transition-all duration-300 hover:scale-105 hover:shadow-xl
                   cursor-pointer group
+                  w-full max-w-sm mx-auto
+                  ${index === 1 && 'md:col-span-2 lg:col-span-1'}
                 `}
                 variants={cardVariants}
                 onClick={() => handleCardAction(card)}
               >
                 <div className="text-center flex flex-col items-center justify-center h-full">
-                  <h3 className="text-3xl lg:text-4xl font-cormorant mb-4 leading-tight">
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-cormorant mb-3 sm:mb-4 leading-tight">
                     {card.title}
                   </h3>
-                  <p className="text-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[200px]">
+                  <p className="text-base sm:text-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[200px] sm:max-w-[220px]">
                     {card.description}
                   </p>
                 </div>
 
                 <motion.button
                   className={`
-                    inline-flex items-center justify-center px-6 py-3 rounded-lg 
-                    font-medium text-base transition-all duration-300 
+                    inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-lg 
+                    font-medium text-sm sm:text-base transition-all duration-300 
                     transform group-hover:scale-105 focus:outline-none focus:ring-4 
                     ${getButtonStyles(card.bgColor)}
-                    mt-6 w-auto mx-auto
+                    mt-4 sm:mt-6 w-auto mx-auto min-h-[44px]
                   `}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

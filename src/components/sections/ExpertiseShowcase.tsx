@@ -1,7 +1,8 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useMobileDetection } from '@/hooks/useMobileDetection';
 
 /**
  * ExpertiseShowcase - Interactive Hover Animation Component
@@ -94,13 +95,24 @@ const expertiseData: ExpertiseCard[] = [
 
 export default function ExpertiseShowcase() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const { isMobile, canHover } = useMobileDetection();
+
+  // Auto-hide overlay on mobile after 3 seconds
+  useEffect(() => {
+    if (isMobile && hoveredCard) {
+      const timer = setTimeout(() => {
+        setHoveredCard(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile, hoveredCard]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center py-20">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Title - Minimal */}
-        <div className="text-center mb-16">
-          <h2 className="text-6xl md:text-7xl font-cormorant tracking-tight text-black">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant tracking-tight text-black">
             Expertise
           </h2>
         </div>
@@ -109,7 +121,7 @@ export default function ExpertiseShowcase() {
         <div className="relative">
           {/* Background Grid - All Cards */}
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 gap-16 md:gap-20 max-w-7xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 md:gap-16 lg:gap-20 max-w-7xl mx-auto"
             animate={{ 
               opacity: hoveredCard ? 0.2 : 1,
               scale: hoveredCard ? 0.95 : 1 
@@ -120,8 +132,14 @@ export default function ExpertiseShowcase() {
               <motion.div
                 key={card.id}
                 className="aspect-square relative cursor-pointer"
-                onHoverStart={() => setHoveredCard(card.id)}
-                onHoverEnd={() => setHoveredCard(null)}
+                onHoverStart={() => canHover && setHoveredCard(card.id)}
+                onHoverEnd={() => canHover && setHoveredCard(null)}
+                onTap={() => {
+                  // Mobile tap to show/hide details
+                  if (isMobile || !canHover) {
+                    setHoveredCard(hoveredCard === card.id ? null : card.id);
+                  }
+                }}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -138,7 +156,7 @@ export default function ExpertiseShowcase() {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-cormorant tracking-tight text-black leading-tight whitespace-pre-line">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-cormorant tracking-tight text-black leading-tight whitespace-pre-line">
                     {card.title}
                   </h3>
                 </motion.div>
@@ -169,12 +187,13 @@ export default function ExpertiseShowcase() {
                     backdrop-blur-md
                     rounded-lg
                     w-[94%] max-w-4xl
-                    h-[84%] max-h-[30rem]
+                    h-[84%] max-h-[30rem] sm:max-h-[32rem] lg:max-h-[30rem]
                     flex flex-col items-center justify-center text-center
-                    p-5 md:p-6
+                    p-4 sm:p-5 md:p-6
                     border border-gray-300/50
                     shadow-lg shadow-black/10
                     ring-1 ring-gray-200/20
+                    mx-2 sm:mx-0
                   "
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -188,7 +207,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3 
-                          className="text-3xl md:text-4xl lg:text-5xl font-cormorant text-black mb-3 tracking-tight"
+                          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-cormorant text-black mb-2 sm:mb-3 tracking-tight"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
@@ -197,7 +216,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
                         
                         <motion.p 
-                          className="text-lg md:text-xl text-gray-700 mb-5 leading-relaxed max-w-lg"
+                          className="text-base sm:text-lg md:text-xl text-gray-700 mb-3 sm:mb-4 md:mb-5 leading-relaxed max-w-lg"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.15 }}
@@ -206,7 +225,7 @@ export default function ExpertiseShowcase() {
                         </motion.p>
 
                         <motion.div 
-                          className="grid grid-cols-1 gap-2 text-base md:text-lg text-gray-600"
+                          className="grid grid-cols-1 gap-1 sm:gap-2 text-sm sm:text-base md:text-lg text-gray-600"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}

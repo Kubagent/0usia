@@ -6,6 +6,8 @@ export { useCarousel } from './useCarousel';
 export { useRotatingCards } from './useRotatingCards';
 export { useScrollDirection } from './useScrollDirection';
 export { useWillChange } from './useWillChange';
+export { useMobileScrollOptimization } from './useMobileScrollOptimization';
+export { useMobileDetection } from './useMobileDetection';
 
 // Export types
 export type { 
@@ -17,3 +19,13 @@ export type {
 export type { 
   ScrollLockOptions 
 } from './useScrollLock';
+
+export type {
+  TouchGestureConfig,
+  TouchMetrics,
+  MobilePerformanceMetrics
+} from './useMobileScrollOptimization';
+
+export type {
+  MobileDetectionResult
+} from './useMobileDetection';

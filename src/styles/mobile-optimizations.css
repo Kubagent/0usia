@@ -1,0 +1,238 @@
+/**
+ * Mobile Optimizations for Ovsia V4
+ * 
+ * Mobile-specific CSS optimizations for better performance and UX
+ */
+
+/* Touch targets and interactions */
+@media (pointer: coarse) {
+  /* Ensure minimum touch target size (44px) */
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Improve tap targets for small elements */
+  .tap-target {
+    position: relative;
+  }
+  
+  .tap-target::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+  }
+}
+
+/* Mobile viewport optimizations */
+@media screen and (max-width: 768px) {
+  /* Prevent horizontal scrolling */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Optimize scroll performance on iOS */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent zoom on form inputs on iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* Improve button press feedback */
+  button:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  /* Optimize image rendering */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* High DPI optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+  /* Better text rendering on high DPI screens */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Gesture and touch optimizations */
+.gesture-area {
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Optimize animations for mobile */
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-optimized-animation {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile-specific scroll behavior */
+@media screen and (max-width: 768px) {
+  .scroll-section {
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+
+  .scroll-section > * {
+    scroll-snap-align: start;
+  }
+}
+
+/* Performance optimizations for mobile */
+@media screen and (max-width: 768px) {
+  /* Optimize composite layers */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  .will-change-auto {
+    will-change: auto;
+  }
+
+  /* Optimize blur effects for mobile */
+  .mobile-backdrop-blur {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Reduce complexity on mobile */
+  .complex-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Safe area handling for mobile devices with notches */
+@supports (padding: max(0px)) {
+  .safe-area-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-area-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .safe-area-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Mobile keyboard handling */
+@media screen and (max-width: 768px) {
+  .keyboard-avoiding {
+    transition: transform 0.3s ease;
+  }
+
+  /* Adjust when virtual keyboard is present */
+  @supports (-webkit-touch-callout: none) {
+    .keyboard-avoiding {
+      position: relative;
+    }
+  }
+}
+
+/* Mobile-specific typography improvements */
+@media screen and (max-width: 768px) {
+  /* Improve readability on small screens */
+  .mobile-text-optimize {
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+
+  /* Better button typography */
+  button,
+  .btn {
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+}
+
+/* Battery and performance considerations */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+  /* Dark mode optimizations for OLED screens */
+  .dark-mode-optimize {
+    background-color: #000000;
+    color: #ffffff;
+  }
+}
+
+/* Connection-aware optimizations */
+@media (max-width: 768px) and (prefers-reduced-data: reduce) {
+  /* Reduce animations and effects on slow connections */
+  .connection-aware {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .connection-aware img {
+    content-visibility: auto;
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media screen and (max-width: 768px) {
+  /* Better focus indicators on mobile */
+  button:focus,
+  input:focus,
+  textarea:focus,
+  select:focus,
+  [tabindex]:focus {
+    outline: 3px solid #007acc;
+    outline-offset: 2px;
+  }
+
+  /* Improve text contrast */
+  .high-contrast-text {
+    color: #000000;
+    text-shadow: none;
+  }
+}
