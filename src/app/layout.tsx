@@ -18,7 +18,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: '0usia -> 1',
   description:
-    '0usia brings your vision, virtue and venture to life. Narrative, innovation and partnerships to create long-term value. Stay in Ousia.',
+    '0usia brings your vision, virtue and venture to life. Flourishment of narrative, innovative strategy and partnerships to create value. Stay in ousia.',
   keywords: 'ventures, GTM, AI, operations, capital, innovation, start-up, enactivism, life',
   authors: [{ name: 'Ovsia Team' }],
   icons: {
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ousia',
     description:
-      '0usia brings your vision, virtue and venture to life. Narrative, innovation and partnerships to create long-term value. Stay in Ousia.',
+      '0usia brings your vision, virtue and venture to life. Flourishment of narrative, innovative strategy and partnerships to create value. Stay in ousia.',
     type: 'website',
     locale: 'en_US',
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'ousia',
     description:
-      '0usia brings your vision, virtue and venture to life. Narrative, innovation and partnerships to create long-term value. Stay in Ousia.',
+      '0usia brings your vision, virtue and venture to life. Flourishment of narrative, innovative strategy and partnerships to create value. Stay in ousia.',
   },
 };
 

@@ -481,7 +481,7 @@ export default function ThreeCardCTA() {
 
           {/* Three Cards Layout */}
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 md:gap-16 lg:gap-20 xl:gap-28 max-w-6xl mx-auto items-center justify-items-center px-4"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 md:gap-20 lg:gap-24 xl:gap-32 max-w-7xl mx-auto items-center justify-items-center px-4"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -497,7 +497,7 @@ export default function ThreeCardCTA() {
                   backdrop-blur-sm
                   transition-all duration-300 hover:scale-105 hover:shadow-xl
                   cursor-pointer group
-                  w-full h-full max-w-sm mx-auto
+                  w-full h-full max-w-md mx-auto
                   ${index === 1 && 'md:col-span-2 lg:col-span-1'}
                 `}
                 variants={cardVariants}
