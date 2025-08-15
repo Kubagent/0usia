@@ -5,7 +5,7 @@ pages_build_output_dir = ".next"
 
 # Exclude cache files from deployment
 [build]
-command = "npm run build && find .next/cache -name '*.pack' -size +20M -delete || true"
+command = "bash scripts/cloudflare-build.sh"
 
 [env.production]
 name = "ovsia-v4"
