@@ -10,6 +10,7 @@ name = "ovsia-v4"
 name = "ovsia-v4-preview"
 
 # Build configuration for Cloudflare Pages dashboard:
+# Framework preset: Next.js (Full Stack)
 # Build command: npm run build:cf
 # Build output directory: .next
 # Root directory: (leave empty)

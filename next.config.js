@@ -14,12 +14,10 @@ const nextConfig = {
   // Server optimizations
   serverExternalPackages: [],
 
-  // Image optimization
+  // Image optimization - disabled for static export
   images: {
+    unoptimized: true,
     domains: ['notion.so'],
-    formats: ['image/webp', 'image/avif'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
   // Performance optimizations
@@ -31,6 +29,9 @@ const nextConfig = {
   
   // Optimize build output
   productionBrowserSourceMaps: false,
+  
+  // Keep server-side rendering for API routes
+  // output: 'export', // Disabled because we have API routes
   
   // Security headers
   async headers() {
