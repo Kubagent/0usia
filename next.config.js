@@ -34,7 +34,7 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
   
-  // Security headers
+  // Security headers and caching
   async headers() {
     return [
       {
@@ -51,6 +51,30 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+      // Aggressive caching for venture logos
+      {
+        source: '/venture-logos/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable', // 1 year cache
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+      // General image caching
+      {
+        source: '/:path*.(png|jpg|jpeg|gif|svg|webp|ico)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, must-revalidate', // 24 hours with revalidation
           },
         ],
       },

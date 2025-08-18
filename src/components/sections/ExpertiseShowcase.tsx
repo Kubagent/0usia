@@ -112,9 +112,12 @@ export default function ExpertiseShowcase() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Title - Minimal */}
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant tracking-tight text-black">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant tracking-tight text-black mb-2 sm:mb-4">
             Expertise
           </h2>
+          <p className="text-lg sm:text-xl md:text-2xl text-black font-light max-w-2xl mx-auto px-4">
+            How we support your flourishing
+          </p>
         </div>
 
         {/* Cards Grid - With Rectangle Overlay */}

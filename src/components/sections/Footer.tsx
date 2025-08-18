@@ -44,6 +44,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   const [currentYear] = useState(new Date().getFullYear());
   const [berlinTime, setBerlinTime] = useState<string>('');
   const [mounted, setMounted] = useState(false);
+  const [showCopyMessage, setShowCopyMessage] = useState(false);
 
   // Initialize time on mount to avoid hydration mismatch
   useEffect(() => {
@@ -57,8 +58,17 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleMailClick = () => {
-    window.location.href = 'mailto:contact@ovsia.com';
+  const handleMailClick = async () => {
+    try {
+      await navigator.clipboard.writeText('contact@0usia.com');
+      // Show magical animation
+      setShowCopyMessage(true);
+      setTimeout(() => setShowCopyMessage(false), 2500);
+      console.log('Email copied to clipboard: contact@0usia.com');
+    } catch (error) {
+      // Fallback to mailto if clipboard API fails
+      window.location.href = 'mailto:contact@0usia.com';
+    }
   };
 
   return (
@@ -134,7 +144,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             
             {/* Left - MAIL Button (reduced size) */}
             <motion.div
-              className="flex items-center"
+              className="flex flex-col items-center relative"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -149,6 +159,88 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               >
                 MAIL
               </motion.button>
+              
+              {/* Magical Copy Message */}
+              <motion.div
+                className="absolute top-full mt-4 sm:mt-6 md:mt-8"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={showCopyMessage ? {
+                  opacity: [0, 1, 1, 0],
+                  scale: [0.8, 1.1, 1, 0.9],
+                  y: [10, 0, 0, -5]
+                } : { opacity: 0, scale: 0.8 }}
+                transition={{
+                  duration: 2.5,
+                  times: [0, 0.2, 0.8, 1],
+                  ease: "easeOut"
+                }}
+              >
+                <div className="relative">
+                  {/* Sparkles */}
+                  {showCopyMessage && (
+                    <>
+                      {[...Array(6)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="absolute w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"
+                          style={{
+                            left: `${-20 + i * 8}px`,
+                            top: `${-10 + (i % 2) * 20}px`
+                          }}
+                          animate={{
+                            opacity: [0, 1, 0],
+                            scale: [0, 1, 0],
+                            rotate: [0, 180, 360]
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            delay: i * 0.1,
+                            repeat: 1,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      ))}
+                      {[...Array(4)].map((_, i) => (
+                        <motion.div
+                          key={`sparkle-${i}`}
+                          className="absolute"
+                          style={{
+                            left: `${-15 + i * 10}px`,
+                            top: `${-5 + (i % 2) * 15}px`
+                          }}
+                          animate={{
+                            opacity: [0, 1, 0],
+                            scale: [0, 1, 0]
+                          }}
+                          transition={{
+                            duration: 1.2,
+                            delay: 0.3 + i * 0.15,
+                            ease: "easeInOut"
+                          }}
+                        >
+                          <svg width="8" height="8" viewBox="0 0 24 24" fill="white" className="sm:w-3 sm:h-3">
+                            <path d="M12 0L14.09 8.26L22 6L14.09 15.74L12 24L9.91 15.74L2 18L9.91 8.26L12 0Z"/>
+                          </svg>
+                        </motion.div>
+                      ))}
+                    </>
+                  )}
+                  
+                  {/* Copy Message */}
+                  <motion.p 
+                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-cormorant tracking-tight text-white whitespace-nowrap"
+                    animate={showCopyMessage ? {
+                      opacity: [0.7, 1, 0.8, 1],
+                    } : {}}
+                    transition={{
+                      duration: 2,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    address copied
+                  </motion.p>
+                </div>
+              </motion.div>
             </motion.div>
 
             {/* Right - Berlin Time (reduced size, no flickering) */}

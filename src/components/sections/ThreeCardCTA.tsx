@@ -474,14 +474,14 @@ export default function ThreeCardCTA() {
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant tracking-tight text-black mb-2 sm:mb-4">
               Choose Your Path
             </h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 font-light max-w-2xl mx-auto px-4">
+            <p className="text-lg sm:text-xl md:text-2xl text-black font-light max-w-4xl mx-auto px-4">
               Every journey begins with a single step. Which path calls to you?
             </p>
           </motion.div>
 
           {/* Three Cards Layout */}
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 md:gap-20 lg:gap-24 xl:gap-32 max-w-7xl mx-auto items-center justify-items-center px-4"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 max-w-7xl mx-auto items-center justify-items-center px-4"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -491,13 +491,13 @@ export default function ThreeCardCTA() {
               <motion.div
                 key={card.id}
                 className={`
-                  flex flex-col justify-between p-6 sm:p-8 lg:p-12 
+                  flex flex-col justify-between p-8 sm:p-10 lg:p-16 
                   aspect-square rounded-full
                   ${getCardStyles(card.bgColor)}
                   backdrop-blur-sm
                   transition-all duration-300 hover:scale-105 hover:shadow-xl
                   cursor-pointer group
-                  w-full h-full max-w-md mx-auto
+                  w-full h-full max-w-2xl mx-auto
                   ${index === 1 && 'md:col-span-2 lg:col-span-1'}
                 `}
                 variants={cardVariants}
@@ -507,7 +507,7 @@ export default function ThreeCardCTA() {
                   <h3 className="text-2xl sm:text-3xl lg:text-4xl font-cormorant mb-3 sm:mb-4 leading-tight">
                     {card.title}
                   </h3>
-                  <p className="text-base sm:text-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[200px] sm:max-w-[220px]">
+                  <p className="text-base sm:text-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[240px] sm:max-w-[280px]">
                     {card.description}
                   </p>
                 </div>

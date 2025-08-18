@@ -3,6 +3,7 @@
 import { Hero, Footer, ExpertiseShowcase, VenturesCarousel, ThreeCardCTA } from '@/components/sections';
 import RotatingWordAnimation from '@/components/RotatingWordAnimation';
 import OptimizedScrollContainer from '@/components/OptimizedScrollContainer';
+import { ImagePreloader } from '@/components/ImagePreloader';
 import type { SiteContent } from '@/types/notion';
 import { transformSiteContentForComponents, createFallbackTransformation } from '@/lib/content-transformers';
 
@@ -24,6 +25,16 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
   const transformedContent = siteContent 
     ? transformSiteContentForComponents(siteContent)
     : createFallbackTransformation();
+
+  // Venture logo URLs for preloading
+  const ventureLogoUrls = [
+    '/venture-logos/violca.png',
+    '/venture-logos/wojcistics.png', 
+    '/venture-logos/fix.png',
+    '/venture-logos/libelo.png',
+    '/venture-logos/objectsgallery.png',
+    '/venture-logos/substans.png'
+  ];
 
   // Development logging (suppressed for cleaner output)
   // Log content source in development
@@ -48,6 +59,9 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
 
   return (
     <div className="min-h-screen">
+      {/* Preload venture logos early for smooth carousel experience */}
+      <ImagePreloader images={ventureLogoUrls} priority={true} />
+      
       {/* Section 1: Hero - White background with white→black transition */}
       <Hero />
       
