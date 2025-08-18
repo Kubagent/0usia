@@ -36,7 +36,7 @@ export function useImagePreloader(imageUrls: string[]): UseImagePreloaderReturn 
     });
     setImages(initialImages);
     setIsLoading(imageUrls.length > 0);
-  }, [imageUrls]);
+  }, [imageUrls.join(',')]);
 
   const preloadImage = useCallback((url: string): Promise<HTMLImageElement> => {
     return new Promise((resolve, reject) => {
@@ -73,6 +73,7 @@ export function useImagePreloader(imageUrls: string[]): UseImagePreloaderReturn 
 
     setIsLoading(true);
     const loadedImagesMap = new Map<string, HTMLImageElement>();
+    const updatedImages = new Map<string, PreloadedImage>();
     
     try {
       // Load images concurrently
@@ -86,29 +87,28 @@ export function useImagePreloader(imageUrls: string[]): UseImagePreloaderReturn 
           }
           
           loadedImagesMap.set(url, img);
-          
-          setImages(prev => {
-            const newImages = new Map(prev);
-            newImages.set(url, { url, status: 'loaded', image: img });
-            return newImages;
-          });
+          updatedImages.set(url, { url, status: 'loaded', image: img });
           
         } catch (error) {
           if (signal.aborted) {
             return;
           }
           
-          setImages(prev => {
-            const newImages = new Map(prev);
-            newImages.set(url, { url, status: 'error' });
-            return newImages;
-          });
+          updatedImages.set(url, { url, status: 'error' });
         }
       });
 
       await Promise.all(loadPromises);
       
       if (!signal.aborted) {
+        // Batch update to prevent multiple re-renders
+        setImages(prev => {
+          const newImages = new Map(prev);
+          updatedImages.forEach((value, key) => {
+            newImages.set(key, value);
+          });
+          return newImages;
+        });
         setPreloadedImages(loadedImagesMap);
         setIsLoading(false);
       }
@@ -119,42 +119,45 @@ export function useImagePreloader(imageUrls: string[]): UseImagePreloaderReturn 
         setIsLoading(false);
       }
     }
-  }, [imageUrls, preloadImage]);
+  }, [imageUrls.join(','), preloadImage]);
 
   const retryFailed = useCallback(() => {
-    const failedUrls = Array.from(images.values())
-      .filter(img => img.status === 'error')
-      .map(img => img.url);
-      
-    if (failedUrls.length > 0) {
-      // Reset failed images to pending
-      setImages(prev => {
+    setImages(prev => {
+      const failedUrls = Array.from(prev.values())
+        .filter(img => img.status === 'error')
+        .map(img => img.url);
+        
+      if (failedUrls.length > 0) {
         const newImages = new Map(prev);
         failedUrls.forEach(url => {
           newImages.set(url, { url, status: 'pending' });
         });
+        
+        // Trigger reload by resetting loading state
+        setIsLoading(true);
+        
         return newImages;
-      });
-      
-      // Retry loading
-      loadImages();
-    }
-  }, [images, loadImages]);
+      }
+      return prev;
+    });
+  }, []);
 
   // Initialize and load images when URLs change
   useEffect(() => {
     initializeImages();
-  }, [initializeImages]);
+  }, [imageUrls.join(',')]);
 
   useEffect(() => {
-    loadImages();
+    if (isLoading && imageUrls.length > 0) {
+      loadImages();
+    }
     
     return () => {
       if (abortController.current) {
         abortController.current.abort();
       }
     };
-  }, [loadImages]);
+  }, [imageUrls.join(','), isLoading]);
 
   // Calculate derived state
   const imageList = Array.from(images.values());

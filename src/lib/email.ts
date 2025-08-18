@@ -251,7 +251,7 @@ function createContactEmailHTML(data: EmailTemplateData): string {
     </div>
     
     <div class="footer">
-        <p>This email was automatically generated from the Ovsia contact form.</p>
+        <p>This email was automatically generated from the 0usia contact form.</p>
         <p>To reply to this inquiry, simply respond to this email or contact ${data.email} directly.</p>
     </div>
 </body>
@@ -283,7 +283,7 @@ Time: ${data.submissionTime}
 ${data.formType === 'Investment' ? 'Priority: High - Investment Inquiry' : ''}
 
 ---
-This email was automatically generated from the Ovsia contact form.
+This email was automatically generated from the 0usia contact form.
 To reply to this inquiry, contact ${data.email} directly.
   `;
 }
@@ -333,7 +333,7 @@ class EmailService {
         }),
       };
 
-      const subject = `Ovsia Contact Form - ${templateData.formType} from ${templateData.name}`;
+      const subject = `0usia Contact Form - ${templateData.formType} from ${templateData.name}`;
       
       const result = await resend.emails.send({
         from: this.config.fromEmail,

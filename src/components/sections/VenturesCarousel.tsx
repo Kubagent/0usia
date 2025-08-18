@@ -110,7 +110,9 @@ const venturesData: Venture[] = [
 ];
 
 export default function VenturesCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Find Substans index to start there
+  const substansIndex = venturesData.findIndex(venture => venture.id === 'substans');
+  const [currentIndex, setCurrentIndex] = useState(substansIndex >= 0 ? substansIndex : 0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [activePopup, setActivePopup] = useState<string | null>(null);
   const [isHoveringCurrentVenture, setIsHoveringCurrentVenture] =
@@ -131,10 +133,22 @@ export default function VenturesCarousel() {
 
   // Set images ready when preloading completes
   useEffect(() => {
-    if (!isPreloading && !hasErrors) {
+    if (!isPreloading) {
       setImagesReady(true);
     }
-  }, [isPreloading, hasErrors]);
+  }, [isPreloading]);
+
+  // Fallback timeout to ensure carousel shows even if preloading gets stuck
+  useEffect(() => {
+    const fallbackTimer = setTimeout(() => {
+      if (!imagesReady) {
+        console.warn('Image preloading timeout - showing carousel anyway');
+        setImagesReady(true);
+      }
+    }, 5000); // 5 second timeout
+
+    return () => clearTimeout(fallbackTimer);
+  }, [imagesReady]);
 
   // Auto-play with visual countdown - only start when images are ready
   useEffect(() => {
@@ -152,10 +166,10 @@ export default function VenturesCarousel() {
         
         return newProgress;
       });
-    }, 10); // Update every 10ms for smooth progress animation
+    }, 10); // Update every 10ms for smooth progress animation (4 seconds total)
 
     return () => clearInterval(progressInterval);
-  }, [isAutoPlay, imagesReady, currentIndex]); // Include currentIndex to restart progress on manual navigation
+  }, [isAutoPlay, imagesReady]); // Removed currentIndex to prevent infinite re-renders
 
   const handleNext = () => {
     setCurrentIndex(prev => (prev + 1) % venturesData.length);

@@ -148,7 +148,7 @@ const FALLBACK_SITE_COPY = {
     sectionName: 'cta',
     contentType: 'fallback',
     primaryText: 'Choose Your Path',
-    secondaryText: 'Multiple ways to engage with Ovsia',
+    secondaryText: 'Multiple ways to engage with 0usia',
     buttonText: 'Get Started',
     lastUpdated: new Date().toISOString(),
   } as SiteCopyContent,
@@ -171,7 +171,7 @@ const FALLBACK_ASSETS: AssetContent[] = [
     name: 'Default Logo',
     type: 'image',
     url: '/logo.png',
-    altText: 'Ovsia Logo',
+    altText: '0usia Logo',
     usageContext: ['header', 'footer'],
   },
 ];

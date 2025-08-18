@@ -59,7 +59,7 @@ export default function SimpleHero() {
         <div className="relative z-10">
           <Image
             src="/0usia_black.png"
-            alt="Ovsia Logo"
+            alt="0usia Logo"
             width={600}
             height={600}
             priority
@@ -109,7 +109,7 @@ export default function SimpleHero() {
           >
             <Image
               src="/0usia_black.png"
-              alt="Ovsia Logo"
+              alt="0usia Logo"
               width={600}
               height={600}
               priority

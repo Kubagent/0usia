@@ -201,7 +201,7 @@ export function transformSiteContentForComponents(siteContent: SiteContent) {
     siteContent.siteCopy,
     'cta',
     'Choose Your Path',
-    'Multiple ways to engage with Ovsia'
+    'Multiple ways to engage with 0usia'
   );
   
   const footerText = extractSectionText(
@@ -371,7 +371,7 @@ export function createFallbackTransformation() {
       },
       cta: {
         primary: 'Choose Your Path',
-        secondary: 'Multiple ways to engage with Ovsia'
+        secondary: 'Multiple ways to engage with 0usia'
       },
       footer: {
         primary: 'Stay in Ousia',

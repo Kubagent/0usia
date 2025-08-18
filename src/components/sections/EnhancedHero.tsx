@@ -48,7 +48,7 @@ export const EnhancedHero: React.FC<EnhancedHeroProps> = ({
   logoSize = 600,
   transitionTiming = [0, 0.4],
   enableA11y = true,
-  logoAlt = 'Ovsia Logo'
+  logoAlt = '0usia Logo'
 }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { sectionRef: transitionRef } = useBackgroundTransitionSection('hero');
@@ -134,7 +134,7 @@ export const EnhancedHero: React.FC<EnhancedHeroProps> = ({
     if (!enableA11y) return {};
     
     return {
-      'aria-label': 'Hero section with Ovsia logo',
+      'aria-label': 'Hero section with 0usia logo',
       'role': 'banner',
       'tabIndex': -1
     };
@@ -251,8 +251,8 @@ export const EnhancedHero: React.FC<EnhancedHeroProps> = ({
       {/* Accessibility: Screen reader content */}
       {enableA11y && (
         <div className="sr-only">
-          <h1>Ovsia - From 0 to 1, We Make Essence Real</h1>
-          <p>Welcome to Ovsia, a venture studio building the impossible through strategy, AI operations, and capital.</p>
+          <h1>0usia - From 0 to 1, We Make Essence Real</h1>
+          <p>Welcome to 0usia, a venture studio building the impossible through strategy, AI operations, and capital.</p>
         </div>
       )}
     </motion.section>

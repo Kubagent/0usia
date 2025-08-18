@@ -41,7 +41,7 @@ export interface MobilePerformanceMetrics {
 }
 
 /**
- * Mobile-optimized scroll hook for Ovsia V4 that provides:
+ * Mobile-optimized scroll hook for 0usia V4 that provides:
  * - High-performance touch gesture recognition
  * - Momentum scrolling with physics-based decay
  * - Adaptive performance based on device capabilities

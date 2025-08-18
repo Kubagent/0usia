@@ -19,7 +19,7 @@ export interface MobileDetectionResult {
 }
 
 /**
- * Mobile Detection Hook for Ovsia V4
+ * Mobile Detection Hook for 0usia V4
  * 
  * Provides comprehensive device and capability detection for optimal UX
  */

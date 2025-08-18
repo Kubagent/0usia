@@ -43,7 +43,7 @@ export interface PerformanceMetrics {
 }
 
 /**
- * Enhanced Intersection Observer hook optimized for Ovsia V4 scroll performance.
+ * Enhanced Intersection Observer hook optimized for 0usia V4 scroll performance.
  * 
  * Features:
  * - Adaptive thresholds based on device performance

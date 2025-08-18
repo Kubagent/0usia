@@ -92,7 +92,7 @@ export default function OptimizedHero() {
         >
           <Image
             src='/0usia_black.png'
-            alt='Ovsia Logo'
+            alt='0usia Logo'
             width={600}
             height={600}
             priority

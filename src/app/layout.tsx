@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   description:
     '0usia brings your vision, virtue and venture to life. Flourishment of narrative, innovative strategy and partnerships to create value. Stay in ousia.',
   keywords: 'ventures, GTM, AI, operations, capital, innovation, start-up, enactivism, life',
-  authors: [{ name: 'Ovsia Team' }],
+  authors: [{ name: '0usia Team' }],
   icons: {
     icon: '/0usia_black.png',
     shortcut: '/0usia_black.png',

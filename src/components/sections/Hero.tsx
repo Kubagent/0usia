@@ -82,7 +82,7 @@ export default function Hero() {
         >
           <Image
             src="/0usia_black.png"
-            alt="Ovsia Logo"
+            alt="0usia Logo"
             width={600}
             height={600}
             priority
@@ -102,7 +102,7 @@ export default function Hero() {
         >
           <Image
             src="/0usia_white.png"
-            alt="Ovsia Logo White"
+            alt="0usia Logo White"
             width={600}
             height={600}
             priority

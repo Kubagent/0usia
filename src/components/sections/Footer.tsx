@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * Hyper Minimalist Full Screen Footer
@@ -45,6 +45,16 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   const [berlinTime, setBerlinTime] = useState<string>('');
   const [mounted, setMounted] = useState(false);
   const [showCopyMessage, setShowCopyMessage] = useState(false);
+  const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
+
+  // Handle modal actions
+  const openModal = (type: 'privacy' | 'terms') => {
+    setActiveModal(type);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+  };
 
   // Initialize time on mount to avoid hydration mismatch
   useEffect(() => {
@@ -283,28 +293,167 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         >
           <div className="text-center">
             <p className="text-gray-500 text-sm sm:text-base font-light mb-2">
-              © {currentYear} Ovsia
+              © {currentYear} 0usia
             </p>
             <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm">
-              <motion.a
-                href="/privacy"
-                className="text-gray-500 hover:text-gray-300 transition-colors duration-300"
+              <motion.button
+                onClick={() => openModal('privacy')}
+                className="text-gray-500 hover:text-gray-300 transition-colors duration-300 cursor-pointer"
                 whileHover={{ y: -1 }}
               >
                 Privacy
-              </motion.a>
-              <motion.a
-                href="/terms"
-                className="text-gray-500 hover:text-gray-300 transition-colors duration-300"
+              </motion.button>
+              <motion.button
+                onClick={() => openModal('terms')}
+                className="text-gray-500 hover:text-gray-300 transition-colors duration-300 cursor-pointer"
                 whileHover={{ y: -1 }}
               >
                 Terms
-              </motion.a>
+              </motion.button>
             </div>
           </div>
         </motion.div>
 
       </div>
+
+      {/* Privacy & Terms Modals */}
+      <AnimatePresence>
+        {activeModal && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={closeModal}
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+            
+            {/* Modal Content */}
+            <motion.div
+              className="
+                relative
+                bg-white
+                rounded-2xl
+                w-full max-w-md
+                p-6
+                border border-gray-200
+                shadow-2xl
+                mx-4
+                max-h-[80vh]
+                overflow-y-auto
+              "
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+                aria-label="Close modal"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+
+              {/* Modal Content */}
+              {activeModal === 'privacy' && (
+                <>
+                  <motion.h3 
+                    className="text-2xl font-cormorant text-black mb-4 tracking-tight pr-8"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    Privacy Policy
+                  </motion.h3>
+                  
+                  <motion.div 
+                    className="text-sm text-gray-700 leading-relaxed space-y-3"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                  >
+                    <p>
+                      <strong>Data Collection:</strong> We collect minimal information necessary for business operations, including contact details when you reach out to us.
+                    </p>
+                    <p>
+                      <strong>Data Use:</strong> Information is used solely to respond to inquiries and provide our services. We do not sell or share personal data with third parties.
+                    </p>
+                    <p>
+                      <strong>Data Storage:</strong> Data is stored securely in the UK and EU, complying with GDPR requirements.
+                    </p>
+                    <p>
+                      <strong>Your Rights:</strong> You may request access, correction, or deletion of your personal data at any time by contacting us.
+                    </p>
+                    <p>
+                      <strong>Contact:</strong> For privacy inquiries, email contact@0usia.com
+                    </p>
+                    <p className="text-xs text-gray-500 mt-4">
+                      Last updated: {new Date().toLocaleDateString()}
+                    </p>
+                  </motion.div>
+                </>
+              )}
+
+              {activeModal === 'terms' && (
+                <>
+                  <motion.h3 
+                    className="text-2xl font-cormorant text-black mb-4 tracking-tight pr-8"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    Terms of Service
+                  </motion.h3>
+                  
+                  <motion.div 
+                    className="text-sm text-gray-700 leading-relaxed space-y-3"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                  >
+                    <p>
+                      <strong>Service Provision:</strong> 0usia provides venture studio and consulting services as described on this website.
+                    </p>
+                    <p>
+                      <strong>Intellectual Property:</strong> All content on this website is owned by 0usia or used with permission. Unauthorized use is prohibited.
+                    </p>
+                    <p>
+                      <strong>Limitation of Liability:</strong> Services are provided "as is." 0usia is not liable for indirect or consequential damages.
+                    </p>
+                    <p>
+                      <strong>Governing Law:</strong> These terms are governed by UK law. Disputes will be resolved in UK courts.
+                    </p>
+                    <p>
+                      <strong>Contact:</strong> For terms inquiries, email contact@0usia.com
+                    </p>
+                    <p className="text-xs text-gray-500 mt-4">
+                      Last updated: {new Date().toLocaleDateString()}
+                    </p>
+                  </motion.div>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.footer>
   );
 };
