@@ -24,65 +24,107 @@ interface Venture {
 // Actual venture data with real logos
 const venturesData: Venture[] = [
   {
+    id: 'substans',
+    name: 'Substans',
+    tagline: 'Art Institution',
+    logoUrl: '/venture-logos/substans.png',
+    websiteUrl: 'https://www.substans.art',
+    description: 'Institution of art for the furtherment of what really matters – the substance',
+    status: 'active',
+    popupContent: {
+      title: 'Substans',
+      description:
+        'Institution of art for the furtherment of what really matters – the substance, advancing substantial artistic expression through cultural initiatives.',
+      details: [
+        'Industry: Arts & Culture / Performance',
+        'Business Model: Cultural Institution (B2C/Non-profit)',
+        'USP: Advancing substantial artistic expression',
+        'Focus: Dissemination and distribution of art',
+      ],
+    },
+  },
+  {
     id: 'violca',
     name: 'Violca',
-    tagline: 'Visual Innovation Platform',
+    tagline: 'Cycling Adventures',
     logoUrl: '/venture-logos/violca.png',
     websiteUrl: 'https://violca.com',
-    description: 'Transforming visual experiences through technology',
+    description: 'Ecommerce in cycling gear, to prepare you for cycling adventures to get to know oneself',
     status: 'active',
+    popupContent: {
+      title: 'Violca',
+      description:
+        'Ecommerce platform specializing in cycling gear, preparing customers for cycling adventures that lead to self-discovery.',
+      details: [
+        'Industry: Community & E-commerce for cycling ',
+        'Business Model: Direct-to-Consumer (B2C)',
+        'USP: Self-discovery through cycling adventures',
+        'Focus: Premium cycling gear and experiences',
+      ],
+    },
   },
   {
     id: 'wojcistics',
     name: 'Wojcistics',
-    tagline: 'Logistics Optimization',
+    tagline: 'Logistics Tech Distribution',
     logoUrl: '/venture-logos/wojcistics.png',
     websiteUrl: 'https://wojcistics.com',
-    description: 'Revolutionary supply chain solutions',
+    description: 'Land transport innovative machine/vehicle distribution company',
     inactive: true,
     status: 'discontinued',
     popupContent: {
       title: 'Wojcistics',
       description:
-        'Advanced logistics optimization platform leveraging AI and machine learning to revolutionize supply chain management.',
+        'Innovative distribution platform specializing in land transport vehicles and machinery, connecting manufacturers with dealers.',
       details: [
-        'AI-powered route optimization',
-        'Real-time supply chain visibility',
-        'Predictive demand forecasting',
-        'Automated inventory management',
+        'Industry: Land transport / Logistics',
+        'Business Model: Distribution(B2B)',
+        'USP: Innovative vehicle distribution platform',
+        'Focus: Land transport machinery distribution',
       ],
     },
   },
   {
     id: 'fix',
     name: 'Fix',
-    tagline: 'Problem Resolution Platform',
+    tagline: 'Maintenance Services Marketplace',
     logoUrl: '/venture-logos/fix.png',
     websiteUrl: 'https://fix-platform.com',
-    description: 'Streamlining problem resolution processes',
+    description: 'Connecting facility management professionals with customers as smoothly as Uber gets you rides',
     inactive: true,
     acquired: true,
     status: 'sold',
     popupContent: {
       title: 'Fix',
       description:
-        'Innovative problem resolution platform that streamlines issue tracking and resolution workflows across organizations.',
+        'Connecting facility management professionals with customers as smoothly as Uber gets you rides.',
       details: [
-        'Intelligent issue categorization',
-        'Automated workflow routing',
-        'Real-time collaboration tools',
-        'Performance analytics dashboard',
+        'Industry: Facility Management / Maintenance',
+        'Business Model: Marketplace (B2B)',
+        'USP: Seamless service connection',
+        'Focus: Facility management services',
       ],
     },
   },
   {
     id: 'libelo',
     name: 'Libelo',
-    tagline: 'Freedom & Innovation',
+    tagline: 'Nature Exploration App',
     logoUrl: '/venture-logos/libelo.png',
     websiteUrl: 'https://libelo.com',
-    description: 'Empowering digital freedom through innovation',
+    description: 'Empowering you on adventures into the wild',
     status: 'profit',
+    popupContent: {
+      title: 'Libelo',
+      description:
+        'Empowering you on adventures into the wild',
+      details: [
+        'Industry: Nature Exploration /Adventure travel',
+        'Business Model: Consumer App (B2C)',
+        'USP: Seamless service connection',
+        'Focus: Adventure travel',
+      ],
+    },
   },
   {
     id: 'objects-gallery',
@@ -99,20 +141,11 @@ const venturesData: Venture[] = [
         'Curated collection of exceptional design objects, connecting creators with discerning collectors and design enthusiasts.',
       details: [
         'Curated design collections',
-        'Artist and maker profiles',
+        'Artist and designer profiles',
         'Exclusive limited editions',
         'Design story narratives',
       ],
     },
-  },
-  {
-    id: 'substans',
-    name: 'Substans',
-    tagline: 'Substance & Strategy',
-    logoUrl: '/venture-logos/substans.png',
-    websiteUrl: 'https://www.substans.art',
-    description: 'Strategic consulting with substance',
-    status: 'active',
   },
 ];
 
@@ -174,14 +207,13 @@ function StatusTag({ status, className = '' }: StatusTagProps) {
 }
 
 export default function VenturesCarousel() {
-  // Find Substans index to start there
-  const substansIndex = venturesData.findIndex(venture => venture.id === 'substans');
-  const [currentIndex, setCurrentIndex] = useState(substansIndex >= 0 ? substansIndex : 0);
-  const [isAutoPlay, setIsAutoPlay] = useState(true);
+  // Start with Substans (now at index 0)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  // Auto-play is now always enabled - removed toggle functionality
   const [activePopup, setActivePopup] = useState<string | null>(null);
   const [isHoveringCurrentVenture, setIsHoveringCurrentVenture] =
     useState(false);
-  const [autoPlayProgress, setAutoPlayProgress] = useState(0);
+  // Removed autoPlayProgress state as it's no longer needed without the button
 
   // Preload all venture logos for smooth rendering
   const ventureLogoUrls = venturesData.map(venture => venture.logoUrl);
@@ -214,39 +246,25 @@ export default function VenturesCarousel() {
     return () => clearTimeout(fallbackTimer);
   }, [imagesReady]);
 
-  // Auto-play with visual countdown - only start when images are ready
+  // Auto-play carousel - advance every 8 seconds when images are ready
   useEffect(() => {
-    if (!isAutoPlay || !imagesReady) return;
+    if (!imagesReady) return;
 
-    const progressInterval = setInterval(() => {
-      setAutoPlayProgress(prev => {
-        const newProgress = prev + (100 / 400); // Update every 10ms for smooth animation (4000ms / 10ms = 400 steps)
-        
-        if (newProgress >= 100) {
-          // When progress reaches 100%, advance to next venture and reset
-          setCurrentIndex(prevIndex => (prevIndex + 1) % venturesData.length);
-          return 0; // Reset progress
-        }
-        
-        return newProgress;
-      });
-    }, 10); // Update every 10ms for smooth progress animation (4 seconds total)
+    const autoPlayInterval = setInterval(() => {
+      setCurrentIndex(prevIndex => (prevIndex + 1) % venturesData.length);
+    }, 8000); // Advance every 8 seconds
 
-    return () => clearInterval(progressInterval);
-  }, [isAutoPlay, imagesReady]); // Removed currentIndex to prevent infinite re-renders
+    return () => clearInterval(autoPlayInterval);
+  }, [imagesReady]);
 
   const handleNext = () => {
     setCurrentIndex(prev => (prev + 1) % venturesData.length);
-    setAutoPlayProgress(0); // Reset progress on manual navigation
-    setIsAutoPlay(false);
   };
 
   const handlePrev = () => {
     setCurrentIndex(
       prev => (prev - 1 + venturesData.length) % venturesData.length
     );
-    setAutoPlayProgress(0); // Reset progress on manual navigation
-    setIsAutoPlay(false);
   };
 
   const handleVentureClick = (index: number) => {
@@ -262,8 +280,6 @@ export default function VenturesCarousel() {
     } else {
       // If clicking adjacent venture, make it current
       setCurrentIndex(index);
-      setAutoPlayProgress(0); // Reset progress on manual navigation
-      setIsAutoPlay(false);
     }
   };
 
@@ -346,57 +362,17 @@ export default function VenturesCarousel() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant tracking-tight text-white mb-2 sm:mb-4'>
+          <h2 className='text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-white mb-2 sm:mb-4'>
             Proof of{' '}
             <span className='relative inline-block'>
               <span className='relative inline-block'>
                 O
-                <span className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
-                  {/* Auto-play Toggle - Positioned in center of O */}
-                  <button
-                    onClick={() => {
-                      setIsAutoPlay(!isAutoPlay);
-                      setAutoPlayProgress(0); // Reset progress when toggling
-                    }}
-                    className='group relative flex items-center justify-center w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 transition-all duration-300'
-                    aria-label={
-                      isAutoPlay ? 'Pause auto-play' : 'Resume auto-play'
-                    }
-                  >
-                    {isAutoPlay ? (
-                      // Progress circle that fills up over 4 seconds
-                      <div className="relative w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-3.5 lg:h-3.5">
-                        {/* Background circle */}
-                        <div className='absolute inset-0 border border-white/60 rounded-full group-hover:border-white/80 transition-colors duration-300' />
-                        {/* Progress fill */}
-                        <svg 
-                          className="absolute inset-0 w-full h-full transform -rotate-90"
-                          viewBox="0 0 20 20"
-                        >
-                          <circle
-                            cx="10"
-                            cy="10"
-                            r="8"
-                            fill="none"
-                            stroke="rgba(255, 255, 255, 0.6)"
-                            strokeWidth="2"
-                            strokeDasharray={`${2 * Math.PI * 8}`}
-                            strokeDashoffset={`${2 * Math.PI * 8 * (1 - autoPlayProgress / 100)}`}
-                            className="transition-all duration-75 ease-linear group-hover:stroke-white/80"
-                          />
-                        </svg>
-                      </div>
-                    ) : (
-                      // Dot (filled circle when auto-play is PAUSED)
-                      <div className='w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 bg-white/60 rounded-full group-hover:bg-white/80 transition-colors duration-300' />
-                    )}
-                  </button>
-                </span>
+                <span className='absolute top-1/2 left-1/2 w-0.5 h-0.5 sm:w-1 sm:h-1 md:w-1.5 md:h-1.5 lg:w-2 lg:h-2 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2'></span>
               </span>
               usia
             </span>
           </h2>
-          <p className='text-lg sm:text-xl md:text-2xl text-white font-light max-w-2xl mx-auto px-4'>
+          <p className='text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-white font-light max-w-2xl mx-auto px-4'>
             Ventures we have brought to life
           </p>
         </motion.div>
@@ -637,7 +613,7 @@ export default function VenturesCarousel() {
                 </div>
 
                 {/* Venture Info */}
-                <AnimatePresence mode='wait'>
+                <AnimatePresence>
                   <motion.div
                     key={current.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -646,19 +622,13 @@ export default function VenturesCarousel() {
                     transition={{ duration: 0.3 }}
                     className='space-y-4'
                   >
-                    <h3 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-cormorant text-white tracking-tight'>
+                    <h3 className='text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant text-white tracking-tight'>
                       {current.name}
                     </h3>
-                    <p className='text-gray-400 text-lg sm:text-xl md:text-2xl font-light max-w-md mx-auto leading-relaxed px-2'>
+                    <p className='text-gray-400 text-ovsia-body-lg sm:text-ovsia-body-xl font-light max-w-md mx-auto leading-relaxed px-2'>
                       {current.tagline}
                     </p>
 
-                    {/* Visit Website Hint */}
-                    <div className='text-sm sm:text-base text-white/40 group-hover:text-white/60 transition-colors duration-300 mt-4 sm:mt-6'>
-                      {current.inactive
-                        ? 'Click to learn more'
-                        : 'Click to visit website'}
-                    </div>
                   </motion.div>
                 </AnimatePresence>
               </motion.div>

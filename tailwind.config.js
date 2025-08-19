@@ -106,6 +106,37 @@ module.exports = {
         xs: '475px',
         '3xl': '1600px',
       },
+      // Unified Font Size System - Three Categories
+      fontSize: {
+        // Extend default sizes with our custom sizes
+        ...require('tailwindcss/defaultTheme').fontSize,
+        // Body Size (Smallest) - for content, body text, sub headers
+        'ovsia-body-xs': ['0.875rem', { lineHeight: '1.25rem' }], // 14px
+        'ovsia-body-sm': ['1rem', { lineHeight: '1.5rem' }], // 16px
+        'ovsia-body-base': ['1.125rem', { lineHeight: '1.75rem' }], // 18px
+        'ovsia-body-lg': ['1.25rem', { lineHeight: '1.75rem' }], // 20px
+        'ovsia-body-xl': ['1.375rem', { lineHeight: '1.875rem' }], // 22px
+        'ovsia-body-2xl': ['1.5rem', { lineHeight: '2rem' }], // 24px
+        
+        // Header Size (Medium) - for navigation, section headers
+        'ovsia-header-sm': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
+        'ovsia-header-base': ['2.25rem', { lineHeight: '2.5rem' }], // 36px
+        'ovsia-header-lg': ['2.5rem', { lineHeight: '3rem' }], // 40px
+        'ovsia-header-xl': ['3rem', { lineHeight: '3.5rem' }], // 48px
+        'ovsia-header-2xl': ['3.5rem', { lineHeight: '4rem' }], // 56px
+        'ovsia-header-3xl': ['4rem', { lineHeight: '4.5rem' }], // 64px
+        
+        // Tagline Size (Largest) - for main taglines, hero text
+        'ovsia-tagline-sm': ['4.5rem', { lineHeight: '5rem' }], // 72px
+        'ovsia-tagline-base': ['5rem', { lineHeight: '5.5rem' }], // 80px
+        'ovsia-tagline-lg': ['6rem', { lineHeight: '6.5rem' }], // 96px
+        'ovsia-tagline-xl': ['7rem', { lineHeight: '7.5rem' }], // 112px
+        'ovsia-tagline-2xl': ['8rem', { lineHeight: '8.5rem' }], // 128px
+        'ovsia-tagline-3xl': ['10rem', { lineHeight: '10.5rem' }], // 160px
+        'ovsia-tagline-4xl': ['12rem', { lineHeight: '12.5rem' }], // 192px
+        'ovsia-tagline-5xl': ['14rem', { lineHeight: '14.5rem' }], // 224px
+        'ovsia-tagline-6xl': ['16rem', { lineHeight: '16.5rem' }], // 256px
+      },
       // 3D perspective utilities for rotating cards
       perspective: {
         '1000': '1000px',

@@ -14,7 +14,7 @@ function ContentLoading() {
     <div className="min-h-screen flex items-center justify-center bg-black text-white">
       <div className="text-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white mb-4"></div>
-        <p className="text-2xl font-space">Loading 0usia content...</p>
+        <p className="text-2xl font-space">Loading ousia content...</p>
       </div>
     </div>
   );

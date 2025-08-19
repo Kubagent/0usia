@@ -133,10 +133,10 @@ export default function ExpertiseShowcase() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Title - Minimal */}
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-cormorant tracking-tight text-black mb-2 sm:mb-4">
+          <h2 className="text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-2 sm:mb-4">
             Expertise
           </h2>
-          <p className="text-lg sm:text-xl md:text-2xl text-black font-light max-w-2xl mx-auto px-4">
+          <p className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-black font-light max-w-2xl mx-auto px-4">
             How we support your flourishing
           </p>
         </div>
@@ -166,7 +166,7 @@ export default function ExpertiseShowcase() {
                 <motion.div
                   className="
                     w-full h-full 
-                    bg-gradient-to-br from-gray-50/60 to-gray-100/40
+                    bg-gradient-to-br from-gray-50/80 to-gray-100/60
                     border border-gray-200/80
                     flex items-center justify-center text-center p-8
                     backdrop-blur-sm
@@ -175,7 +175,7 @@ export default function ExpertiseShowcase() {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-cormorant tracking-tight text-black leading-tight whitespace-pre-line">
+                  <h3 className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant font-bold tracking-tight text-black leading-snug whitespace-pre-line">
                     {card.title}
                   </h3>
                 </motion.div>
@@ -226,7 +226,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3 
-                          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-cormorant text-black mb-2 sm:mb-3 tracking-tight"
+                          className="text-ovsia-body-xl sm:text-ovsia-body-2xl font-cormorant font-bold text-black mb-2 sm:mb-3 tracking-tight"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
@@ -235,7 +235,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
                         
                         <motion.p 
-                          className="text-base sm:text-lg md:text-xl text-gray-700 mb-3 sm:mb-4 md:mb-5 leading-relaxed max-w-lg"
+                          className="text-ovsia-body-sm sm:text-ovsia-body-base md:text-ovsia-body-lg text-gray-700 mb-3 sm:mb-4 md:mb-5 leading-relaxed max-w-lg"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.15 }}
@@ -244,7 +244,7 @@ export default function ExpertiseShowcase() {
                         </motion.p>
 
                         <motion.div 
-                          className="grid grid-cols-1 gap-1 sm:gap-2 text-sm sm:text-base md:text-lg text-gray-600"
+                          className="grid grid-cols-1 gap-1 sm:gap-2 text-ovsia-body-xs sm:text-ovsia-body-sm md:text-ovsia-body-base text-gray-600"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}
@@ -346,7 +346,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3 
-                          className="text-2xl font-cormorant text-black mb-3 tracking-tight pr-8"
+                          className="text-ovsia-body-xl font-cormorant font-bold text-black mb-3 tracking-tight pr-8"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 }}
@@ -355,7 +355,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
                         
                         <motion.p 
-                          className="text-base text-gray-700 mb-4 leading-relaxed"
+                          className="text-ovsia-body-sm text-gray-700 mb-4 leading-relaxed"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.15 }}
@@ -378,7 +378,7 @@ export default function ExpertiseShowcase() {
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
                               <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                              <span className="text-sm text-gray-600 leading-relaxed">{detail}</span>
+                              <span className="text-ovsia-body-xs text-gray-600 leading-relaxed">{detail}</span>
                             </motion.div>
                           ))}
                         </motion.div>

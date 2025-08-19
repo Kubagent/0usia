@@ -133,7 +133,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             viewport={{ once: true }}
           >
             <motion.h2
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-cormorant tracking-wide leading-tight text-center relative"
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11rem] 3xl:text-[12rem] font-cormorant tracking-wide leading-tight text-center relative"
               animate={{ 
                 opacity: [1, 0.7, 1] 
               }}
@@ -162,7 +162,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             >
               <motion.button
                 onClick={handleMailClick}
-                className="text-5xl sm:text-7xl md:text-[10rem] lg:text-[12rem] xl:text-[14rem] 2xl:text-[16rem] 3xl:text-[18rem] font-cormorant tracking-tight text-gray-300 hover:text-white transition-colors duration-300 bg-transparent cursor-pointer leading-none"
+                className="text-ovsia-tagline-sm sm:text-ovsia-tagline-base md:text-ovsia-tagline-lg font-cormorant tracking-tight text-gray-300 hover:text-white transition-colors duration-300 bg-transparent cursor-pointer leading-none flex items-center justify-center h-20 sm:h-24 md:h-28"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Send us an email"
@@ -238,7 +238,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                   
                   {/* Copy Message */}
                   <motion.p 
-                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-cormorant tracking-tight text-white whitespace-nowrap"
+                    className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant tracking-tight text-white whitespace-nowrap"
                     animate={showCopyMessage ? {
                       opacity: [0.7, 1, 0.8, 1],
                     } : {}}
@@ -264,13 +264,13 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               >
                 <div className="text-center lg:text-left">
                   <p
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-cormorant tracking-tight leading-none"
+                    className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none uppercase"
                     aria-label={`Current time in Berlin: ${berlinTime}`}
                   >
-                    Berlin:
+                    BERLIN:
                   </p>
                   <p
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-cormorant tracking-tight leading-none mt-1 sm:mt-2 tabular-nums"
+                    className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none mt-0.5 sm:mt-1 tabular-nums"
                     style={{ minWidth: 'auto' }}
                   >
                     {berlinTime}
@@ -292,10 +292,10 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
           viewport={{ once: true }}
         >
           <div className="text-center">
-            <p className="text-gray-500 text-sm sm:text-base font-light mb-2">
+            <p className="text-gray-500 text-ovsia-body-xs sm:text-ovsia-body-sm font-light mb-2">
               © {currentYear} 0usia
             </p>
-            <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm">
+            <div className="flex space-x-4 sm:space-x-6 text-ovsia-body-xs">
               <motion.button
                 onClick={() => openModal('privacy')}
                 className="text-gray-500 hover:text-gray-300 transition-colors duration-300 cursor-pointer"
@@ -376,7 +376,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               {activeModal === 'privacy' && (
                 <>
                   <motion.h3 
-                    className="text-2xl font-cormorant text-black mb-4 tracking-tight pr-8"
+                    className="text-ovsia-body-xl font-cormorant text-black mb-4 tracking-tight pr-8"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
@@ -385,7 +385,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                   </motion.h3>
                   
                   <motion.div 
-                    className="text-sm text-gray-700 leading-relaxed space-y-3"
+                    className="text-ovsia-body-xs text-gray-700 leading-relaxed space-y-3"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
@@ -405,7 +405,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                     <p>
                       <strong>Contact:</strong> For privacy inquiries, email contact@0usia.com
                     </p>
-                    <p className="text-xs text-gray-500 mt-4">
+                    <p className="text-ovsia-body-xs text-gray-500 mt-4">
                       Last updated: {new Date().toLocaleDateString()}
                     </p>
                   </motion.div>
@@ -415,7 +415,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               {activeModal === 'terms' && (
                 <>
                   <motion.h3 
-                    className="text-2xl font-cormorant text-black mb-4 tracking-tight pr-8"
+                    className="text-ovsia-body-xl font-cormorant text-black mb-4 tracking-tight pr-8"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
@@ -424,7 +424,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                   </motion.h3>
                   
                   <motion.div 
-                    className="text-sm text-gray-700 leading-relaxed space-y-3"
+                    className="text-ovsia-body-xs text-gray-700 leading-relaxed space-y-3"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
@@ -444,7 +444,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                     <p>
                       <strong>Contact:</strong> For terms inquiries, email contact@0usia.com
                     </p>
-                    <p className="text-xs text-gray-500 mt-4">
+                    <p className="text-ovsia-body-xs text-gray-500 mt-4">
                       Last updated: {new Date().toLocaleDateString()}
                     </p>
                   </motion.div>
