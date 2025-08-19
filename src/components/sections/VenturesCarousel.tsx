@@ -13,6 +13,7 @@ interface Venture {
   description?: string;
   inactive?: boolean;
   acquired?: boolean;
+  status?: 'sold' | 'discontinued' | 'active' | 'profit';
   popupContent?: {
     title: string;
     description: string;
@@ -29,6 +30,7 @@ const venturesData: Venture[] = [
     logoUrl: '/venture-logos/violca.png',
     websiteUrl: 'https://violca.com',
     description: 'Transforming visual experiences through technology',
+    status: 'active',
   },
   {
     id: 'wojcistics',
@@ -38,6 +40,7 @@ const venturesData: Venture[] = [
     websiteUrl: 'https://wojcistics.com',
     description: 'Revolutionary supply chain solutions',
     inactive: true,
+    status: 'discontinued',
     popupContent: {
       title: 'Wojcistics',
       description:
@@ -59,6 +62,7 @@ const venturesData: Venture[] = [
     description: 'Streamlining problem resolution processes',
     inactive: true,
     acquired: true,
+    status: 'sold',
     popupContent: {
       title: 'Fix',
       description:
@@ -78,6 +82,7 @@ const venturesData: Venture[] = [
     logoUrl: '/venture-logos/libelo.png',
     websiteUrl: 'https://libelo.com',
     description: 'Empowering digital freedom through innovation',
+    status: 'profit',
   },
   {
     id: 'objects-gallery',
@@ -87,6 +92,7 @@ const venturesData: Venture[] = [
     websiteUrl: 'https://objectsgallery.com',
     description: 'Discovering exceptional design objects',
     inactive: true,
+    status: 'active',
     popupContent: {
       title: 'Objects Gallery',
       description:
@@ -106,8 +112,66 @@ const venturesData: Venture[] = [
     logoUrl: '/venture-logos/substans.png',
     websiteUrl: 'https://www.substans.art',
     description: 'Strategic consulting with substance',
+    status: 'active',
   },
 ];
+
+// Status Tag Component
+interface StatusTagProps {
+  status: 'sold' | 'discontinued' | 'active' | 'profit';
+  className?: string;
+}
+
+function StatusTag({ status, className = '' }: StatusTagProps) {
+  const getTagConfig = (status: string) => {
+    switch (status) {
+      case 'sold':
+        return { letter: 'S', color: 'bg-yellow-500', textColor: 'text-yellow-900', label: 'Sold' };
+      case 'discontinued':
+        return { letter: 'D', color: 'bg-red-500', textColor: 'text-red-900', label: 'Discontinued' };
+      case 'active':
+        return { letter: 'A', color: 'bg-blue-500', textColor: 'text-blue-900', label: 'Active' };
+      case 'profit':
+        return { letter: 'P', color: 'bg-green-500', textColor: 'text-green-900', label: 'Profit' };
+      default:
+        return { letter: '?', color: 'bg-gray-500', textColor: 'text-gray-900', label: 'Unknown' };
+    }
+  };
+
+  const config = getTagConfig(status);
+
+  return (
+    <div className={`group relative inline-block ${className}`}>
+      <motion.div
+        className={`
+          w-6 h-6 rounded-full flex items-center justify-center
+          ${config.color} ${config.textColor}
+          text-xs font-bold cursor-pointer
+          shadow-lg border-2 border-white/20
+        `}
+        whileHover={{ scale: 1.1 }}
+        transition={{ duration: 0.2 }}
+      >
+        {config.letter}
+      </motion.div>
+      
+      {/* Tooltip */}
+      <div className="
+        absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2
+        px-2 py-1 bg-black/90 text-white text-xs rounded-md
+        opacity-0 group-hover:opacity-100 pointer-events-none
+        whitespace-nowrap z-50 transition-all duration-200
+        group-hover:translate-y-0 translate-y-1
+      ">
+        {config.label}
+        {/* Arrow */}
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2">
+          <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] border-transparent border-t-black/90"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function VenturesCarousel() {
   // Find Substans index to start there
@@ -743,13 +807,25 @@ export default function VenturesCarousel() {
 
                     {/* Content */}
                     <motion.h3
-                      className='text-3xl sm:text-4xl md:text-5xl font-cormorant text-black mb-4 tracking-tight'
+                      className='text-3xl sm:text-4xl md:text-5xl font-cormorant text-black mb-2 tracking-tight'
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.1 }}
                     >
                       {venture.popupContent.title}
                     </motion.h3>
+
+                    {/* Status Tag */}
+                    {venture.status && (
+                      <motion.div
+                        className='flex justify-center mb-4'
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.12 }}
+                      >
+                        <StatusTag status={venture.status} />
+                      </motion.div>
+                    )}
 
                     <motion.p
                       className='text-lg sm:text-xl text-gray-700 mb-6 leading-relaxed'
@@ -760,24 +836,36 @@ export default function VenturesCarousel() {
                       {venture.popupContent.description}
                     </motion.p>
 
+                    {/* Further Details Section */}
                     <motion.div
-                      className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-base text-gray-600'
+                      className='w-full'
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ delay: 0.2 }}
+                      transition={{ delay: 0.18 }}
                     >
-                      {venture.popupContent.details.map((detail, idx) => (
-                        <motion.div
-                          key={idx}
-                          className='flex items-center'
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.25 + idx * 0.05 }}
-                        >
-                          <span className='w-2 h-2 bg-black/60 rounded-full mr-3 flex-shrink-0'></span>
-                          <span className='text-left'>{detail}</span>
-                        </motion.div>
-                      ))}
+                      <h4 className='text-xl sm:text-2xl font-cormorant text-black mb-4 text-center tracking-tight'>
+                        Further Details
+                      </h4>
+                      
+                      <motion.div
+                        className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-base text-gray-600'
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {venture.popupContent.details.map((detail, idx) => (
+                          <motion.div
+                            key={idx}
+                            className='flex items-center'
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.25 + idx * 0.05 }}
+                          >
+                            <span className='w-2 h-2 bg-black/60 rounded-full mr-3 flex-shrink-0'></span>
+                            <span className='text-left'>{detail}</span>
+                          </motion.div>
+                        ))}
+                      </motion.div>
                     </motion.div>
                   </motion.div>
                 </motion.div>
