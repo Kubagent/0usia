@@ -1,8 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { useImagePreloader } from '@/hooks/useImagePreloader';
+import { AnimatePresence, motion } from 'framer-motion';
+import Image from 'next/image';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Venture {
   id: string;
@@ -46,7 +46,7 @@ const venturesData: Venture[] = [
   {
     id: 'violca',
     name: 'Violca',
-    tagline: 'Cycling Adventures',
+    tagline: 'Cycling Gear & Adventures',
     logoUrl: '/venture-logos/violca.png',
     websiteUrl: 'https://violca.com',
     description: 'Ecommerce in cycling gear, to prepare you for cycling adventures to get to know oneself',
@@ -111,7 +111,7 @@ const venturesData: Venture[] = [
     name: 'Libelo',
     tagline: 'Nature Exploration App',
     logoUrl: '/venture-logos/libelo.png',
-    websiteUrl: 'https://libelo.com',
+    websiteUrl: 'https://libelo.app',
     description: 'Empowering you on adventures into the wild',
     status: 'profit',
     popupContent: {
@@ -120,7 +120,7 @@ const venturesData: Venture[] = [
         'Empowering you on adventures into the wild',
       details: [
         'Industry: Nature Exploration /Adventure travel',
-        'Business Model: Consumer App (B2C)',
+        'Business Model: Direct-to-Consumer (B2C)',
         'USP: Seamless service connection',
         'Focus: Adventure travel',
       ],
@@ -140,10 +140,10 @@ const venturesData: Venture[] = [
       description:
         'Curated collection of exceptional design objects, connecting creators with discerning collectors and design enthusiasts.',
       details: [
-        'Curated design collections',
-        'Artist and designer profiles',
-        'Exclusive limited editions',
-        'Design story narratives',
+        'Industry: Curated design collections',
+        'Business Model: Marketplace (B2C)',
+        'USP: Exclusive limited editions',
+        'Focus: Design story narratives',
       ],
     },
   },
@@ -246,16 +246,44 @@ export default function VenturesCarousel() {
     return () => clearTimeout(fallbackTimer);
   }, [imagesReady]);
 
-  // Auto-play carousel - advance every 8 seconds when images are ready
+  // Auto-play timer management using useRef to avoid stale closures
+  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Function to start/restart the auto-play timer
+  const startAutoPlayTimer = useCallback(() => {
+    // Clear existing timer if any
+    if (autoPlayTimerRef.current) {
+      clearTimeout(autoPlayTimerRef.current);
+    }
+
+    // Start new timer
+    autoPlayTimerRef.current = setTimeout(() => {
+      setCurrentIndex(prevIndex => (prevIndex + 1) % venturesData.length);
+    }, 5000); // 5 seconds
+  }, []);
+
+  // Auto-play carousel - advance every 5 seconds when images are ready
   useEffect(() => {
     if (!imagesReady) return;
 
-    const autoPlayInterval = setInterval(() => {
-      setCurrentIndex(prevIndex => (prevIndex + 1) % venturesData.length);
-    }, 8000); // Advance every 8 seconds
+    // Start the initial timer
+    startAutoPlayTimer();
 
-    return () => clearInterval(autoPlayInterval);
-  }, [imagesReady]);
+    // Cleanup on unmount
+    return () => {
+      if (autoPlayTimerRef.current) {
+        clearTimeout(autoPlayTimerRef.current);
+      }
+    };
+  }, [imagesReady, startAutoPlayTimer]);
+
+  // Restart timer when currentIndex changes (including from user interactions)
+  useEffect(() => {
+    if (!imagesReady) return;
+    
+    // Restart the timer for consistent 5-second intervals
+    startAutoPlayTimer();
+  }, [currentIndex, imagesReady, startAutoPlayTimer]);
 
   const handleNext = () => {
     setCurrentIndex(prev => (prev + 1) % venturesData.length);
@@ -275,7 +303,11 @@ export default function VenturesCarousel() {
         setActivePopup(venture.id);
       } else {
         // If clicking current venture and it's active, navigate to website
-        window.open(venture.websiteUrl, '_blank');
+        const link = document.createElement('a');
+        link.href = venture.websiteUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.click();
       }
     } else {
       // If clicking adjacent venture, make it current
