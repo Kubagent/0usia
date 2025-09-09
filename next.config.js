@@ -30,8 +30,8 @@ const nextConfig = {
   // Optimize build output
   productionBrowserSourceMaps: false,
   
-  // Static export for Cloudflare Pages - disabled for development
-  // output: 'export',
+  // Static export for Cloudflare Pages
+  output: 'export',
   trailingSlash: true,
   
   // Security headers and caching
