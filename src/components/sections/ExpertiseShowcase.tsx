@@ -205,10 +205,10 @@ export default function ExpertiseShowcase() {
                     bg-white/70
                     backdrop-blur-md
                     rounded-lg
-                    w-[94%] max-w-4xl
-                    h-[84%] max-h-[30rem] sm:max-h-[32rem] lg:max-h-[30rem]
+                    w-[96%] max-w-5xl
+                    h-[88%] max-h-[38rem] sm:max-h-[40rem] lg:max-h-[38rem]
                     flex flex-col items-center justify-center text-center
-                    p-4 sm:p-5 md:p-6
+                    p-6 sm:p-7 md:p-8 lg:p-10
                     border border-gray-300/50
                     shadow-lg shadow-black/10
                     ring-1 ring-gray-200/20
@@ -226,7 +226,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3 
-                          className="text-ovsia-body-xl sm:text-ovsia-body-2xl font-cormorant font-bold text-black mb-2 sm:mb-3 tracking-tight"
+                          className="text-ovsia-body-xl lg:text-ovsia-body-2xl font-cormorant font-bold text-black mb-3 lg:mb-4 tracking-tight"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
@@ -235,7 +235,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
                         
                         <motion.p 
-                          className="text-ovsia-body-sm sm:text-ovsia-body-base md:text-ovsia-body-lg text-gray-700 mb-3 sm:mb-4 md:mb-5 leading-relaxed max-w-lg"
+                          className="text-ovsia-body-base lg:text-ovsia-body-lg text-gray-700 mb-4 lg:mb-5 leading-relaxed max-w-2xl"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.15 }}
@@ -244,7 +244,7 @@ export default function ExpertiseShowcase() {
                         </motion.p>
 
                         <motion.div 
-                          className="grid grid-cols-1 gap-1 sm:gap-2 text-ovsia-body-xs sm:text-ovsia-body-sm md:text-ovsia-body-base text-gray-600"
+                          className="grid grid-cols-1 gap-2 lg:gap-3 text-ovsia-body-sm lg:text-ovsia-body-base text-gray-600"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}
@@ -346,7 +346,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3 
-                          className="text-ovsia-body-xl font-cormorant font-bold text-black mb-3 tracking-tight pr-8"
+                          className="text-ovsia-body-lg font-cormorant font-bold text-black mb-3 tracking-tight pr-8"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 }}
@@ -355,7 +355,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
                         
                         <motion.p 
-                          className="text-ovsia-body-sm text-gray-700 mb-4 leading-relaxed"
+                          className="text-ovsia-body-base text-gray-700 mb-4 leading-relaxed"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.15 }}
@@ -378,7 +378,7 @@ export default function ExpertiseShowcase() {
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
                               <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                              <span className="text-ovsia-body-xs text-gray-600 leading-relaxed">{detail}</span>
+                              <span className="text-ovsia-body-sm text-gray-600 leading-relaxed">{detail}</span>
                             </motion.div>
                           ))}
                         </motion.div>

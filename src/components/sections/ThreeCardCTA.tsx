@@ -435,27 +435,15 @@ export default function ThreeCardCTA() {
     }
   };
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        duration: 0.6
-      }
-    }
-  };
-
+  // Simplified animation variants - only for hover effects
   const cardVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      }
+    hover: { 
+      scale: 1.05,
+      transition: { duration: 0.3, ease: "easeOut" }
+    },
+    tap: { 
+      scale: 0.95,
+      transition: { duration: 0.1, ease: "easeOut" }
     }
   };
 
@@ -464,29 +452,17 @@ export default function ThreeCardCTA() {
       <section className="min-h-screen flex items-center justify-center py-20">
         <div className="w-full max-w-7xl mx-auto px-4">
           {/* Section Title */}
-          <motion.div
-            className="text-center mb-8 sm:mb-12 md:mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-2 sm:mb-4">
               Choose Your Path
             </h2>
             <p className="text-ovsia-body-base sm:text-ovsia-body-lg text-black font-light max-w-4xl mx-auto px-4">
               Every journey begins with a single step. Which path calls to you?
             </p>
-          </motion.div>
+          </div>
 
           {/* Three Cards Layout */}
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 max-w-7xl mx-auto items-center justify-items-center px-4"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 max-w-7xl mx-auto items-center justify-items-center px-4">
             {ctaCards.map((card, index) => (
               <motion.div
                 key={card.id}
@@ -495,12 +471,14 @@ export default function ThreeCardCTA() {
                   aspect-square rounded-full
                   ${getCardStyles(card.bgColor)}
                   backdrop-blur-sm
-                  transition-all duration-300 hover:scale-105 hover:shadow-xl
+                  transition-all duration-300 hover:shadow-xl
                   cursor-pointer group
                   w-full h-full max-w-2xl mx-auto
                   ${index === 1 && 'md:col-span-2 lg:col-span-1'}
                 `}
                 variants={cardVariants}
+                whileHover="hover"
+                whileTap="tap"
                 onClick={() => handleCardAction(card)}
               >
                 <div className="text-center flex flex-col items-center space-y-4 sm:space-y-6">
@@ -510,16 +488,14 @@ export default function ThreeCardCTA() {
                   <p className="text-ovsia-body-base sm:text-ovsia-body-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[240px] sm:max-w-[280px]">
                     {card.description}
                   </p>
-                  <motion.button
+                  <button
                     className={`
                       inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-lg 
                       font-medium text-ovsia-body-base sm:text-ovsia-body-lg transition-all duration-300 
-                      transform group-hover:scale-105 focus:outline-none focus:ring-4 
+                      focus:outline-none focus:ring-4 
                       ${getButtonStyles(card.bgColor)}
                       w-auto mx-auto min-h-[44px]
                     `}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleCardAction(card);
@@ -530,11 +506,11 @@ export default function ThreeCardCTA() {
                   <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                  </motion.button>
+                  </button>
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 

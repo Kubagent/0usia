@@ -63,7 +63,7 @@ const FALLBACK_VENTURES: VentureContent[] = [
       users: '500K+',
       growth: '400% YoY'
     },
-    siteUrl: 'https://libelo.com',
+    siteUrl: 'https://libelo.app',
     sortOrder: 3,
   },
 ];

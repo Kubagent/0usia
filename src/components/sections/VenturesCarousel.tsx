@@ -259,7 +259,7 @@ export default function VenturesCarousel() {
     // Start new timer
     autoPlayTimerRef.current = setTimeout(() => {
       setCurrentIndex(prevIndex => (prevIndex + 1) % venturesData.length);
-    }, 5000); // 5 seconds
+    }, 6000); // 6 seconds
   }, []);
 
   // Auto-play carousel - advance every 5 seconds when images are ready
@@ -278,22 +278,35 @@ export default function VenturesCarousel() {
   }, [imagesReady, startAutoPlayTimer]);
 
   // Restart timer when currentIndex changes (including from user interactions)
+  // Add a small delay to prevent conflicts with rapid user clicks
   useEffect(() => {
     if (!imagesReady) return;
     
-    // Restart the timer for consistent 5-second intervals
-    startAutoPlayTimer();
+    // Use a small delay to prevent interference with rapid clicks
+    const delayedRestart = setTimeout(() => {
+      startAutoPlayTimer();
+    }, 100);
+    
+    return () => clearTimeout(delayedRestart);
   }, [currentIndex, imagesReady, startAutoPlayTimer]);
 
-  const handleNext = () => {
+  const handleNext = useCallback((e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setCurrentIndex(prev => (prev + 1) % venturesData.length);
-  };
+  }, []);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback((e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setCurrentIndex(
       prev => (prev - 1 + venturesData.length) % venturesData.length
     );
-  };
+  }, []);
 
   const handleVentureClick = (index: number) => {
     if (index === currentIndex) {
@@ -385,6 +398,24 @@ export default function VenturesCarousel() {
 
   return (
     <section className='relative min-h-screen flex items-center justify-center py-20'>
+      {/* Fixed navigation button styles */}
+      <style jsx>{`
+        .fixed-nav-button {
+          will-change: auto;
+        }
+        .fixed-nav-button:active {
+          transform: translateY(-50%) !important;
+        }
+        .fixed-nav-button:focus {
+          outline: 2px solid rgba(255, 255, 255, 0.3);
+          outline-offset: 2px;
+        }
+        @media (hover: hover) {
+          .fixed-nav-button:hover {
+            transform: translateY(-50%) scale(1.05);
+          }
+        }
+      `}</style>
       <div className='max-w-7xl mx-auto px-6 w-full'>
         {/* Section Title */}
         <motion.div
@@ -423,16 +454,23 @@ export default function VenturesCarousel() {
               staggerChildren: 0.1,
             }}
           >
-            {/* Navigation Arrows */}
+            {/* Navigation Arrows - Fixed positioning and touch handling */}
             <button
               onClick={handlePrev}
-              className='absolute left-2 sm:left-4 md:-left-12 top-1/2 -translate-y-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-3 md:p-2 bg-white/10 md:bg-transparent rounded-full md:rounded-none backdrop-blur-sm md:backdrop-blur-none'
+              onTouchEnd={handlePrev}
+              className='fixed-nav-button left-2 sm:left-4 md:-left-12 top-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-3 md:p-2 bg-white/10 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
+              style={{
+                position: 'absolute',
+                transform: 'translateY(-50%)',
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation'
+              }}
               aria-label='Previous venture'
             >
               <svg
                 width='20'
                 height='20'
-                className='md:w-6 md:h-6'
+                className='md:w-6 md:h-6 pointer-events-none'
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'
@@ -448,13 +486,20 @@ export default function VenturesCarousel() {
 
             <button
               onClick={handleNext}
-              className='absolute right-2 sm:right-4 md:-right-12 top-1/2 -translate-y-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-3 md:p-2 bg-white/10 md:bg-transparent rounded-full md:rounded-none backdrop-blur-sm md:backdrop-blur-none'
+              onTouchEnd={handleNext}
+              className='fixed-nav-button right-2 sm:right-4 md:-right-12 top-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-3 md:p-2 bg-white/10 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
+              style={{
+                position: 'absolute',
+                transform: 'translateY(-50%)',
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation'
+              }}
               aria-label='Next venture'
             >
               <svg
                 width='20'
                 height='20'
-                className='md:w-6 md:h-6'
+                className='md:w-6 md:h-6 pointer-events-none'
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'
@@ -469,11 +514,11 @@ export default function VenturesCarousel() {
             </button>
 
             {/* Ventures Display */}
-            <div className='flex items-center justify-between max-w-6xl mx-auto py-8 sm:py-10 md:py-12 px-4 sm:px-0'>
+            <div className='flex items-center justify-center sm:justify-between max-w-6xl mx-auto py-8 sm:py-10 md:py-12 px-2 sm:px-4 md:px-0'>
               {/* Previous Venture - Left Side */}
               <motion.div
                 key={`prev-${prevIndex}`}
-                className='flex-shrink-0 cursor-pointer group'
+                className='hidden sm:flex flex-shrink-0 cursor-pointer group'
                 onClick={() => handleVentureClick(prevIndex)}
                 initial={{ opacity: 0, x: -50, scale: 0.8 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -510,7 +555,7 @@ export default function VenturesCarousel() {
               {/* Current Venture - Center */}
               <motion.div
                 key={`current-${currentIndex}`}
-                className='flex-shrink-0 text-center cursor-pointer group mx-8'
+                className='flex-shrink-0 text-center cursor-pointer group mx-2 sm:mx-8 max-w-full'
                 onClick={() => handleVentureClick(currentIndex)}
                 onMouseEnter={() => setIsHoveringCurrentVenture(true)}
                 onMouseLeave={() => setIsHoveringCurrentVenture(false)}
@@ -526,7 +571,7 @@ export default function VenturesCarousel() {
                 <div className='relative'>
                   {/* Logo Container with clipPath */}
                   <div
-                    className='w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 aspect-square mx-auto mb-6 sm:mb-8 bg-white/85 flex items-center justify-center group-hover:bg-white/95 transition-all duration-300 p-6 sm:p-8 md:p-10 relative shadow-lg transform group-hover:scale-105 overflow-hidden'
+                    className='w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 aspect-square mx-auto mb-6 sm:mb-8 bg-white/85 flex items-center justify-center group-hover:bg-white/95 transition-all duration-300 p-4 sm:p-6 md:p-8 lg:p-10 relative shadow-lg transform group-hover:scale-105 overflow-hidden'
                     style={{
                       clipPath:
                         'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)',
@@ -541,8 +586,8 @@ export default function VenturesCarousel() {
                       priority
                       className={`object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300 ${
                         current.id === 'objects-gallery'
-                          ? 'w-40 h-40 sm:w-44 sm:h-44 md:w-50 md:h-50 lg:w-56 lg:h-56 xl:w-60 xl:h-60'
-                          : 'w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 xl:w-48 xl:h-48'
+                          ? 'w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-52 xl:h-52'
+                          : 'w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40'
                       }`}
                     />
                   </div>
@@ -652,12 +697,12 @@ export default function VenturesCarousel() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
-                    className='space-y-4'
+                    className='space-y-4 w-full max-w-xs sm:max-w-md'
                   >
-                    <h3 className='text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant text-white tracking-tight'>
+                    <h3 className='text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant text-white tracking-tight break-words px-2 sm:px-0'>
                       {current.name}
                     </h3>
-                    <p className='text-gray-400 text-ovsia-body-lg sm:text-ovsia-body-xl font-light max-w-md mx-auto leading-relaxed px-2'>
+                    <p className='text-gray-400 text-ovsia-body-base sm:text-ovsia-body-lg md:text-ovsia-body-xl font-light leading-relaxed px-4 sm:px-2 break-words'>
                       {current.tagline}
                     </p>
 
@@ -668,7 +713,7 @@ export default function VenturesCarousel() {
               {/* Next Venture - Right Side */}
               <motion.div
                 key={`next-${nextIndex}`}
-                className='flex-shrink-0 cursor-pointer group'
+                className='hidden sm:flex flex-shrink-0 cursor-pointer group'
                 onClick={() => handleVentureClick(nextIndex)}
                 initial={{ opacity: 0, x: 50, scale: 0.8 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -717,12 +762,25 @@ export default function VenturesCarousel() {
               {venturesData.map((_, index) => (
                 <motion.button
                   key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCurrentIndex(index);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCurrentIndex(index);
+                  }}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 touch-manipulation ${
                     index === currentIndex
                       ? 'bg-white'
                       : 'bg-white/30 hover:bg-white/50'
                   }`}
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                    touchAction: 'manipulation'
+                  }}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
                   aria-label={`Go to venture ${index + 1}`}

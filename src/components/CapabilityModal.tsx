@@ -148,7 +148,7 @@ const CapabilityModal: React.FC<CapabilityModalProps> = ({
           {/* Modal Content */}
           <motion.div
             id="capability-modal"
-            className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden focus:outline-none"
+            className="relative w-full max-w-2xl lg:max-w-4xl max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden focus:outline-none"
             variants={modalVariants}
             tabIndex={-1}
           >
@@ -162,7 +162,7 @@ const CapabilityModal: React.FC<CapabilityModalProps> = ({
                   <div>
                     <h2 
                       id="modal-title"
-                      className="text-3xl sm:text-4xl font-bold text-gray-800 font-cormorant"
+                      className="text-2xl lg:text-3xl font-bold text-gray-800 font-cormorant"
                     >
                       {card.modalContent.title}
                     </h2>
@@ -198,7 +198,7 @@ const CapabilityModal: React.FC<CapabilityModalProps> = ({
               <div className="mb-8">
                 <p 
                   id="modal-description"
-                  className="text-gray-700 text-xl leading-relaxed font-cormorant"
+                  className="text-gray-700 text-lg leading-relaxed font-cormorant"
                 >
                   {card.modalContent.description}
                 </p>
@@ -207,7 +207,7 @@ const CapabilityModal: React.FC<CapabilityModalProps> = ({
               {/* Features */}
               {card.modalContent.features && card.modalContent.features.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-4 font-cormorant">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 font-cormorant">
                     Key Features
                   </h3>
                   <ul className="space-y-3">
@@ -217,7 +217,7 @@ const CapabilityModal: React.FC<CapabilityModalProps> = ({
                         className="flex items-start space-x-3"
                       >
                         <div className="flex-shrink-0 w-2 h-2 bg-gray-400 rounded-full mt-2" />
-                        <span className="text-gray-600 font-cormorant">
+                        <span className="text-gray-600 text-base font-cormorant">
                           {feature}
                         </span>
                       </li>
@@ -229,7 +229,7 @@ const CapabilityModal: React.FC<CapabilityModalProps> = ({
               {/* Examples */}
               {card.modalContent.examples && card.modalContent.examples.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-4 font-cormorant">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 font-cormorant">
                     Examples
                   </h3>
                   <div className="grid gap-3 sm:grid-cols-2">
@@ -250,7 +250,7 @@ const CapabilityModal: React.FC<CapabilityModalProps> = ({
               {/* Technologies */}
               {card.modalContent.technologies && card.modalContent.technologies.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-4 font-cormorant">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 font-cormorant">
                     Technologies
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -272,12 +272,12 @@ const CapabilityModal: React.FC<CapabilityModalProps> = ({
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={onClose}
-                  className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 font-cormorant"
+                  className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 text-base font-cormorant"
                 >
                   Close
                 </button>
                 <button
-                  className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors duration-200 font-cormorant"
+                  className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors duration-200 text-base font-cormorant"
                   onClick={() => {
                     // Optional: Add action for "Learn More" or "Contact Us"
                     // Track interest without console logging
