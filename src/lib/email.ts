@@ -65,12 +65,20 @@ export class EmailError extends Error {
    * Get user-friendly error message
    */
   getUserFriendlyMessage(): string {
+    if (this.code === 'DOMAIN_NOT_VERIFIED') {
+      return 'Email service configuration issue. Please try again later or contact support.';
+    }
+
     if (this.status === 400) {
       return 'Invalid email data. Please check your information and try again.';
     }
 
     if (this.status === 401) {
       return 'Email service configuration error. Please try again later.';
+    }
+
+    if (this.status === 403) {
+      return 'Email service temporarily unavailable. Please try again later.';
     }
 
     if (this.status === 429) {
@@ -362,26 +370,74 @@ class EmailService {
         throw error;
       }
 
-      // Handle Resend API errors
-      if (error && typeof error === 'object' && 'message' in error) {
+      console.error('Resend API error details:', error);
+
+      // Handle Resend API errors with better error detection
+      if (error && typeof error === 'object') {
         const resendError = error as any;
         
-        if (resendError.message?.includes('Invalid API key')) {
+        // Check for domain verification error
+        if (resendError.error?.includes('domain is not verified') || 
+            resendError.message?.includes('domain is not verified')) {
+          throw new EmailError(
+            'Email domain not verified. Please verify the domain in Resend console.',
+            403,
+            'DOMAIN_NOT_VERIFIED'
+          );
+        }
+
+        // Check for invalid API key
+        if (resendError.error?.includes('Invalid API key') || 
+            resendError.message?.includes('Invalid API key') ||
+            resendError.statusCode === 401) {
           throw new EmailError('Invalid email service configuration', 401, 'INVALID_API_KEY');
         }
         
-        if (resendError.message?.includes('Rate limit')) {
+        // Check for rate limit
+        if (resendError.error?.includes('Rate limit') || 
+            resendError.message?.includes('Rate limit') ||
+            resendError.statusCode === 429) {
           throw new EmailError('Email rate limit exceeded', 429, 'RATE_LIMIT');
         }
 
-        throw new EmailError(
-          `Email service error: ${resendError.message}`,
-          500,
-          'SERVICE_ERROR'
-        );
+        // Check for validation errors
+        if (resendError.name === 'validation_error' || resendError.statusCode === 403) {
+          const errorMsg = resendError.error || resendError.message || 'Validation error';
+          throw new EmailError(
+            `Email validation error: ${errorMsg}`,
+            403,
+            'VALIDATION_ERROR'
+          );
+        }
+
+        // Generic Resend error with status code
+        if (resendError.statusCode) {
+          const errorMsg = resendError.error || resendError.message || 'Unknown API error';
+          throw new EmailError(
+            `Email service error: ${errorMsg}`,
+            resendError.statusCode,
+            'API_ERROR'
+          );
+        }
+
+        // Fallback for other structured errors
+        if (resendError.message || resendError.error) {
+          const errorMsg = resendError.error || resendError.message;
+          throw new EmailError(
+            `Email service error: ${errorMsg}`,
+            500,
+            'SERVICE_ERROR'
+          );
+        }
       }
 
-      throw new EmailError('Unknown email service error', 500, 'UNKNOWN_ERROR');
+      // Handle generic errors
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new EmailError(
+        `Unknown email service error: ${errorMessage}`,
+        500,
+        'UNKNOWN_ERROR'
+      );
     }
   }
 
@@ -421,6 +477,40 @@ class EmailService {
       toEmail: this.config.toEmail,
       errors,
     };
+  }
+
+  /**
+   * Check if domains are verified in Resend
+   */
+  async checkDomainVerification(): Promise<{
+    verified: boolean;
+    domains: Array<{ name: string; status: string }>;
+    errors: string[];
+  }> {
+    const errors: string[] = [];
+    
+    try {
+      const resend = this.getResend();
+      const result = await resend.domains.list();
+      
+      if (result.error) {
+        errors.push(`Domain check failed: ${result.error.message || result.error}`);
+        return { verified: false, domains: [], errors };
+      }
+
+      const domains = result.data || [];
+      const fromDomain = this.config.fromEmail.split('@')[1];
+      const domainInfo = domains.find(d => d.name === fromDomain);
+      
+      return {
+        verified: domainInfo ? domainInfo.status === 'verified' : false,
+        domains: domains.map(d => ({ name: d.name, status: d.status })),
+        errors,
+      };
+    } catch (error) {
+      errors.push(`Domain verification check failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return { verified: false, domains: [], errors };
+    }
   }
 }
 

@@ -25,13 +25,34 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-// Database IDs configuration
+/**
+ * Utility function to clean Notion database ID
+ * Removes view parameters and other URL artifacts to get a clean UUID
+ */
+function cleanNotionDatabaseId(id: string): string {
+  if (!id) return '';
+  
+  // Remove view parameters (everything after ?)
+  const cleanId = id.split('?')[0];
+  
+  // Remove dashes and validate it's a 32-character hex string
+  const normalizedId = cleanId.replace(/-/g, '');
+  
+  if (normalizedId.length === 32 && /^[0-9a-f]+$/i.test(normalizedId)) {
+    return normalizedId;
+  }
+  
+  console.warn(`Invalid Notion database ID format: ${id}`);
+  return cleanId; // Return as-is if we can't validate it
+}
+
+// Database IDs configuration with cleaning
 export const NOTION_DATABASES: NotionDatabaseConfig = {
-  ventures: process.env.NOTION_VENTURES_DB_ID || '',
-  capabilities: process.env.NOTION_CAPABILITIES_DB_ID || '',
-  siteCopy: process.env.NOTION_SITE_COPY_DB_ID || '',
-  assets: process.env.NOTION_ASSETS_DB_ID || '',
-  contactSubmissions: process.env.NOTION_CONTACT_DB_ID || '',
+  ventures: cleanNotionDatabaseId(process.env.NOTION_VENTURES_DB_ID || ''),
+  capabilities: cleanNotionDatabaseId(process.env.NOTION_CAPABILITIES_DB_ID || ''),
+  siteCopy: cleanNotionDatabaseId(process.env.NOTION_SITE_COPY_DB_ID || ''),
+  assets: cleanNotionDatabaseId(process.env.NOTION_ASSETS_DB_ID || ''),
+  contactSubmissions: cleanNotionDatabaseId(process.env.NOTION_CONTACT_DB_ID || ''),
 };
 
 /**
@@ -216,6 +237,7 @@ export async function checkNotionConnection(): Promise<{
       capabilities: false,
       siteCopy: false,
       assets: false,
+      contactSubmissions: false,
     } as { [key in keyof NotionDatabaseConfig]: boolean },
   };
 
@@ -228,19 +250,76 @@ export async function checkNotionConnection(): Promise<{
     for (const [key, databaseId] of Object.entries(NOTION_DATABASES)) {
       if (databaseId) {
         try {
-          await notion.databases.retrieve({ database_id: databaseId });
+          console.log(`Testing database ${key} with ID: ${databaseId}`);
+          const dbInfo = await notion.databases.retrieve({ database_id: databaseId });
+          console.log(`Database ${key} is accessible:`, dbInfo.title);
           result.databases[key as keyof NotionDatabaseConfig] = true;
-        } catch (error) {
-          console.warn(`Database ${key} (${databaseId}) is not accessible:`, error);
+        } catch (error: any) {
+          console.warn(`Database ${key} (${databaseId}) is not accessible:`, {
+            code: error.code,
+            message: error.message,
+            status: error.status
+          });
         }
+      } else {
+        console.warn(`Database ${key} has no ID configured`);
       }
     }
 
     return result;
   } catch (error: any) {
+    console.error('Failed to connect to Notion API:', error);
     return {
       ...result,
       error: error.message || 'Failed to connect to Notion API',
+    };
+  }
+}
+
+/**
+ * Test the contact form submission specifically
+ */
+export async function testContactFormSubmission(): Promise<{
+  success: boolean;
+  error?: string;
+  databaseId?: string;
+  databaseInfo?: any;
+}> {
+  try {
+    const databaseId = NOTION_DATABASES.contactSubmissions;
+    
+    if (!databaseId) {
+      return {
+        success: false,
+        error: 'Contact submissions database ID is not configured'
+      };
+    }
+
+    console.log('Testing contact form database with ID:', databaseId);
+
+    // Retrieve database info
+    const databaseInfo = await notion.databases.retrieve({ database_id: databaseId });
+    
+    console.log('Contact form database info:', {
+      title: databaseInfo.title,
+      properties: Object.keys(databaseInfo.properties || {}),
+    });
+
+    return {
+      success: true,
+      databaseId,
+      databaseInfo: {
+        title: databaseInfo.title,
+        properties: Object.keys(databaseInfo.properties || {}),
+      }
+    };
+
+  } catch (error: any) {
+    console.error('Contact form database test failed:', error);
+    return {
+      success: false,
+      error: error.message || 'Unknown error',
+      databaseId: NOTION_DATABASES.contactSubmissions
     };
   }
 }
@@ -313,6 +392,12 @@ export async function submitContactForm(formData: ContactFormData): Promise<Cont
   try {
     if (!NOTION_DATABASES.contactSubmissions) {
       throw new Error('Contact submissions database ID is not configured');
+    }
+
+    // Validate database ID format
+    if (NOTION_DATABASES.contactSubmissions.length !== 32 || !/^[0-9a-f]+$/i.test(NOTION_DATABASES.contactSubmissions)) {
+      console.error('Invalid database ID format:', NOTION_DATABASES.contactSubmissions);
+      throw new Error(`Invalid database ID format: ${NOTION_DATABASES.contactSubmissions}`);
     }
 
     // Prepare the properties for Notion page creation
@@ -398,9 +483,25 @@ export async function submitContactForm(formData: ContactFormData): Promise<Cont
   } catch (error: any) {
     console.error('Error submitting contact form to Notion:', error);
     
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Failed to submit contact form to database';
+    let errorCode = error.code || 'SUBMISSION_ERROR';
+    
+    if (error.code === 'object_not_found') {
+      errorMessage = 'Contact database not found or not accessible. Please check integration permissions.';
+    } else if (error.code === 'unauthorized') {
+      errorMessage = 'Unauthorized access to Notion. Please check the integration token.';
+    } else if (error.code === 'validation_error') {
+      errorMessage = 'Invalid data format. Please check the form fields.';
+    } else if (error.code === 'rate_limited') {
+      errorMessage = 'Too many requests to Notion. Please try again in a few minutes.';
+    } else if (error.message && error.message.includes('database_id should be a valid uuid')) {
+      errorMessage = 'Database ID configuration error. Please check NOTION_CONTACT_DB_ID environment variable.';
+    }
+    
     const notionError: NotionError = {
-      code: error.code || 'SUBMISSION_ERROR',
-      message: error.message || 'Failed to submit contact form',
+      code: errorCode,
+      message: errorMessage,
       status: error.status || 500,
     };
 

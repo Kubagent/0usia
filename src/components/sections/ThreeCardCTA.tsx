@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 // Contact Form Modal Component
@@ -19,10 +19,36 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
     marketingConsent: false,
     honeypot: ''
   });
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  // Focus management and keyboard navigation
+  useEffect(() => {
+    // Focus first input when modal opens
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+
+    // Handle escape key
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Clear errors when user starts typing
+    if (submitError) {
+      setSubmitError(null);
+    }
+
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
@@ -40,50 +66,108 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate GDPR consent
     if (!formData.gdprConsent) {
-      alert('You must accept the privacy policy to continue');
+      setSubmitError('You must accept the privacy policy to continue');
       return;
     }
 
-    // Special validation for investment forms (require attachment)
-    if (modalType === 'investment' && !formData.attachment) {
-      alert('Please attach your pitch deck for investment inquiries');
+    // Reset any previous errors
+    setSubmitError(null);
+
+    // Basic validation
+    if (!formData.name.trim()) {
+      setSubmitError('Please enter your name');
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setSubmitError('Please enter your email address');
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setSubmitError('Please enter a valid email address');
       return;
     }
 
     setIsSubmitting(true);
-    
-    try {
-      // Prepare form data
-      const submitData = new FormData();
-      submitData.append('name', formData.name);
-      submitData.append('email', formData.email);
-      if (formData.phone) submitData.append('phone', formData.phone);
-      if (formData.message) submitData.append('message', formData.message);
-      submitData.append('formType', modalType === 'partnership' ? 'Partnership' : modalType === 'project' ? 'Project' : 'Investment');
-      submitData.append('gdprConsent', formData.gdprConsent.toString());
-      submitData.append('marketingConsent', formData.marketingConsent.toString());
-      submitData.append('honeypot', formData.honeypot); // Anti-spam field
-      if (formData.attachment) submitData.append('attachment', formData.attachment);
 
-      // Submit to API
-      const response = await fetch('/api/contact/submit', {
+    try {
+      // Prepare JSON data for API (no file upload support yet)
+      const submitData = {
+        name: formData.name,
+        email: formData.email,
+        company: formData.phone, // Using phone field as company for now
+        message: formData.message,
+        formType: modalType === 'partnership' ? 'Partnership' : modalType === 'project' ? 'Project' : 'Investment',
+        gdprConsent: formData.gdprConsent,
+        marketingConsent: formData.marketingConsent,
+        honeypot: formData.honeypot,
+        source: 'three_card_cta'
+      };
+
+      // Submit to API with proper JSON format
+      const response = await fetch('/api/contact', {
         method: 'POST',
-        body: submitData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitData),
       });
 
-      const result = await response.json();
+      // Check if response has content before parsing
+      let result;
+      const contentType = response.headers.get('content-type');
+
+      if (contentType && contentType.includes('application/json')) {
+        const text = await response.text();
+        if (text.trim()) {
+          try {
+            result = JSON.parse(text);
+          } catch (parseError) {
+            console.error('Failed to parse JSON response:', parseError);
+            throw new Error('Invalid response format from server');
+          }
+        } else {
+          throw new Error('Empty response from server');
+        }
+      } else {
+        // Non-JSON response
+        const text = await response.text();
+        console.error('Non-JSON response received:', text);
+        throw new Error(`Server returned non-JSON response: ${response.status} ${response.statusText}`);
+      }
+
+      if (!response.ok) {
+        throw new Error(result?.message || `HTTP ${response.status}: ${response.statusText}`);
+      }
 
       if (!result.success) {
         throw new Error(result.message || 'Failed to submit form');
       }
 
       setSubmitted(true);
+
+      // Reset form after successful submission
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+          attachment: null,
+          gdprConsent: false,
+          marketingConsent: false,
+          honeypot: ''
+        });
+      }, 2000);
     } catch (error: any) {
       console.error('Form submission error:', error);
-      alert(`Error submitting form: ${error.message}`);
+      setSubmitError(error.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -99,21 +183,23 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
       case 'partnership':
         return {
           title: 'Start Partnership',
-          fields: ['name', 'email', 'phone', 'message', 'attachment'],
-          attachmentLabel: 'Attachment (optional, max 10MB)'
+          fields: ['name', 'email', 'phone', 'message'],
+          attachmentLabel: 'Attachment (coming soon)',
+          required: ['name', 'email']
         };
       case 'project':
         return {
           title: 'Start Project',
-          fields: ['name', 'email', 'phone', 'message', 'attachment'],
-          attachmentLabel: 'Project brief (optional, max 10MB)'
+          fields: ['name', 'email', 'phone', 'message'],
+          attachmentLabel: 'Project brief (coming soon)',
+          required: ['name', 'email']
         };
       case 'investment':
         return {
           title: 'Submit Pitch',
-          fields: ['name', 'email', 'attachment'],
-          attachmentLabel: 'Pitch deck (required, max 10MB)',
-          required: ['name', 'email', 'attachment']
+          fields: ['name', 'email', 'phone', 'message'],
+          attachmentLabel: 'Pitch deck (coming soon)',
+          required: ['name', 'email']
         };
       default:
         return { title: '', fields: [] };
@@ -140,6 +226,11 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
             <p className="text-ovsia-body-base text-gray-600 mb-6">
               We've received your {modalType === 'investment' ? 'pitch' : 'inquiry'} and will be in touch soon.
             </p>
+            {submitError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-700 text-sm">{submitError}</p>
+              </div>
+            )}
             <button
               onClick={onClose}
               className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors"
@@ -153,22 +244,37 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <motion.div 
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <motion.div
         className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
       >
         <div className="flex justify-between items-center mb-4 sm:mb-6">
-          <h3 className="text-ovsia-body-xl sm:text-ovsia-body-2xl font-cormorant">{config.title}</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <h3 className="text-ovsia-body-xl sm:text-ovsia-body-2xl font-cormorant" id="modal-title">{config.title}</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+            aria-label="Close form"
+          >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        {submitError && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-700 text-sm" role="alert">{submitError}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" noValidate>
           {config.fields.includes('name') && (
             <div>
               <label className="block text-ovsia-body-sm font-medium text-gray-700 mb-2">
@@ -180,8 +286,12 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
                 value={formData.name}
                 onChange={handleInputChange}
                 required={config.required?.includes('name')}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
                 placeholder="Your full name"
+                aria-describedby={submitError && submitError.includes('name') ? 'name-error' : undefined}
+                aria-invalid={submitError && submitError.includes('name') ? 'true' : 'false'}
+                ref={firstInputRef}
+                autoComplete="name"
               />
             </div>
           )}
@@ -197,22 +307,30 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
                 value={formData.email}
                 onChange={handleInputChange}
                 required={config.required?.includes('email')}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
                 placeholder="your@email.com"
+                aria-describedby={submitError && submitError.includes('email') ? 'email-error' : undefined}
+                aria-invalid={submitError && submitError.includes('email') ? 'true' : 'false'}
+                autoComplete="email"
               />
             </div>
           )}
 
           {config.fields.includes('phone') && (
             <div>
-              <label className="block text-ovsia-body-sm font-medium text-gray-700 mb-2">Phone</label>
+              <label className="block text-ovsia-body-sm font-medium text-gray-700 mb-2">
+                Company {config.required?.includes('phone') && <span className="text-red-500">*</span>}
+              </label>
               <input
-                type="tel"
+                type="text"
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors"
-                placeholder="+1 (555) 123-4567"
+                required={config.required?.includes('phone')}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
+                placeholder="Your company name (optional)"
+                aria-describedby={config.required?.includes('phone') ? 'company-help' : undefined}
+                autoComplete="organization"
               />
             </div>
           )}
@@ -225,31 +343,30 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
                 value={formData.message}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors resize-none"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors resize-none"
                 placeholder="Tell us about your project or inquiry..."
+                aria-describedby="message-help"
               />
+              <p id="message-help" className="mt-1 text-ovsia-body-xs text-gray-500">
+                Share any details about your {modalType === 'partnership' ? 'partnership goals' : modalType === 'project' ? 'project requirements' : 'investment opportunity'}
+              </p>
             </div>
           )}
 
           {config.fields.includes('attachment') && (
-            <div>
-              <label className="block text-ovsia-body-sm font-medium text-gray-700 mb-2">
-                {config.attachmentLabel} {config.required?.includes('attachment') && <span className="text-red-500">*</span>}
-              </label>
-              <div className="relative">
-                <input
-                  type="file"
-                  name="attachment"
-                  onChange={handleFileChange}
-                  required={config.required?.includes('attachment')}
-                  accept=".pdf,.doc,.docx,.ppt,.pptx,.zip"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-1 focus:ring-black focus:border-black transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-100 file:text-black hover:file:bg-gray-200"
-                />
-                {formData.attachment && (
-                  <p className="text-ovsia-body-sm text-gray-600 mt-1">
-                    Selected: {formData.attachment.name} ({Math.round(formData.attachment.size / 1024)}KB)
+            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                </svg>
+                <div>
+                  <p className="text-ovsia-body-sm font-medium text-gray-700">
+                    File Upload Coming Soon
                   </p>
-                )}
+                  <p className="text-ovsia-body-xs text-gray-500">
+                    For now, please include any details in your message and we'll follow up about file sharing.
+                  </p>
+                </div>
               </div>
             </div>
           )}
@@ -331,10 +448,14 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="flex-1 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-h-[48px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              aria-describedby={isSubmitting ? 'submit-status' : undefined}
             >
               {isSubmitting ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="sr-only" id="submit-status">Submitting form...</span>
+                </>
               ) : (
                 'Submit'
               )}
