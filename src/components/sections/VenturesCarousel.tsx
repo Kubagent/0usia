@@ -531,11 +531,12 @@ export default function VenturesCarousel() {
                 }}
               >
                 <div
-                  className='w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-42 lg:h-42 aspect-square bg-white/90 flex items-center justify-center group-hover:bg-white/95 transition-all duration-300 p-3 sm:p-4 md:p-5 shadow-lg overflow-hidden'
+                  className='w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-42 lg:h-42 aspect-square flex items-center justify-center transition-all duration-300 p-3 sm:p-4 md:p-5 shadow-lg overflow-hidden'
                   style={{
                     clipPath:
                       'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)',
                     willChange: 'transform',
+                    backgroundColor: '#f9fafb',
                   }}
                 >
                   <Image
@@ -572,11 +573,12 @@ export default function VenturesCarousel() {
                 <div className='relative'>
                   {/* Logo Container with clipPath */}
                   <div
-                    className='w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 aspect-square mx-auto mb-6 sm:mb-8 bg-white/85 flex items-center justify-center group-hover:bg-white/95 transition-all duration-300 p-4 sm:p-6 md:p-8 lg:p-10 relative shadow-lg transform group-hover:scale-105 overflow-hidden'
+                    className='w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 aspect-square mx-auto mb-6 sm:mb-8 flex items-center justify-center transition-all duration-300 p-4 sm:p-6 md:p-8 lg:p-10 relative shadow-lg transform group-hover:scale-105 overflow-hidden'
                     style={{
                       clipPath:
                         'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)',
                       willChange: 'transform',
+                      backgroundColor: '#f3f4f6',
                     }}
                   >
                     <Image
@@ -726,11 +728,12 @@ export default function VenturesCarousel() {
                 }}
               >
                 <div
-                  className='w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-42 lg:h-42 aspect-square bg-white/90 flex items-center justify-center group-hover:bg-white/95 transition-all duration-300 p-3 sm:p-4 md:p-5 shadow-lg overflow-hidden'
+                  className='w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-42 lg:h-42 aspect-square flex items-center justify-center transition-all duration-300 p-3 sm:p-4 md:p-5 shadow-lg overflow-hidden'
                   style={{
                     clipPath:
                       'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)',
                     willChange: 'transform',
+                    backgroundColor: '#f9fafb',
                   }}
                 >
                   <Image

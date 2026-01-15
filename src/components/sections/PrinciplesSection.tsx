@@ -239,48 +239,50 @@ export default function PrinciplesSection() {
                     }}
                   />
 
-                  {/* Content overlay */}
-                  <div className="relative z-10 p-6 md:p-8 lg:p-10 max-w-[240px] md:max-w-[320px] lg:max-w-[380px] text-center">
-                    {/* Title */}
-                    <motion.h3
-                      className="text-xl md:text-2xl lg:text-3xl font-cormorant font-bold text-black mb-2 md:mb-3"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 }}
-                    >
-                      {hoveredPrinciple.title}
-                    </motion.h3>
+                  {/* Content overlay with scroll */}
+                  <div className="relative z-10 w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] flex items-center justify-center">
+                    <div className="max-h-[260px] md:max-h-[380px] lg:max-h-[480px] overflow-y-auto px-6 md:px-8 lg:px-10 py-4 text-center scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
+                      {/* Title */}
+                      <motion.h3
+                        className="text-base md:text-lg lg:text-xl font-cormorant font-bold text-black mb-2"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                      >
+                        {hoveredPrinciple.title}
+                      </motion.h3>
 
-                    {/* Description */}
-                    <motion.p
-                      className="text-xs md:text-sm lg:text-base text-gray-700 mb-3 md:mb-4 font-light leading-relaxed"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.15 }}
-                    >
-                      {hoveredPrinciple.description}
-                    </motion.p>
+                      {/* Description */}
+                      <motion.p
+                        className="text-[10px] md:text-xs lg:text-sm text-gray-700 mb-2 md:mb-3 font-light leading-relaxed"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 }}
+                      >
+                        {hoveredPrinciple.description}
+                      </motion.p>
 
-                    {/* Details */}
-                    <motion.ul
-                      className="space-y-1.5 md:space-y-2"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      {hoveredPrinciple.details.map((detail, index) => (
-                        <motion.li
-                          key={index}
-                          className="text-xs md:text-sm text-gray-600 flex items-start justify-center"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.25 + index * 0.05 }}
-                        >
-                          <span className="mr-2 text-black flex-shrink-0">•</span>
-                          <span className="text-left">{detail}</span>
-                        </motion.li>
-                      ))}
-                    </motion.ul>
+                      {/* Details */}
+                      <motion.ul
+                        className="space-y-1 md:space-y-1.5"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                      >
+                        {hoveredPrinciple.details.map((detail, index) => (
+                          <motion.li
+                            key={index}
+                            className="text-[9px] md:text-[10px] lg:text-xs text-gray-600 flex items-start justify-center"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.25 + index * 0.05 }}
+                          >
+                            <span className="mr-1.5 text-black flex-shrink-0 text-[10px] md:text-xs">•</span>
+                            <span className="text-left">{detail}</span>
+                          </motion.li>
+                        ))}
+                      </motion.ul>
+                    </div>
                   </div>
                 </motion.div>
               </motion.div>
@@ -303,7 +305,7 @@ export default function PrinciplesSection() {
 
               {/* Modal Content */}
               <motion.div
-                className="relative bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+                className="relative bg-white rounded-2xl p-6 max-w-lg w-full max-h-[85vh] shadow-2xl overflow-y-auto"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
@@ -316,7 +318,7 @@ export default function PrinciplesSection() {
                 {/* Close Button */}
                 <button
                   onClick={closeModal}
-                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                  className="sticky top-0 float-right w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors z-10"
                   aria-label="Close modal"
                 >
                   <svg
@@ -338,12 +340,12 @@ export default function PrinciplesSection() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-2xl font-cormorant font-bold text-black mb-3">
+                <h3 className="text-xl font-cormorant font-bold text-black mb-3">
                   {clickedPrinciple.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-base text-gray-700 mb-4 font-light leading-relaxed">
+                <p className="text-sm text-gray-700 mb-4 font-light leading-relaxed">
                   {clickedPrinciple.description}
                 </p>
 
@@ -352,9 +354,9 @@ export default function PrinciplesSection() {
                   {clickedPrinciple.details.map((detail, index) => (
                     <li
                       key={index}
-                      className="text-sm text-gray-600 flex items-start"
+                      className="text-xs text-gray-600 flex items-start"
                     >
-                      <span className="mr-2 text-black">•</span>
+                      <span className="mr-2 text-black flex-shrink-0">•</span>
                       <span>{detail}</span>
                     </li>
                   ))}
