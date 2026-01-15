@@ -74,61 +74,85 @@ export default function PrinciplesSection() {
           </p>
         </div>
 
-        {/* Quadrant Circle */}
+        {/* Quadrant Circle with Animation */}
         <div className="flex items-center justify-center">
-          <svg
-            viewBox="0 0 400 400"
-            className="w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
-            style={{ overflow: 'visible' }}
+          <motion.div
+            animate={{
+              rotate: 360,
+            }}
+            transition={{
+              duration: 60,
+              ease: 'linear',
+              repeat: Infinity,
+            }}
+            style={{
+              transformStyle: 'preserve-3d',
+              willChange: 'transform',
+            }}
+            className="relative"
           >
-            <g>
-              {principlesData.map((quadrant) => {
-                const path = createQuadrantPath(
-                  centerX,
-                  centerY,
-                  radius,
-                  quadrant.angle,
-                  quadrant.angle + 90
-                );
-                const labelPos = getLabelPosition(quadrant.angle, radius);
+            <motion.svg
+              viewBox="0 0 400 400"
+              className="w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
+              style={{ overflow: 'visible' }}
+              animate={{
+                opacity: [0.95, 1, 0.95],
+              }}
+              transition={{
+                duration: 4,
+                ease: 'easeInOut',
+                repeat: Infinity,
+              }}
+            >
+              <g>
+                {principlesData.map((quadrant) => {
+                  const path = createQuadrantPath(
+                    centerX,
+                    centerY,
+                    radius,
+                    quadrant.angle,
+                    quadrant.angle + 90
+                  );
+                  const labelPos = getLabelPosition(quadrant.angle, radius);
 
-                return (
-                  <g key={quadrant.id}>
-                    {/* Quadrant slice */}
-                    <path
-                      d={path}
-                      fill={quadrant.color.base}
-                      stroke="#000000"
-                      strokeWidth="1.5"
-                      className="transition-colors duration-300"
-                    />
+                  return (
+                    <g key={quadrant.id}>
+                      {/* Quadrant slice */}
+                      <path
+                        d={path}
+                        fill={quadrant.color.base}
+                        stroke="#000000"
+                        strokeWidth="1.5"
+                        className="transition-colors duration-300"
+                      />
 
-                    {/* Label text */}
-                    <text
-                      x={centerX + labelPos.x}
-                      y={centerY + labelPos.y}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      className="text-2xl md:text-3xl font-cormorant font-semibold fill-black select-none"
-                      style={{ pointerEvents: 'none' }}
-                    >
-                      {quadrant.label}
-                    </text>
-                  </g>
-                );
-              })}
+                      {/* Label text */}
+                      <text
+                        x={centerX + labelPos.x}
+                        y={centerY + labelPos.y}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        className="text-2xl md:text-3xl font-cormorant font-semibold fill-black select-none"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        {quadrant.label}
+                      </text>
+                    </g>
+                  );
+                })}
 
-              {/* Center circle overlay for aesthetic */}
-              <circle
-                cx={centerX}
-                cy={centerY}
-                r="15"
-                fill="white"
-                stroke="#000000"
-                strokeWidth="1.5"
-              />
-            </g>
-          </svg>
+                {/* Center circle overlay for aesthetic */}
+                <circle
+                  cx={centerX}
+                  cy={centerY}
+                  r="15"
+                  fill="white"
+                  stroke="#000000"
+                  strokeWidth="1.5"
+                />
+              </g>
+            </motion.svg>
+          </motion.div>
         </div>
       </div>
     </section>
