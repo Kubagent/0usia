@@ -86,6 +86,13 @@ export default function PrinciplesSection() {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent, quadrantId: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick(quadrantId);
+    }
+  };
+
   const closeModal = () => {
     setClickedQuadrant(null);
   };
@@ -111,7 +118,10 @@ export default function PrinciplesSection() {
   const clickedPrinciple = principlesData.find((q) => q.id === clickedQuadrant);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center py-20">
+    <section
+      className="relative min-h-screen flex items-center justify-center py-20"
+      aria-label="Our Principles - Interactive quadrant circle"
+    >
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-4">
@@ -176,6 +186,11 @@ export default function PrinciplesSection() {
                         onMouseEnter={() => handleMouseEnter(quadrant.id)}
                         onMouseLeave={handleMouseLeave}
                         onClick={() => handleClick(quadrant.id)}
+                        onKeyDown={(e) => handleKeyDown(e, quadrant.id)}
+                        tabIndex={0}
+                        role="button"
+                        aria-label={`View ${quadrant.label} principle: ${quadrant.title}`}
+                        aria-expanded={hoveredQuadrant === quadrant.id || clickedQuadrant === quadrant.id}
                         style={{ pointerEvents: 'auto' }}
                       />
 
