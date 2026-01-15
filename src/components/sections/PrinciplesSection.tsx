@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { principlesData, PrincipleQuadrant } from '@/data/principles';
+import { principlesData } from '@/data/principles';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
 
 // Helper function to convert polar coordinates to cartesian
@@ -19,7 +19,7 @@ const polarToCartesian = (
   };
 };
 
-// Helper function to create SVG path for a quadrant (90-degree slice)
+// Helper function to create SVG path for a quadrant
 const createQuadrantPath = (
   centerX: number,
   centerY: number,
@@ -32,29 +32,16 @@ const createQuadrantPath = (
   const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
 
   return [
-    'M',
-    centerX,
-    centerY,
-    'L',
-    start.x,
-    start.y,
-    'A',
-    radius,
-    radius,
-    0,
-    largeArcFlag,
-    0,
-    end.x,
-    end.y,
+    'M', centerX, centerY,
+    'L', start.x, start.y,
+    'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y,
     'Z',
   ].join(' ');
 };
 
-// Helper function to get label position for each quadrant
+// Helper function to get label position
 const getLabelPosition = (angle: number, radius: number) => {
-  // Position label at 60% of radius from center
   const labelRadius = radius * 0.6;
-  // Add 45 degrees to center the label in the quadrant
   const labelAngle = angle + 45;
   return polarToCartesian(0, 0, labelRadius, labelAngle);
 };
@@ -68,59 +55,25 @@ export default function PrinciplesSection() {
   const [clickedQuadrant, setClickedQuadrant] = useState<string | null>(null);
   const { canHover, isMobile } = useMobileDetection();
 
-  const handleMouseEnter = (quadrantId: string) => {
-    if (canHover) {
-      setHoveredQuadrant(quadrantId);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (canHover) {
-      setHoveredQuadrant(null);
-    }
-  };
-
-  const handleClick = (quadrantId: string) => {
-    if (!canHover || isMobile) {
-      setClickedQuadrant(quadrantId);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent, quadrantId: string) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleClick(quadrantId);
-    }
-  };
+  const hoveredPrinciple = principlesData.find((q) => q.id === hoveredQuadrant);
+  const clickedPrinciple = principlesData.find((q) => q.id === clickedQuadrant);
 
   const closeModal = () => {
     setClickedQuadrant(null);
   };
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  };
-
   // Auto-dismiss modal after 5 seconds
   useEffect(() => {
     if (clickedQuadrant) {
-      const timer = setTimeout(() => {
-        closeModal();
-      }, 5000);
-
+      const timer = setTimeout(() => closeModal(), 5000);
       return () => clearTimeout(timer);
     }
   }, [clickedQuadrant]);
 
-  const hoveredPrinciple = principlesData.find((q) => q.id === hoveredQuadrant);
-  const clickedPrinciple = principlesData.find((q) => q.id === clickedQuadrant);
-
   return (
     <section
       className="relative min-h-screen flex items-center justify-center py-20"
-      aria-label="Our Principles - Interactive quadrant circle"
+      aria-label="Principles - Interactive quadrant circle"
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
@@ -132,56 +85,37 @@ export default function PrinciplesSection() {
           </p>
         </div>
 
-        {/* Quadrant Circle with Scroll Animation and Hover Overlay */}
-        <div className="flex items-center justify-center relative min-h-[600px]">
+        {/* Quadrant Circle Container */}
+        <div className="flex items-center justify-center relative">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
             whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 0.8,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            className="relative z-0"
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <motion.svg
+            <svg
               viewBox="0 0 400 400"
               className="w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
-              style={{ overflow: 'visible' }}
             >
               <g>
                 {principlesData.map((quadrant) => {
-                  const path = createQuadrantPath(
-                    centerX,
-                    centerY,
-                    radius,
-                    quadrant.angle,
-                    quadrant.angle + 90
-                  );
+                  const path = createQuadrantPath(centerX, centerY, radius, quadrant.angle, quadrant.angle + 90);
                   const labelPos = getLabelPosition(quadrant.angle, radius);
                   const isHovered = hoveredQuadrant === quadrant.id;
 
                   return (
                     <g key={quadrant.id}>
-                      {/* Quadrant slice */}
                       <path
                         d={path}
                         fill={isHovered ? quadrant.color.hover : quadrant.color.base}
                         stroke="#000000"
                         strokeWidth="1.5"
                         className="transition-colors duration-300 cursor-pointer"
-                        onMouseEnter={() => handleMouseEnter(quadrant.id)}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={() => handleClick(quadrant.id)}
-                        onKeyDown={(e) => handleKeyDown(e, quadrant.id)}
-                        tabIndex={0}
-                        role="button"
-                        aria-label={`View ${quadrant.label} principle: ${quadrant.title}`}
-                        aria-expanded={hoveredQuadrant === quadrant.id || clickedQuadrant === quadrant.id}
+                        onMouseEnter={() => canHover && setHoveredQuadrant(quadrant.id)}
+                        onMouseLeave={() => canHover && setHoveredQuadrant(null)}
+                        onClick={() => (!canHover || isMobile) && setClickedQuadrant(quadrant.id)}
                         style={{ pointerEvents: 'auto' }}
                       />
-
-                      {/* Label text */}
                       <text
                         x={centerX + labelPos.x}
                         y={centerY + labelPos.y}
@@ -195,95 +129,75 @@ export default function PrinciplesSection() {
                     </g>
                   );
                 })}
-
-                {/* Center circle overlay for aesthetic */}
-                <circle
-                  cx={centerX}
-                  cy={centerY}
-                  r="15"
-                  fill="white"
-                  stroke="#000000"
-                  strokeWidth="1.5"
-                />
+                <circle cx={centerX} cy={centerY} r="15" fill="white" stroke="#000000" strokeWidth="1.5" />
               </g>
-            </motion.svg>
+            </svg>
           </motion.div>
 
-          {/* Hover Overlay - Simple expanding circle from center */}
+          {/* Desktop Hover Overlay - Expanding Circle */}
           <AnimatePresence>
             {hoveredPrinciple && canHover && (
               <motion.div
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-white shadow-2xl"
-                initial={{
-                  width: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '500px' :
-                         typeof window !== 'undefined' && window.innerWidth >= 768 ? '400px' : '280px',
-                  height: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '500px' :
-                          typeof window !== 'undefined' && window.innerWidth >= 768 ? '400px' : '280px',
-                  opacity: 0
-                }}
-                animate={{
-                  width: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '1500px' :
-                         typeof window !== 'undefined' && window.innerWidth >= 768 ? '1200px' : '840px',
-                  height: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '1500px' :
-                          typeof window !== 'undefined' && window.innerWidth >= 768 ? '1200px' : '840px',
-                  opacity: 1
-                }}
-                exit={{
-                  width: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '500px' :
-                         typeof window !== 'undefined' && window.innerWidth >= 768 ? '400px' : '280px',
-                  height: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '500px' :
-                          typeof window !== 'undefined' && window.innerWidth >= 768 ? '400px' : '280px',
-                  opacity: 0
-                }}
-                transition={{
-                  duration: 0.4,
-                  ease: [0.4, 0, 0.2, 1]
-                }}
-                style={{
-                  clipPath: 'circle(50% at 50% 50%)'
-                }}
+                className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                {/* Content inside the circular area */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-12 overflow-y-auto">
-                  {/* Title */}
-                  <h3 className="text-2xl md:text-3xl font-cormorant font-bold text-black mb-4">
-                    {hoveredPrinciple.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-base text-gray-700 mb-4 font-light leading-relaxed max-w-[85%] text-center">
-                    {hoveredPrinciple.description}
-                  </p>
-
-                  {/* Image (for WHO principle) */}
-                  {hoveredPrinciple.image && (
-                    <div className="mb-4">
+                {/* Expanding circular content */}
+                <motion.div
+                  className="bg-white shadow-2xl pointer-events-auto"
+                  initial={{
+                    width: '280px',
+                    height: '280px',
+                    opacity: 0,
+                  }}
+                  animate={{
+                    width: '900px',
+                    height: '900px',
+                    opacity: 1,
+                  }}
+                  exit={{
+                    width: '280px',
+                    height: '280px',
+                    opacity: 0,
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.4, 0, 0.2, 1],
+                  }}
+                  style={{
+                    clipPath: 'circle(50% at 50% 50%)',
+                  }}
+                >
+                  <div className="w-full h-full flex flex-col items-center justify-center p-16 overflow-y-auto">
+                    <h3 className="text-3xl font-cormorant font-bold text-black mb-4 text-center">
+                      {hoveredPrinciple.title}
+                    </h3>
+                    <p className="text-lg text-gray-700 mb-6 font-light leading-relaxed max-w-2xl text-center">
+                      {hoveredPrinciple.description}
+                    </p>
+                    {hoveredPrinciple.image && (
                       <img
                         src={hoveredPrinciple.image}
                         alt="Jakub - 0usia"
-                        className="w-32 h-32 rounded-full object-cover border-2 border-gray-200 shadow-lg"
+                        className="w-40 h-40 rounded-full object-cover border-2 border-gray-200 shadow-lg mb-6"
                       />
+                    )}
+                    <div className="space-y-4 max-w-2xl">
+                      {hoveredPrinciple.details.map((detail, index) => (
+                        <p key={index} className="text-base text-gray-600 leading-relaxed text-center">
+                          {detail}
+                        </p>
+                      ))}
                     </div>
-                  )}
-
-                  {/* Details - as paragraphs */}
-                  <div className="space-y-3 max-w-[85%]">
-                    {hoveredPrinciple.details.map((detail, index) => (
-                      <p
-                        key={index}
-                        className="text-sm text-gray-600 leading-relaxed text-center"
-                      >
-                        {detail}
-                      </p>
-                    ))}
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Mobile Modal - Shows content when tapping on a quadrant */}
+        {/* Mobile Modal */}
         <AnimatePresence>
           {clickedPrinciple && (!canHover || isMobile) && (
             <motion.div
@@ -291,58 +205,33 @@ export default function PrinciplesSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={handleBackdropClick}
+              onClick={(e) => e.target === e.currentTarget && closeModal()}
             >
-              {/* Backdrop */}
               <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-
-              {/* Modal Content */}
               <motion.div
                 className="relative bg-white rounded-2xl p-6 max-w-lg w-full max-h-[85vh] shadow-2xl overflow-y-auto"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 300,
-                  damping: 25,
-                }}
               >
-                {/* Close Button */}
                 <button
                   onClick={closeModal}
-                  className="sticky top-0 float-right w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors z-10"
+                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                   aria-label="Close modal"
                 >
-                  <svg
-                    className="w-5 h-5 text-black"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="w-5 h-5" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
-
-                {/* Quadrant Label */}
                 <div className="text-sm font-medium text-gray-500 mb-2 uppercase tracking-wide">
                   {clickedPrinciple.label}
                 </div>
-
-                {/* Title */}
-                <h3 className="text-xl font-cormorant font-bold text-black mb-3">
+                <h3 className="text-2xl font-cormorant font-bold text-black mb-3">
                   {clickedPrinciple.title}
                 </h3>
-
-                {/* Description */}
-                <p className="text-sm text-gray-700 mb-4 font-light leading-relaxed">
+                <p className="text-base text-gray-700 mb-4 font-light leading-relaxed">
                   {clickedPrinciple.description}
                 </p>
-
-                {/* Image (for WHO principle) */}
                 {clickedPrinciple.image && (
                   <div className="mb-4 flex justify-center">
                     <img
@@ -352,14 +241,9 @@ export default function PrinciplesSection() {
                     />
                   </div>
                 )}
-
-                {/* Details - as paragraphs, no bullets */}
                 <div className="space-y-3">
                   {clickedPrinciple.details.map((detail, index) => (
-                    <p
-                      key={index}
-                      className="text-xs text-gray-600 leading-relaxed"
-                    >
+                    <p key={index} className="text-sm text-gray-600 leading-relaxed">
                       {detail}
                     </p>
                   ))}
