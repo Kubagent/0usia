@@ -86,7 +86,10 @@ export default function PrinciplesSection() {
         </div>
 
         {/* Quadrant Circle Container */}
-        <div className="flex items-center justify-center relative">
+        <div
+          className="flex items-center justify-center relative"
+          onMouseLeave={() => canHover && setHoveredQuadrant(null)}
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
             whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -112,7 +115,6 @@ export default function PrinciplesSection() {
                         strokeWidth="1.5"
                         className="transition-colors duration-300 cursor-pointer"
                         onMouseEnter={() => canHover && setHoveredQuadrant(quadrant.id)}
-                        onMouseLeave={() => canHover && setHoveredQuadrant(null)}
                         onClick={() => (!canHover || isMobile) && setClickedQuadrant(quadrant.id)}
                         style={{ pointerEvents: 'auto' }}
                       />
@@ -143,9 +145,9 @@ export default function PrinciplesSection() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                {/* Expanding circular content */}
+                {/* Expanding circular content - pointer-events-none so it doesn't interfere with hover */}
                 <motion.div
-                  className="bg-white shadow-2xl pointer-events-auto"
+                  className="bg-white shadow-2xl"
                   initial={{
                     width: '280px',
                     height: '280px',
@@ -167,6 +169,7 @@ export default function PrinciplesSection() {
                   }}
                   style={{
                     clipPath: 'circle(50% at 50% 50%)',
+                    pointerEvents: 'none',
                   }}
                 >
                   <div className="w-full h-full flex flex-col items-center justify-center p-16 overflow-y-auto">
