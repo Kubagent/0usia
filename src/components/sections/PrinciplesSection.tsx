@@ -127,6 +127,9 @@ export default function PrinciplesSection() {
           <h2 className="text-ovsia-header-3xl font-cormorant tracking-tight text-black">
             Principles
           </h2>
+          <p className="text-ovsia-body-xl text-black font-light max-w-2xl mx-auto mt-4">
+            The foundation of how we create value
+          </p>
         </div>
 
         {/* Quadrant Circle with Scroll Animation and Hover Overlay */}
@@ -210,15 +213,24 @@ export default function PrinciplesSection() {
           <AnimatePresence>
             {hoveredPrinciple && canHover && (
               <motion.div
-                className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+                className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
               >
+                {/* Full screen backdrop */}
+                <motion.div
+                  className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                />
+
                 {/* Expanding Circle Overlay */}
                 <motion.div
-                  className="relative flex items-center justify-center rounded-full bg-white/95 backdrop-blur-md shadow-2xl border-2 border-gray-200"
+                  className="relative z-10 flex items-center justify-center rounded-full bg-white shadow-2xl border-2 border-gray-200"
                   initial={{
                     width: '280px',
                     height: '280px',
