@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { principlesData, PrincipleQuadrant } from '@/data/principles';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
@@ -65,7 +65,8 @@ export default function PrinciplesSection() {
   const radius = 180;
 
   const [hoveredQuadrant, setHoveredQuadrant] = useState<string | null>(null);
-  const { canHover } = useMobileDetection();
+  const [clickedQuadrant, setClickedQuadrant] = useState<string | null>(null);
+  const { canHover, isMobile } = useMobileDetection();
 
   const handleMouseEnter = (quadrantId: string) => {
     if (canHover) {
@@ -79,7 +80,35 @@ export default function PrinciplesSection() {
     }
   };
 
+  const handleClick = (quadrantId: string) => {
+    if (!canHover || isMobile) {
+      setClickedQuadrant(quadrantId);
+    }
+  };
+
+  const closeModal = () => {
+    setClickedQuadrant(null);
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  };
+
+  // Auto-dismiss modal after 5 seconds
+  useEffect(() => {
+    if (clickedQuadrant) {
+      const timer = setTimeout(() => {
+        closeModal();
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [clickedQuadrant]);
+
   const hoveredPrinciple = principlesData.find((q) => q.id === hoveredQuadrant);
+  const clickedPrinciple = principlesData.find((q) => q.id === clickedQuadrant);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center py-20">
@@ -146,6 +175,7 @@ export default function PrinciplesSection() {
                         className="transition-colors duration-300 cursor-pointer"
                         onMouseEnter={() => handleMouseEnter(quadrant.id)}
                         onMouseLeave={handleMouseLeave}
+                        onClick={() => handleClick(quadrant.id)}
                         style={{ pointerEvents: 'auto' }}
                       />
 
@@ -243,6 +273,82 @@ export default function PrinciplesSection() {
             )}
           </AnimatePresence>
         </div>
+
+        {/* Mobile Modal - Shows content when tapping on a quadrant */}
+        <AnimatePresence>
+          {clickedPrinciple && (!canHover || isMobile) && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleBackdropClick}
+            >
+              {/* Backdrop */}
+              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+
+              {/* Modal Content */}
+              <motion.div
+                className="relative bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 25,
+                }}
+              >
+                {/* Close Button */}
+                <button
+                  onClick={closeModal}
+                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                  aria-label="Close modal"
+                >
+                  <svg
+                    className="w-5 h-5 text-black"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
+                {/* Quadrant Label */}
+                <div className="text-sm font-medium text-gray-500 mb-2 uppercase tracking-wide">
+                  {clickedPrinciple.label}
+                </div>
+
+                {/* Title */}
+                <h3 className="text-2xl font-cormorant font-bold text-black mb-3">
+                  {clickedPrinciple.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-base text-gray-700 mb-4 font-light leading-relaxed">
+                  {clickedPrinciple.description}
+                </p>
+
+                {/* Details */}
+                <ul className="space-y-2">
+                  {clickedPrinciple.details.map((detail, index) => (
+                    <li
+                      key={index}
+                      className="text-sm text-gray-600 flex items-start"
+                    >
+                      <span className="mr-2 text-black">•</span>
+                      <span>{detail}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
