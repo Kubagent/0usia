@@ -16,7 +16,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: '0usia → 1',
+  title: 'where ⊙usia begins',
   description:
     '0usia brings your vision, virtue and venture to life. Flourishment of narrative, innovative strategy and partnerships to create value. Stay in ousia.',
   keywords: 'ventures, GTM, AI, operations, capital, innovation, start-up, enactivism, life',

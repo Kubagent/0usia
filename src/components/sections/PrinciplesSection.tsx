@@ -132,20 +132,15 @@ export default function PrinciplesSection() {
           </p>
         </div>
 
-        {/* Quadrant Circle with Animation and Hover Overlay */}
+        {/* Quadrant Circle with Scroll Animation and Hover Overlay */}
         <div className="flex items-center justify-center relative">
           <motion.div
-            animate={{
-              rotate: 360,
-            }}
+            initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{
-              duration: 60,
-              ease: 'linear',
-              repeat: Infinity,
-            }}
-            style={{
-              transformStyle: 'preserve-3d',
-              willChange: 'transform',
+              duration: 0.8,
+              ease: [0.25, 0.46, 0.45, 0.94],
             }}
             className="relative"
           >
@@ -153,14 +148,6 @@ export default function PrinciplesSection() {
               viewBox="0 0 400 400"
               className="w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
               style={{ overflow: 'visible' }}
-              animate={{
-                opacity: [0.95, 1, 0.95],
-              }}
-              transition={{
-                duration: 4,
-                ease: 'easeInOut',
-                repeat: Infinity,
-              }}
             >
               <g>
                 {principlesData.map((quadrant) => {
@@ -222,7 +209,7 @@ export default function PrinciplesSection() {
             </motion.svg>
           </motion.div>
 
-          {/* Hover Overlay - Shows content when hovering over a quadrant */}
+          {/* Hover Overlay - Covers full circle with content */}
           <AnimatePresence>
             {hoveredPrinciple && canHover && (
               <motion.div
@@ -232,8 +219,9 @@ export default function PrinciplesSection() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
+                {/* Full Circle Overlay */}
                 <motion.div
-                  className="bg-white/95 backdrop-blur-md rounded-2xl p-8 max-w-md shadow-2xl border border-gray-200"
+                  className="relative flex items-center justify-center"
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.8, opacity: 0 }}
@@ -243,46 +231,57 @@ export default function PrinciplesSection() {
                     damping: 25,
                   }}
                 >
-                  {/* Title */}
-                  <motion.h3
-                    className="text-3xl font-cormorant font-bold text-black mb-3"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    {hoveredPrinciple.title}
-                  </motion.h3>
+                  {/* Circular background that matches the SVG size */}
+                  <div
+                    className="absolute w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full bg-white/95 backdrop-blur-md shadow-2xl border-2 border-gray-200"
+                    style={{
+                      clipPath: 'circle(50% at 50% 50%)'
+                    }}
+                  />
 
-                  {/* Description */}
-                  <motion.p
-                    className="text-base text-gray-700 mb-4 font-light leading-relaxed"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15 }}
-                  >
-                    {hoveredPrinciple.description}
-                  </motion.p>
+                  {/* Content overlay */}
+                  <div className="relative z-10 p-6 md:p-8 lg:p-10 max-w-[240px] md:max-w-[320px] lg:max-w-[380px] text-center">
+                    {/* Title */}
+                    <motion.h3
+                      className="text-xl md:text-2xl lg:text-3xl font-cormorant font-bold text-black mb-2 md:mb-3"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      {hoveredPrinciple.title}
+                    </motion.h3>
 
-                  {/* Details */}
-                  <motion.ul
-                    className="space-y-2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    {hoveredPrinciple.details.map((detail, index) => (
-                      <motion.li
-                        key={index}
-                        className="text-sm text-gray-600 flex items-start"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.25 + index * 0.05 }}
-                      >
-                        <span className="mr-2 text-black">•</span>
-                        <span>{detail}</span>
-                      </motion.li>
-                    ))}
-                  </motion.ul>
+                    {/* Description */}
+                    <motion.p
+                      className="text-xs md:text-sm lg:text-base text-gray-700 mb-3 md:mb-4 font-light leading-relaxed"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15 }}
+                    >
+                      {hoveredPrinciple.description}
+                    </motion.p>
+
+                    {/* Details */}
+                    <motion.ul
+                      className="space-y-1.5 md:space-y-2"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      {hoveredPrinciple.details.map((detail, index) => (
+                        <motion.li
+                          key={index}
+                          className="text-xs md:text-sm text-gray-600 flex items-start justify-center"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.25 + index * 0.05 }}
+                        >
+                          <span className="mr-2 text-black flex-shrink-0">•</span>
+                          <span className="text-left">{detail}</span>
+                        </motion.li>
+                      ))}
+                    </motion.ul>
+                  </div>
                 </motion.div>
               </motion.div>
             )}

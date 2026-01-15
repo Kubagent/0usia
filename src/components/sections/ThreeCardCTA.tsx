@@ -533,13 +533,13 @@ export default function ThreeCardCTA() {
   const getCardStyles = (bgColor: string) => {
     switch (bgColor) {
       case 'light':
-        return 'bg-gradient-to-br from-white/80 to-gray-50/60 border-4 border-black text-black';
+        return 'bg-gradient-to-br from-white/90 to-gray-50/70 border-4 border-white text-black';
       case 'dark':
-        return 'bg-gradient-to-br from-black/90 to-gray-900/80 border-4 border-black text-white';
+        return 'bg-gradient-to-br from-gray-800/90 to-gray-900/80 border-4 border-gray-600 text-white';
       case 'medium':
-        return 'bg-gradient-to-br from-gray-100/90 to-gray-200/60 border-4 border-black text-black';
+        return 'bg-gradient-to-br from-gray-200/90 to-gray-300/70 border-4 border-gray-400 text-black';
       default:
-        return 'bg-gradient-to-br from-white/80 to-gray-50/60 border-4 border-black text-black';
+        return 'bg-gradient-to-br from-white/90 to-gray-50/70 border-4 border-white text-black';
     }
   };
 
@@ -572,12 +572,12 @@ export default function ThreeCardCTA() {
     <>
       <section className="min-h-screen flex items-center justify-center py-20">
         <div className="w-full max-w-7xl mx-auto px-4">
-          {/* Section Title */}
+          {/* Section Title - Updated for black background */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h2 className="text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-2 sm:mb-4">
+            <h2 className="text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
               Choose Your Path
             </h2>
-            <p className="text-ovsia-body-base sm:text-ovsia-body-lg text-black font-light max-w-4xl mx-auto px-4">
+            <p className="text-ovsia-body-base sm:text-ovsia-body-lg text-gray-300 font-light max-w-4xl mx-auto px-4">
               Every journey begins with a single step. Which path calls to you?
             </p>
           </div>

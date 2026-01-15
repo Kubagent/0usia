@@ -165,17 +165,18 @@ export default function ExpertiseShowcase() {
               >
                 <motion.div
                   className="
-                    w-full h-full 
-                    bg-gradient-to-br from-gray-50/80 to-gray-100/60
-                    border border-gray-200/80
+                    w-full h-full
+                    bg-gradient-to-br from-white/90 to-gray-100/80
+                    border-2 border-white/40
                     flex items-center justify-center text-center p-8
                     backdrop-blur-sm
+                    shadow-lg shadow-white/10
                   "
                   style={{clipPath: 'polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)'}}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant font-bold tracking-tight text-white leading-snug whitespace-pre-line">
+                  <h3 className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant font-bold tracking-tight text-black leading-snug whitespace-pre-line">
                     {card.title}
                   </h3>
                 </motion.div>
@@ -202,16 +203,16 @@ export default function ExpertiseShowcase() {
               >
                 <motion.div
                   className="
-                    bg-white/70
+                    bg-white/95
                     backdrop-blur-md
-                    rounded-lg
+                    rounded-2xl
                     w-[96%] max-w-5xl
                     h-[88%] max-h-[38rem] sm:max-h-[40rem] lg:max-h-[38rem]
                     flex flex-col items-center justify-center text-center
                     p-6 sm:p-7 md:p-8 lg:p-10
-                    border border-gray-300/50
-                    shadow-lg shadow-black/10
-                    ring-1 ring-gray-200/20
+                    border-2 border-gray-200
+                    shadow-2xl shadow-black/20
+                    ring-1 ring-gray-300
                     mx-2 sm:mx-0
                   "
                   initial={{ scale: 0.9, opacity: 0 }}
@@ -222,11 +223,11 @@ export default function ExpertiseShowcase() {
                   {(() => {
                     const card = expertiseData.find(c => c.id === hoveredCard);
                     if (!card) return null;
-                    
+
                     return (
                       <>
                         <motion.h3
-                          className="text-ovsia-body-xl lg:text-ovsia-body-2xl font-cormorant font-bold text-white mb-3 lg:mb-4 tracking-tight"
+                          className="text-ovsia-body-xl lg:text-ovsia-body-2xl font-cormorant font-bold text-black mb-3 lg:mb-4 tracking-tight"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
@@ -235,7 +236,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
 
                         <motion.p
-                          className="text-ovsia-body-base lg:text-ovsia-body-lg text-gray-300 mb-4 lg:mb-5 leading-relaxed max-w-2xl"
+                          className="text-ovsia-body-base lg:text-ovsia-body-lg text-gray-700 mb-4 lg:mb-5 leading-relaxed max-w-2xl"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.15 }}
@@ -244,7 +245,7 @@ export default function ExpertiseShowcase() {
                         </motion.p>
 
                         <motion.div
-                          className="grid grid-cols-1 gap-2 lg:gap-3 text-ovsia-body-sm lg:text-ovsia-body-base text-gray-400"
+                          className="grid grid-cols-1 gap-2 lg:gap-3 text-ovsia-body-sm lg:text-ovsia-body-base text-gray-600"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}
@@ -257,7 +258,7 @@ export default function ExpertiseShowcase() {
                               animate={{ opacity: 1 }}
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
-                              <span className="w-1 h-1 bg-gray-400 rounded-full mr-2 flex-shrink-0"></span>
+                              <span className="w-1 h-1 bg-black rounded-full mr-2 flex-shrink-0"></span>
                               <span>{detail}</span>
                             </motion.div>
                           ))}
@@ -292,24 +293,24 @@ export default function ExpertiseShowcase() {
                     rounded-2xl
                     w-full max-w-sm
                     p-6
-                    border border-gray-200
+                    border-2 border-gray-200
                     shadow-2xl
                     mx-4
                   "
-                  initial={{ 
-                    scale: 0.8, 
+                  initial={{
+                    scale: 0.8,
                     opacity: 0,
                     x: modalPosition.x - window.innerWidth / 2,
                     y: modalPosition.y - window.innerHeight / 2
                   }}
-                  animate={{ 
-                    scale: 1, 
+                  animate={{
+                    scale: 1,
                     opacity: 1,
                     x: 0,
                     y: 0
                   }}
-                  exit={{ 
-                    scale: 0.8, 
+                  exit={{
+                    scale: 0.8,
                     opacity: 0,
                     x: modalPosition.x - window.innerWidth / 2,
                     y: modalPosition.y - window.innerHeight / 2
@@ -342,11 +343,11 @@ export default function ExpertiseShowcase() {
                   {(() => {
                     const card = expertiseData.find(c => c.id === clickedCard);
                     if (!card) return null;
-                    
+
                     return (
                       <>
                         <motion.h3
-                          className="text-ovsia-body-lg font-cormorant font-bold text-white mb-3 tracking-tight pr-8"
+                          className="text-ovsia-body-lg font-cormorant font-bold text-black mb-3 tracking-tight pr-8"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 }}
@@ -355,7 +356,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
 
                         <motion.p
-                          className="text-ovsia-body-base text-gray-300 mb-4 leading-relaxed"
+                          className="text-ovsia-body-base text-gray-700 mb-4 leading-relaxed"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.15 }}
@@ -377,8 +378,8 @@ export default function ExpertiseShowcase() {
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
-                              <span className="w-1.5 h-1.5 bg-white rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                              <span className="text-ovsia-body-sm text-gray-400 leading-relaxed">{detail}</span>
+                              <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                              <span className="text-ovsia-body-sm text-gray-600 leading-relaxed">{detail}</span>
                             </motion.div>
                           ))}
                         </motion.div>

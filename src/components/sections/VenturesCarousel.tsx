@@ -188,18 +188,19 @@ function StatusTag({ status, className = '' }: StatusTagProps) {
         {config.letter}
       </motion.div>
       
-      {/* Tooltip */}
+      {/* Tooltip - Enhanced for white background */}
       <div className="
         absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2
-        px-2 py-1 bg-black/90 text-white text-xs rounded-md
+        px-2 py-1 bg-black text-white text-xs rounded-md
         opacity-0 group-hover:opacity-100 pointer-events-none
         whitespace-nowrap z-50 transition-all duration-200
         group-hover:translate-y-0 translate-y-1
+        shadow-lg
       ">
         {config.label}
         {/* Arrow */}
         <div className="absolute top-full left-1/2 transform -translate-x-1/2">
-          <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] border-transparent border-t-black/90"></div>
+          <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] border-transparent border-t-black"></div>
         </div>
       </div>
     </div>
@@ -344,19 +345,19 @@ export default function VenturesCarousel() {
 
   const { prev, current, next, prevIndex, nextIndex } = getVisibleVentures();
 
-  // Loading component
+  // Loading component - Updated for white background
   const LoadingState = () => (
-    <div className='flex flex-col items-center justify-center min-h-[400px] text-white'>
+    <div className='flex flex-col items-center justify-center min-h-[400px] text-black'>
       <div className='relative w-24 h-24 mb-6'>
         <motion.div
-          className='absolute inset-0 border-2 border-white/20 rounded-full'
+          className='absolute inset-0 border-2 border-gray-300 rounded-full'
           style={{
             clipPath:
               'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)',
           }}
         />
         <motion.div
-          className='absolute inset-0 border-2 border-white/60 rounded-full'
+          className='absolute inset-0 border-2 border-black/60 rounded-full'
           style={{
             clipPath:
               'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)',
@@ -366,16 +367,16 @@ export default function VenturesCarousel() {
         />
       </div>
       <motion.p
-        className='text-lg font-light mb-2'
+        className='text-lg font-light mb-2 text-gray-700'
         animate={{ opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
         Loading venture portfolios...
       </motion.p>
-      <div className='flex items-center space-x-2 text-sm text-white/60'>
-        <div className='w-32 h-1 bg-white/20 rounded-full overflow-hidden'>
+      <div className='flex items-center space-x-2 text-sm text-gray-600'>
+        <div className='w-32 h-1 bg-gray-200 rounded-full overflow-hidden'>
           <motion.div
-            className='h-full bg-white/60 rounded-full origin-left'
+            className='h-full bg-black rounded-full origin-left'
             initial={{ scaleX: 0 }}
             animate={{ scaleX: progress / 100 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -386,7 +387,7 @@ export default function VenturesCarousel() {
       {hasErrors && (
         <motion.button
           onClick={retryFailed}
-          className='mt-4 px-4 py-2 border border-white/30 text-white/70 hover:text-white hover:border-white/50 transition-colors rounded-lg'
+          className='mt-4 px-4 py-2 border border-gray-300 text-gray-700 hover:text-black hover:border-black transition-colors rounded-lg'
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -417,7 +418,7 @@ export default function VenturesCarousel() {
         }
       `}</style>
       <div className='max-w-7xl mx-auto px-6 w-full'>
-        {/* Section Title */}
+        {/* Section Title - Updated for white background */}
         <motion.div
           className='text-center mb-8 sm:mb-12 md:mb-16'
           initial={{ opacity: 0, y: 20 }}
@@ -425,17 +426,17 @@ export default function VenturesCarousel() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className='text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-white mb-2 sm:mb-4'>
+          <h2 className='text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-2 sm:mb-4'>
             Proof of{' '}
             <span className='relative inline-block'>
               <span className='relative inline-block'>
                 O
-                <span className='absolute top-1/2 left-1/2 w-0.5 h-0.5 sm:w-1 sm:h-1 md:w-1.5 md:h-1.5 lg:w-2 lg:h-2 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2'></span>
+                <span className='absolute top-1/2 left-1/2 w-0.5 h-0.5 sm:w-1 sm:h-1 md:w-1.5 md:h-1.5 lg:w-2 lg:h-2 bg-black rounded-full transform -translate-x-1/2 -translate-y-1/2'></span>
               </span>
               usia
             </span>
           </h2>
-          <p className='text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-white font-light max-w-2xl mx-auto px-4'>
+          <p className='text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-gray-700 font-light max-w-2xl mx-auto px-4'>
             Ventures we have brought to life
           </p>
         </motion.div>
@@ -454,11 +455,11 @@ export default function VenturesCarousel() {
               staggerChildren: 0.1,
             }}
           >
-            {/* Navigation Arrows - Fixed positioning and touch handling */}
+            {/* Navigation Arrows - Updated for white background */}
             <button
               onClick={handlePrev}
               onTouchEnd={handlePrev}
-              className='fixed-nav-button left-2 sm:left-4 md:-left-12 top-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-3 md:p-2 bg-white/10 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
+              className='fixed-nav-button left-2 sm:left-4 md:-left-12 top-1/2 z-10 text-gray-600 hover:text-black transition-colors duration-200 p-3 md:p-2 bg-gray-100 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
               style={{
                 position: 'absolute',
                 transform: 'translateY(-50%)',
@@ -478,7 +479,7 @@ export default function VenturesCarousel() {
                 <path
                   strokeLinecap='round'
                   strokeLinejoin='round'
-                  strokeWidth={1}
+                  strokeWidth={2}
                   d='M15 19l-7-7 7-7'
                 />
               </svg>
@@ -487,7 +488,7 @@ export default function VenturesCarousel() {
             <button
               onClick={handleNext}
               onTouchEnd={handleNext}
-              className='fixed-nav-button right-2 sm:right-4 md:-right-12 top-1/2 z-10 text-white/60 hover:text-white transition-colors duration-200 p-3 md:p-2 bg-white/10 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
+              className='fixed-nav-button right-2 sm:right-4 md:-right-12 top-1/2 z-10 text-gray-600 hover:text-black transition-colors duration-200 p-3 md:p-2 bg-gray-100 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
               style={{
                 position: 'absolute',
                 transform: 'translateY(-50%)',
@@ -507,7 +508,7 @@ export default function VenturesCarousel() {
                 <path
                   strokeLinecap='round'
                   strokeLinejoin='round'
-                  strokeWidth={1}
+                  strokeWidth={2}
                   d='M9 5l7 7-7 7'
                 />
               </svg>
@@ -612,13 +613,13 @@ export default function VenturesCarousel() {
                     }}
                   >
                     <div className='relative'>
-                      {/* Sparkles - Fixed to match footer exactly */}
+                      {/* Sparkles - Updated for white background */}
                       {isHoveringCurrentVenture && current.acquired && (
                         <>
                           {[...Array(6)].map((_, i) => (
                             <motion.div
                               key={i}
-                              className='absolute w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full'
+                              className='absolute w-1 h-1 sm:w-1.5 sm:h-1.5 bg-black rounded-full'
                               style={{
                                 left: `${-20 + i * 8}px`,
                                 top: `${-10 + (i % 2) * 20}px`,
@@ -658,7 +659,7 @@ export default function VenturesCarousel() {
                                 width='8'
                                 height='8'
                                 viewBox='0 0 24 24'
-                                fill='white'
+                                fill='black'
                                 className='sm:w-3 sm:h-3'
                               >
                                 <path d='M12 0L14.09 8.26L22 6L14.09 15.74L12 24L9.91 15.74L2 18L9.91 8.26L12 0Z' />
@@ -668,9 +669,9 @@ export default function VenturesCarousel() {
                         </>
                       )}
 
-                      {/* Acquired Text - Matching footer styling */}
+                      {/* Acquired Text - Updated for white background */}
                       <motion.p
-                        className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-cormorant tracking-tight text-white whitespace-nowrap'
+                        className='text-lg sm:text-xl md:text-2xl lg:text-3xl font-cormorant tracking-tight text-black whitespace-nowrap'
                         animate={
                           isHoveringCurrentVenture && current.acquired
                             ? {
@@ -689,7 +690,7 @@ export default function VenturesCarousel() {
                   </motion.div>
                 </div>
 
-                {/* Venture Info */}
+                {/* Venture Info - Updated for white background */}
                 <AnimatePresence>
                   <motion.div
                     key={current.id}
@@ -699,10 +700,10 @@ export default function VenturesCarousel() {
                     transition={{ duration: 0.3 }}
                     className='space-y-4 w-full max-w-xs sm:max-w-md'
                   >
-                    <h3 className='text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant text-white tracking-tight break-words px-2 sm:px-0'>
+                    <h3 className='text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant text-black tracking-tight break-words px-2 sm:px-0'>
                       {current.name}
                     </h3>
-                    <p className='text-gray-400 text-ovsia-body-base sm:text-ovsia-body-lg md:text-ovsia-body-xl font-light leading-relaxed px-4 sm:px-2 break-words'>
+                    <p className='text-gray-700 text-ovsia-body-base sm:text-ovsia-body-lg md:text-ovsia-body-xl font-light leading-relaxed px-4 sm:px-2 break-words'>
                       {current.tagline}
                     </p>
 
@@ -748,7 +749,7 @@ export default function VenturesCarousel() {
               </motion.div>
             </div>
 
-            {/* Progress Indicators */}
+            {/* Progress Indicators - Updated for white background */}
             <motion.div
               className='flex justify-center space-x-2 mt-8'
               initial={{ opacity: 0, y: 10 }}
@@ -774,8 +775,8 @@ export default function VenturesCarousel() {
                   }}
                   className={`w-2 h-2 rounded-full transition-all duration-300 touch-manipulation ${
                     index === currentIndex
-                      ? 'bg-white'
-                      : 'bg-white/30 hover:bg-white/50'
+                      ? 'bg-black'
+                      : 'bg-gray-300 hover:bg-gray-500'
                   }`}
                   style={{
                     WebkitTapHighlightColor: 'transparent',
