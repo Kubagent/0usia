@@ -1,7 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { principlesData, PrincipleQuadrant } from '@/data/principles';
+import { useMobileDetection } from '@/hooks/useMobileDetection';
 
 // Helper function to convert polar coordinates to cartesian
 const polarToCartesian = (
@@ -62,6 +64,23 @@ export default function PrinciplesSection() {
   const centerY = 200;
   const radius = 180;
 
+  const [hoveredQuadrant, setHoveredQuadrant] = useState<string | null>(null);
+  const { canHover } = useMobileDetection();
+
+  const handleMouseEnter = (quadrantId: string) => {
+    if (canHover) {
+      setHoveredQuadrant(quadrantId);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (canHover) {
+      setHoveredQuadrant(null);
+    }
+  };
+
+  const hoveredPrinciple = principlesData.find((q) => q.id === hoveredQuadrant);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center py-20">
       <div className="max-w-7xl mx-auto px-6">
@@ -74,8 +93,8 @@ export default function PrinciplesSection() {
           </p>
         </div>
 
-        {/* Quadrant Circle with Animation */}
-        <div className="flex items-center justify-center">
+        {/* Quadrant Circle with Animation and Hover Overlay */}
+        <div className="flex items-center justify-center relative">
           <motion.div
             animate={{
               rotate: 360,
@@ -114,16 +133,20 @@ export default function PrinciplesSection() {
                     quadrant.angle + 90
                   );
                   const labelPos = getLabelPosition(quadrant.angle, radius);
+                  const isHovered = hoveredQuadrant === quadrant.id;
 
                   return (
                     <g key={quadrant.id}>
                       {/* Quadrant slice */}
                       <path
                         d={path}
-                        fill={quadrant.color.base}
+                        fill={isHovered ? quadrant.color.hover : quadrant.color.base}
                         stroke="#000000"
                         strokeWidth="1.5"
-                        className="transition-colors duration-300"
+                        className="transition-colors duration-300 cursor-pointer"
+                        onMouseEnter={() => handleMouseEnter(quadrant.id)}
+                        onMouseLeave={handleMouseLeave}
+                        style={{ pointerEvents: 'auto' }}
                       />
 
                       {/* Label text */}
@@ -153,6 +176,72 @@ export default function PrinciplesSection() {
               </g>
             </motion.svg>
           </motion.div>
+
+          {/* Hover Overlay - Shows content when hovering over a quadrant */}
+          <AnimatePresence>
+            {hoveredPrinciple && canHover && (
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <motion.div
+                  className="bg-white/95 backdrop-blur-md rounded-2xl p-8 max-w-md shadow-2xl border border-gray-200"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 25,
+                  }}
+                >
+                  {/* Title */}
+                  <motion.h3
+                    className="text-3xl font-cormorant font-bold text-black mb-3"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    {hoveredPrinciple.title}
+                  </motion.h3>
+
+                  {/* Description */}
+                  <motion.p
+                    className="text-base text-gray-700 mb-4 font-light leading-relaxed"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                  >
+                    {hoveredPrinciple.description}
+                  </motion.p>
+
+                  {/* Details */}
+                  <motion.ul
+                    className="space-y-2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    {hoveredPrinciple.details.map((detail, index) => (
+                      <motion.li
+                        key={index}
+                        className="text-sm text-gray-600 flex items-start"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.25 + index * 0.05 }}
+                      >
+                        <span className="mr-2 text-black">•</span>
+                        <span>{detail}</span>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>
