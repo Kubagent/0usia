@@ -5,6 +5,7 @@ export interface PrincipleQuadrant {
   title: string;
   description: string;
   details: string[];
+  image?: string; // Optional image path
   color: {
     base: string; // Subtle color for the slice
     hover: string; // Highlight color on hover
@@ -40,6 +41,7 @@ export const principlesData: PrincipleQuadrant[] = [
       'We\'re collaborative when exploring, decisive when committing, meticulous in delivery, and accountable for what we ship.',
       'Jakub: A serial entrepreneur focused on taking ventures from first principles to real markets. Every build is a partnership; every partnership is a new story made operational.',
     ],
+    image: '/Jakub_0usia.jpeg',
     color: {
       base: '#f3f4f6',
       hover: '#d1d5db',

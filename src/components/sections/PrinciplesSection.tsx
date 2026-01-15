@@ -124,12 +124,9 @@ export default function PrinciplesSection() {
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-4">
-            Our Principles
+          <h2 className="text-ovsia-header-3xl font-cormorant tracking-tight text-black">
+            Principles
           </h2>
-          <p className="text-ovsia-body-xl text-black font-light max-w-2xl mx-auto">
-            The foundation of how we create value
-          </p>
         </div>
 
         {/* Quadrant Circle with Scroll Animation and Hover Overlay */}
@@ -209,7 +206,7 @@ export default function PrinciplesSection() {
             </motion.svg>
           </motion.div>
 
-          {/* Hover Overlay - Covers full circle with content */}
+          {/* Hover Overlay - Expanding circle with content */}
           <AnimatePresence>
             {hoveredPrinciple && canHover && (
               <motion.div
@@ -217,72 +214,97 @@ export default function PrinciplesSection() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
               >
-                {/* Full Circle Overlay */}
+                {/* Expanding Circle Overlay */}
                 <motion.div
-                  className="relative flex items-center justify-center"
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
+                  className="relative flex items-center justify-center rounded-full bg-white/95 backdrop-blur-md shadow-2xl border-2 border-gray-200"
+                  initial={{
+                    width: '280px',
+                    height: '280px',
+                    opacity: 0,
+                    scale: 0.9
+                  }}
+                  animate={{
+                    width: '400px',
+                    height: '400px',
+                    opacity: 1,
+                    scale: 1
+                  }}
+                  exit={{
+                    width: '280px',
+                    height: '280px',
+                    opacity: 0,
+                    scale: 0.9
+                  }}
                   transition={{
                     type: 'spring',
-                    stiffness: 300,
-                    damping: 25,
+                    stiffness: 200,
+                    damping: 20,
+                    mass: 0.8
                   }}
+                  style={{
+                    clipPath: 'circle(50% at 50% 50%)'
+                  }}
+                  className="md:!w-[550px] md:!h-[550px] lg:!w-[700px] lg:!h-[700px]"
                 >
-                  {/* Circular background that matches the SVG size */}
-                  <div
-                    className="absolute w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full bg-white/95 backdrop-blur-md shadow-2xl border-2 border-gray-200"
-                    style={{
-                      clipPath: 'circle(50% at 50% 50%)'
-                    }}
-                  />
+                  {/* Content container - no scrolling */}
+                  <div className="relative z-10 flex flex-col items-center justify-center px-8 md:px-12 lg:px-16 py-6 md:py-8 lg:py-10 text-center max-w-[90%]">
+                    {/* Title */}
+                    <motion.h3
+                      className="text-lg md:text-2xl lg:text-3xl font-cormorant font-bold text-black mb-3 md:mb-4 lg:mb-5"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      {hoveredPrinciple.title}
+                    </motion.h3>
 
-                  {/* Content overlay with scroll */}
-                  <div className="relative z-10 w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] flex items-center justify-center">
-                    <div className="max-h-[260px] md:max-h-[380px] lg:max-h-[480px] overflow-y-auto px-6 md:px-8 lg:px-10 py-4 text-center scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
-                      {/* Title */}
-                      <motion.h3
-                        className="text-base md:text-lg lg:text-xl font-cormorant font-bold text-black mb-2"
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                      >
-                        {hoveredPrinciple.title}
-                      </motion.h3>
+                    {/* Description */}
+                    <motion.p
+                      className="text-xs md:text-sm lg:text-base text-gray-700 mb-3 md:mb-4 lg:mb-5 font-light leading-relaxed"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15 }}
+                    >
+                      {hoveredPrinciple.description}
+                    </motion.p>
 
-                      {/* Description */}
-                      <motion.p
-                        className="text-[10px] md:text-xs lg:text-sm text-gray-700 mb-2 md:mb-3 font-light leading-relaxed"
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15 }}
-                      >
-                        {hoveredPrinciple.description}
-                      </motion.p>
-
-                      {/* Details */}
-                      <motion.ul
-                        className="space-y-1 md:space-y-1.5"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                    {/* Image (before last detail for WHO principle) */}
+                    {hoveredPrinciple.image && (
+                      <motion.div
+                        className="mb-3 md:mb-4 lg:mb-5"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 }}
                       >
-                        {hoveredPrinciple.details.map((detail, index) => (
-                          <motion.li
-                            key={index}
-                            className="text-[9px] md:text-[10px] lg:text-xs text-gray-600 flex items-start justify-center"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.25 + index * 0.05 }}
-                          >
-                            <span className="mr-1.5 text-black flex-shrink-0 text-[10px] md:text-xs">•</span>
-                            <span className="text-left">{detail}</span>
-                          </motion.li>
-                        ))}
-                      </motion.ul>
-                    </div>
+                        <img
+                          src={hoveredPrinciple.image}
+                          alt="Jakub - 0usia"
+                          className="w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-full object-cover border-2 border-gray-200 shadow-lg"
+                        />
+                      </motion.div>
+                    )}
+
+                    {/* Details - as paragraphs, no bullets */}
+                    <motion.div
+                      className="space-y-2 md:space-y-3 lg:space-y-3"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.25 }}
+                    >
+                      {hoveredPrinciple.details.map((detail, index) => (
+                        <motion.p
+                          key={index}
+                          className="text-[10px] md:text-xs lg:text-sm text-gray-600 leading-relaxed"
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 + index * 0.05 }}
+                        >
+                          {detail}
+                        </motion.p>
+                      ))}
+                    </motion.div>
                   </div>
                 </motion.div>
               </motion.div>
@@ -349,18 +371,28 @@ export default function PrinciplesSection() {
                   {clickedPrinciple.description}
                 </p>
 
-                {/* Details */}
-                <ul className="space-y-2">
+                {/* Image (for WHO principle) */}
+                {clickedPrinciple.image && (
+                  <div className="mb-4 flex justify-center">
+                    <img
+                      src={clickedPrinciple.image}
+                      alt="Jakub - 0usia"
+                      className="w-32 h-32 rounded-full object-cover border-2 border-gray-200 shadow-lg"
+                    />
+                  </div>
+                )}
+
+                {/* Details - as paragraphs, no bullets */}
+                <div className="space-y-3">
                   {clickedPrinciple.details.map((detail, index) => (
-                    <li
+                    <p
                       key={index}
-                      className="text-xs text-gray-600 flex items-start"
+                      className="text-xs text-gray-600 leading-relaxed"
                     >
-                      <span className="mr-2 text-black flex-shrink-0">•</span>
-                      <span>{detail}</span>
-                    </li>
+                      {detail}
+                    </p>
                   ))}
-                </ul>
+                </div>
               </motion.div>
             </motion.div>
           )}
