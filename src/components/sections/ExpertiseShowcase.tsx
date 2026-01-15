@@ -133,10 +133,10 @@ export default function ExpertiseShowcase() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Title - Minimal */}
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <h2 className="text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-2 sm:mb-4">
+          <h2 className="text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
             Expertise
           </h2>
-          <p className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-black font-light max-w-2xl mx-auto px-4">
+          <p className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-white font-light max-w-2xl mx-auto px-4">
             How we support your flourishing
           </p>
         </div>
@@ -175,7 +175,7 @@ export default function ExpertiseShowcase() {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant font-bold tracking-tight text-black leading-snug whitespace-pre-line">
+                  <h3 className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant font-bold tracking-tight text-white leading-snug whitespace-pre-line">
                     {card.title}
                   </h3>
                 </motion.div>
@@ -225,17 +225,17 @@ export default function ExpertiseShowcase() {
                     
                     return (
                       <>
-                        <motion.h3 
-                          className="text-ovsia-body-xl lg:text-ovsia-body-2xl font-cormorant font-bold text-black mb-3 lg:mb-4 tracking-tight"
+                        <motion.h3
+                          className="text-ovsia-body-xl lg:text-ovsia-body-2xl font-cormorant font-bold text-white mb-3 lg:mb-4 tracking-tight"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
                         >
                           {card.overlayTitle}
                         </motion.h3>
-                        
-                        <motion.p 
-                          className="text-ovsia-body-base lg:text-ovsia-body-lg text-gray-700 mb-4 lg:mb-5 leading-relaxed max-w-2xl"
+
+                        <motion.p
+                          className="text-ovsia-body-base lg:text-ovsia-body-lg text-gray-300 mb-4 lg:mb-5 leading-relaxed max-w-2xl"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.15 }}
@@ -243,21 +243,21 @@ export default function ExpertiseShowcase() {
                           {card.description}
                         </motion.p>
 
-                        <motion.div 
-                          className="grid grid-cols-1 gap-2 lg:gap-3 text-ovsia-body-sm lg:text-ovsia-body-base text-gray-600"
+                        <motion.div
+                          className="grid grid-cols-1 gap-2 lg:gap-3 text-ovsia-body-sm lg:text-ovsia-body-base text-gray-400"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}
                         >
                           {card.details.slice(0, 4).map((detail, idx) => (
-                            <motion.div 
+                            <motion.div
                               key={idx}
                               className="flex items-center justify-center"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
-                              <span className="w-1 h-1 bg-gray-500 rounded-full mr-2 flex-shrink-0"></span>
+                              <span className="w-1 h-1 bg-gray-400 rounded-full mr-2 flex-shrink-0"></span>
                               <span>{detail}</span>
                             </motion.div>
                           ))}
@@ -345,17 +345,17 @@ export default function ExpertiseShowcase() {
                     
                     return (
                       <>
-                        <motion.h3 
-                          className="text-ovsia-body-lg font-cormorant font-bold text-black mb-3 tracking-tight pr-8"
+                        <motion.h3
+                          className="text-ovsia-body-lg font-cormorant font-bold text-white mb-3 tracking-tight pr-8"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 }}
                         >
                           {card.overlayTitle}
                         </motion.h3>
-                        
-                        <motion.p 
-                          className="text-ovsia-body-base text-gray-700 mb-4 leading-relaxed"
+
+                        <motion.p
+                          className="text-ovsia-body-base text-gray-300 mb-4 leading-relaxed"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.15 }}
@@ -363,22 +363,22 @@ export default function ExpertiseShowcase() {
                           {card.description}
                         </motion.p>
 
-                        <motion.div 
+                        <motion.div
                           className="space-y-2"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.2 }}
                         >
                           {card.details.map((detail, idx) => (
-                            <motion.div 
+                            <motion.div
                               key={idx}
                               className="flex items-start"
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
-                              <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                              <span className="text-ovsia-body-sm text-gray-600 leading-relaxed">{detail}</span>
+                              <span className="w-1.5 h-1.5 bg-white rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                              <span className="text-ovsia-body-sm text-gray-400 leading-relaxed">{detail}</span>
                             </motion.div>
                           ))}
                         </motion.div>

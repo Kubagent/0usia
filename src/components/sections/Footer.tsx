@@ -83,7 +83,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
   return (
     <motion.footer
-      className={`min-h-screen w-full text-white relative px-6 ${className}`}
+      className={`min-h-screen w-full text-black relative px-6 ${className}`}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
@@ -104,7 +104,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             href="https://www.linkedin.com/company/0usia"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-400 hover:text-white transition-colors duration-300 block"
+            className="text-gray-600 hover:text-black transition-colors duration-300 block"
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Connect with us on LinkedIn"
@@ -144,7 +144,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               }}
             >
               Stay in <span className="relative inline-block">
-                <span className="relative inline-block">O<span className="absolute top-1/2 left-1/2 w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-3 md:h-3 lg:w-4 lg:h-4 bg-white rounded-full transform -translate-x-1/2 -translate-y-1/2"></span></span>usia
+                <span className="relative inline-block">O<span className="absolute top-1/2 left-1/2 w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-3 md:h-3 lg:w-4 lg:h-4 bg-black rounded-full transform -translate-x-1/2 -translate-y-1/2"></span></span>usia
               </span>
             </motion.h2>
           </motion.div>
@@ -162,7 +162,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             >
               <motion.button
                 onClick={handleMailClick}
-                className="text-ovsia-tagline-sm sm:text-ovsia-tagline-base md:text-ovsia-tagline-lg font-cormorant tracking-tight text-gray-300 hover:text-white transition-colors duration-300 bg-transparent cursor-pointer leading-none flex items-center justify-center h-20 sm:h-24 md:h-28"
+                className="text-ovsia-tagline-sm sm:text-ovsia-tagline-base md:text-ovsia-tagline-lg font-cormorant tracking-tight text-gray-700 hover:text-black transition-colors duration-300 bg-transparent cursor-pointer leading-none flex items-center justify-center h-20 sm:h-24 md:h-28"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Send us an email"
@@ -192,7 +192,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                       {[...Array(6)].map((_, i) => (
                         <motion.div
                           key={i}
-                          className="absolute w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"
+                          className="absolute w-1 h-1 sm:w-1.5 sm:h-1.5 bg-black rounded-full"
                           style={{
                             left: `${-20 + i * 8}px`,
                             top: `${-10 + (i % 2) * 20}px`
@@ -228,7 +228,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                             ease: "easeInOut"
                           }}
                         >
-                          <svg width="8" height="8" viewBox="0 0 24 24" fill="white" className="sm:w-3 sm:h-3">
+                          <svg width="8" height="8" viewBox="0 0 24 24" fill="black" className="sm:w-3 sm:h-3">
                             <path d="M12 0L14.09 8.26L22 6L14.09 15.74L12 24L9.91 15.74L2 18L9.91 8.26L12 0Z"/>
                           </svg>
                         </motion.div>
@@ -237,8 +237,8 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                   )}
                   
                   {/* Copy Message */}
-                  <motion.p 
-                    className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant tracking-tight text-white whitespace-nowrap"
+                  <motion.p
+                    className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant tracking-tight text-black whitespace-nowrap"
                     animate={showCopyMessage ? {
                       opacity: [0.7, 1, 0.8, 1],
                     } : {}}
@@ -298,14 +298,14 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             <div className="flex space-x-4 sm:space-x-6 text-ovsia-body-xs">
               <motion.button
                 onClick={() => openModal('privacy')}
-                className="text-gray-500 hover:text-gray-300 transition-colors duration-300 cursor-pointer"
+                className="text-gray-500 hover:text-gray-700 transition-colors duration-300 cursor-pointer"
                 whileHover={{ y: -1 }}
               >
                 Privacy
               </motion.button>
               <motion.button
                 onClick={() => openModal('terms')}
-                className="text-gray-500 hover:text-gray-300 transition-colors duration-300 cursor-pointer"
+                className="text-gray-500 hover:text-gray-700 transition-colors duration-300 cursor-pointer"
                 whileHover={{ y: -1 }}
               >
                 Terms

@@ -1,6 +1,6 @@
 'use client';
 
-import { Hero, Footer, ExpertiseShowcase, VenturesCarousel, ThreeCardCTA } from '@/components/sections';
+import { Hero, Footer, PrinciplesSection, ExpertiseShowcase, VenturesCarousel, ThreeCardCTA } from '@/components/sections';
 import RotatingWordAnimation from '@/components/RotatingWordAnimation';
 import OptimizedScrollContainer from '@/components/OptimizedScrollContainer';
 import { ImagePreloader } from '@/components/ImagePreloader';
@@ -70,7 +70,7 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
         <div className="text-center text-white px-4 sm:px-6 md:px-8">
           <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11rem] 3xl:text-[12rem] font-cormorant leading-tight tracking-wide">
             <span className="block mb-2 sm:mb-3 md:mb-4">Your</span>
-            <RotatingWordAnimation 
+            <RotatingWordAnimation
               words={['Venture', 'Vision', 'Virtue']}
               interval={2500}
               className="block mb-2 sm:mb-3 md:mb-4 text-white"
@@ -79,24 +79,29 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
           </h1>
         </div>
       </div>
-      
-      {/* Section 3: Expertise - White background */}
+
+      {/* Section 3: Principles - White background */}
       <div className="bg-white">
+        <PrinciplesSection />
+      </div>
+
+      {/* Section 4: Expertise - Black background */}
+      <div className="bg-black">
         <ExpertiseShowcase />
       </div>
-      
-      {/* Section 4: Proof of Ousia - Black background */}
-      <div className="bg-black">
+
+      {/* Section 5: Proof of Ousia - White background */}
+      <div className="bg-white">
         <VenturesCarousel />
       </div>
-      
-      {/* Section 5: Choose Your Path - White background */}
-      <div className="bg-white">
+
+      {/* Section 6: Choose Your Path - Black background */}
+      <div className="bg-black">
         <ThreeCardCTA />
       </div>
-      
-      {/* Section 6: Stay in Ousia - Black background */}
-      <div className="bg-black">
+
+      {/* Section 7: Stay in Ousia - White background */}
+      <div className="bg-white">
         <Footer />
       </div>
       
