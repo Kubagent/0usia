@@ -133,7 +133,7 @@ export default function PrinciplesSection() {
         </div>
 
         {/* Quadrant Circle with Scroll Animation and Hover Overlay */}
-        <div className="flex items-center justify-center relative">
+        <div className="flex items-center justify-center relative min-h-[600px]">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
             whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -142,7 +142,7 @@ export default function PrinciplesSection() {
               duration: 0.8,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            className="relative"
+            className="relative z-0"
           >
             <motion.svg
               viewBox="0 0 400 400"
@@ -209,111 +209,75 @@ export default function PrinciplesSection() {
             </motion.svg>
           </motion.div>
 
-          {/* Hover Overlay - Expanding circle with content */}
+          {/* Hover Overlay - Simple expanding circle from center */}
           <AnimatePresence>
             {hoveredPrinciple && canHover && (
               <motion.div
-                className="fixed inset-0 z-50 flex items-center justify-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-white shadow-2xl"
+                initial={{
+                  width: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '500px' :
+                         typeof window !== 'undefined' && window.innerWidth >= 768 ? '400px' : '280px',
+                  height: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '500px' :
+                          typeof window !== 'undefined' && window.innerWidth >= 768 ? '400px' : '280px',
+                  opacity: 0
+                }}
+                animate={{
+                  width: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '1500px' :
+                         typeof window !== 'undefined' && window.innerWidth >= 768 ? '1200px' : '840px',
+                  height: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '1500px' :
+                          typeof window !== 'undefined' && window.innerWidth >= 768 ? '1200px' : '840px',
+                  opacity: 1
+                }}
+                exit={{
+                  width: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '500px' :
+                         typeof window !== 'undefined' && window.innerWidth >= 768 ? '400px' : '280px',
+                  height: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '500px' :
+                          typeof window !== 'undefined' && window.innerWidth >= 768 ? '400px' : '280px',
+                  opacity: 0
+                }}
+                transition={{
+                  duration: 0.4,
+                  ease: [0.4, 0, 0.2, 1]
+                }}
+                style={{
+                  clipPath: 'circle(50% at 50% 50%)'
+                }}
               >
-                {/* Full screen backdrop */}
-                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+                {/* Content inside the circular area */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-12 overflow-y-auto">
+                  {/* Title */}
+                  <h3 className="text-2xl md:text-3xl font-cormorant font-bold text-black mb-4">
+                    {hoveredPrinciple.title}
+                  </h3>
 
-                {/* The EXPANDING CIRCLE - starts from original size, grows large */}
-                <motion.div
-                  className="relative bg-white shadow-2xl border-2 border-gray-200"
-                  initial={{
-                    width: 280,
-                    height: 280,
-                    opacity: 0,
-                    scale: 0.8
-                  }}
-                  animate={{
-                    width: typeof window !== 'undefined' && window.innerWidth >= 1024 ? 900 :
-                           typeof window !== 'undefined' && window.innerWidth >= 768 ? 700 : 550,
-                    height: typeof window !== 'undefined' && window.innerWidth >= 1024 ? 900 :
-                            typeof window !== 'undefined' && window.innerWidth >= 768 ? 700 : 550,
-                    opacity: 1,
-                    scale: 1
-                  }}
-                  exit={{
-                    width: 280,
-                    height: 280,
-                    opacity: 0,
-                    scale: 0.8
-                  }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 200,
-                    damping: 20,
-                    duration: 0.5
-                  }}
-                  style={{
-                    clipPath: 'circle(50% at 50% 50%)'
-                  }}
-                >
-                  {/* Content inside the circular area */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-8 md:p-10 lg:p-12 overflow-y-auto">
-                    {/* Title */}
-                    <motion.h3
-                      className="text-xl md:text-3xl lg:text-4xl font-cormorant font-bold text-black mb-3 md:mb-5 lg:mb-6"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.15 }}
-                    >
-                      {hoveredPrinciple.title}
-                    </motion.h3>
+                  {/* Description */}
+                  <p className="text-base text-gray-700 mb-4 font-light leading-relaxed max-w-[85%] text-center">
+                    {hoveredPrinciple.description}
+                  </p>
 
-                    {/* Description */}
-                    <motion.p
-                      className="text-sm md:text-base lg:text-lg text-gray-700 mb-4 md:mb-6 lg:mb-7 font-light leading-relaxed max-w-[85%]"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      {hoveredPrinciple.description}
-                    </motion.p>
+                  {/* Image (for WHO principle) */}
+                  {hoveredPrinciple.image && (
+                    <div className="mb-4">
+                      <img
+                        src={hoveredPrinciple.image}
+                        alt="Jakub - 0usia"
+                        className="w-32 h-32 rounded-full object-cover border-2 border-gray-200 shadow-lg"
+                      />
+                    </div>
+                  )}
 
-                    {/* Image (for WHO principle) */}
-                    {hoveredPrinciple.image && (
-                      <motion.div
-                        className="mb-4 md:mb-6 lg:mb-7"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.25 }}
+                  {/* Details - as paragraphs */}
+                  <div className="space-y-3 max-w-[85%]">
+                    {hoveredPrinciple.details.map((detail, index) => (
+                      <p
+                        key={index}
+                        className="text-sm text-gray-600 leading-relaxed text-center"
                       >
-                        <img
-                          src={hoveredPrinciple.image}
-                          alt="Jakub - 0usia"
-                          className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full object-cover border-2 border-gray-200 shadow-lg"
-                        />
-                      </motion.div>
-                    )}
-
-                    {/* Details - as paragraphs, no bullets */}
-                    <motion.div
-                      className="space-y-2 md:space-y-3 lg:space-y-4 max-w-[85%]"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                    >
-                      {hoveredPrinciple.details.map((detail, index) => (
-                        <motion.p
-                          key={index}
-                          className="text-xs md:text-sm lg:text-base text-gray-600 leading-relaxed"
-                          initial={{ opacity: 0, y: 5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.35 + index * 0.05 }}
-                        >
-                          {detail}
-                        </motion.p>
-                      ))}
-                    </motion.div>
+                        {detail}
+                      </p>
+                    ))}
                   </div>
-                </motion.div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
