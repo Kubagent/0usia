@@ -137,7 +137,7 @@ export default function ExpertiseShowcase() {
             Expertise
           </h2>
           <p className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-white font-light max-w-2xl mx-auto px-4">
-            How we support your flourishing
+            How we support flourishment
           </p>
         </div>
 
