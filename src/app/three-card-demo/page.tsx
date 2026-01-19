@@ -1,9 +1,9 @@
-import { ThreeCardCTA } from '@/components/sections';
+import { ContactSection } from '@/components/sections';
 
-export default function ThreeCardDemo() {
+export default function ContactDemo() {
   return (
-    <main className="min-h-screen">
-      <ThreeCardCTA />
+    <main className="min-h-screen bg-black">
+      <ContactSection />
     </main>
   );
 }

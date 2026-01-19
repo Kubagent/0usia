@@ -125,7 +125,8 @@ module.exports = {
         'ovsia-header-xl': ['3rem', { lineHeight: '3.5rem' }], // 48px
         'ovsia-header-2xl': ['3.5rem', { lineHeight: '4rem' }], // 56px
         'ovsia-header-3xl': ['4rem', { lineHeight: '4.5rem' }], // 64px
-        
+        'ovsia-header-4xl': ['4.8rem', { lineHeight: '5.25rem' }], // 77px (~20% larger)
+
         // Tagline Size (Largest) - for main taglines, hero text
         'ovsia-tagline-sm': ['4.5rem', { lineHeight: '5rem' }], // 72px
         'ovsia-tagline-base': ['5rem', { lineHeight: '5.5rem' }], // 80px

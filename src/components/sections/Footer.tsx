@@ -91,8 +91,51 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
     >
       {/* Split Universe Layout */}
       <div className="min-h-screen flex flex-col">
-        
-        {/* Top Section - LinkedIn Icon */}
+
+        {/* Top Section - Mail Button (left) and LinkedIn Icon (right) */}
+        <motion.div
+          className="absolute top-6 left-6 sm:top-8 sm:left-8 md:top-12 md:left-12"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <motion.button
+            onClick={handleMailClick}
+            className="text-gray-600 hover:text-black transition-colors duration-300 block relative"
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Copy email address"
+          >
+            <svg
+              width="32"
+              height="32"
+              className="sm:w-10 sm:h-10 md:w-12 md:h-12"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </motion.button>
+
+          {/* Copy Message for Mail Icon */}
+          <AnimatePresence>
+            {showCopyMessage && (
+              <motion.div
+                className="absolute top-full left-0 mt-2 whitespace-nowrap"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-ovsia-body-xs sm:text-ovsia-body-sm font-cormorant text-black">
+                  address copied
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
         <motion.div
           className="absolute top-6 right-6 sm:top-8 sm:right-8 md:top-12 md:right-12"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -109,11 +152,11 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             whileTap={{ scale: 0.95 }}
             aria-label="Connect with us on LinkedIn"
           >
-            <svg 
-              width="32" 
-              height="32" 
+            <svg
+              width="32"
+              height="32"
               className="sm:w-10 sm:h-10 md:w-12 md:h-12"
-              fill="currentColor" 
+              fill="currentColor"
               viewBox="0 0 24 24"
             >
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -149,137 +192,32 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             </motion.h2>
           </motion.div>
 
-          {/* Main Content - Mail Button and Berlin Time Side by Side */}
-          <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-12 md:gap-16 lg:gap-24">
-            
-            {/* Left - MAIL Button (reduced size) */}
+          {/* Clock and Cities - Center Aligned */}
+          {mounted && (
             <motion.div
-              className="flex flex-col items-center relative"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              className="flex flex-col items-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              <motion.button
-                onClick={handleMailClick}
-                className="text-ovsia-tagline-sm sm:text-ovsia-tagline-base md:text-ovsia-tagline-lg font-cormorant tracking-tight text-gray-700 hover:text-black transition-colors duration-300 bg-transparent cursor-pointer leading-none flex items-center justify-center h-20 sm:h-24 md:h-28"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label="Send us an email"
+              {/* Clock - Above Cities */}
+              <p
+                className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none tabular-nums"
+                aria-label={`Current time: ${berlinTime}`}
               >
-                MAIL
-              </motion.button>
-              
-              {/* Magical Copy Message */}
-              <motion.div
-                className="absolute top-full mt-4 sm:mt-6 md:mt-8"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={showCopyMessage ? {
-                  opacity: [0, 1, 1, 0],
-                  scale: [0.8, 1.1, 1, 0.9],
-                  y: [10, 0, 0, -5]
-                } : { opacity: 0, scale: 0.8 }}
-                transition={{
-                  duration: 2.5,
-                  times: [0, 0.2, 0.8, 1],
-                  ease: "easeOut"
-                }}
+                {berlinTime}
+              </p>
+
+              {/* Cities - Below Clock */}
+              <p
+                className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none mt-1 sm:mt-2 uppercase"
+                style={{ transform: 'translateX(0px)' }}
               >
-                <div className="relative">
-                  {/* Sparkles */}
-                  {showCopyMessage && (
-                    <>
-                      {[...Array(6)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          className="absolute w-1 h-1 sm:w-1.5 sm:h-1.5 bg-black rounded-full"
-                          style={{
-                            left: `${-20 + i * 8}px`,
-                            top: `${-10 + (i % 2) * 20}px`
-                          }}
-                          animate={{
-                            opacity: [0, 1, 0],
-                            scale: [0, 1, 0],
-                            rotate: [0, 180, 360]
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            delay: i * 0.1,
-                            repeat: 1,
-                            ease: "easeInOut"
-                          }}
-                        />
-                      ))}
-                      {[...Array(4)].map((_, i) => (
-                        <motion.div
-                          key={`sparkle-${i}`}
-                          className="absolute"
-                          style={{
-                            left: `${-15 + i * 10}px`,
-                            top: `${-5 + (i % 2) * 15}px`
-                          }}
-                          animate={{
-                            opacity: [0, 1, 0],
-                            scale: [0, 1, 0]
-                          }}
-                          transition={{
-                            duration: 1.2,
-                            delay: 0.3 + i * 0.15,
-                            ease: "easeInOut"
-                          }}
-                        >
-                          <svg width="8" height="8" viewBox="0 0 24 24" fill="black" className="sm:w-3 sm:h-3">
-                            <path d="M12 0L14.09 8.26L22 6L14.09 15.74L12 24L9.91 15.74L2 18L9.91 8.26L12 0Z"/>
-                          </svg>
-                        </motion.div>
-                      ))}
-                    </>
-                  )}
-                  
-                  {/* Copy Message */}
-                  <motion.p
-                    className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant tracking-tight text-black whitespace-nowrap"
-                    animate={showCopyMessage ? {
-                      opacity: [0.7, 1, 0.8, 1],
-                    } : {}}
-                    transition={{
-                      duration: 2,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    address copied
-                  </motion.p>
-                </div>
-              </motion.div>
+                BERLIN
+              </p>
             </motion.div>
-
-            {/* Right - Berlin Time (reduced size, no flickering) */}
-            {mounted && (
-              <motion.div
-                className="flex items-center"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-center lg:text-left">
-                  <p
-                    className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none uppercase"
-                    aria-label={`Current time in Berlin: ${berlinTime}`}
-                  >
-                    BERLIN:
-                  </p>
-                  <p
-                    className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none mt-0.5 sm:mt-1 tabular-nums"
-                    style={{ minWidth: 'auto' }}
-                  >
-                    {berlinTime}
-                  </p>
-                </div>
-              </motion.div>
-            )}
-
-          </div>
+          )}
 
         </div>
 
@@ -293,7 +231,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         >
           <div className="text-center">
             <p className="text-gray-500 text-ovsia-body-xs sm:text-ovsia-body-sm font-light mb-2">
-              © {currentYear} 0usia
+              © {currentYear} 0usia ⨀
             </p>
             <div className="flex space-x-4 sm:space-x-6 text-ovsia-body-xs">
               <motion.button
@@ -384,7 +322,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                     Privacy Policy
                   </motion.h3>
                   
-                  <motion.div 
+                  <motion.div
                     className="text-ovsia-body-xs text-gray-700 leading-relaxed space-y-3"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -423,7 +361,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                     Terms of Service
                   </motion.h3>
                   
-                  <motion.div 
+                  <motion.div
                     className="text-ovsia-body-xs text-gray-700 leading-relaxed space-y-3"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}

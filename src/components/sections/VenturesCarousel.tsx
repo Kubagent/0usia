@@ -24,63 +24,22 @@ interface Venture {
 // Actual venture data with real logos
 const venturesData: Venture[] = [
   {
-    id: 'substans',
-    name: 'Substans',
-    tagline: 'Art Institution',
-    logoUrl: '/venture-logos/substans.png',
-    websiteUrl: 'https://www.substans.art',
-    description: 'Institution of art for the furtherment of what really matters – the substance',
-    status: 'active',
+    id: 'libelo',
+    name: 'Libelo',
+    tagline: 'Nature Exploration App',
+    logoUrl: '/venture-logos/libelo.png',
+    websiteUrl: 'https://libelo.app',
+    description: 'Empowering you on adventures into the wild',
+    status: 'profit',
     popupContent: {
-      title: 'Substans',
+      title: 'Libelo',
       description:
-        'Institution of art for the furtherment of what really matters – the substance, advancing substantial artistic expression through cultural initiatives.',
+        'Empowering you on adventures into the wild',
       details: [
-        'Industry: Arts & Culture / Performance',
-        'Business Model: Cultural Institution (B2C/Non-profit)',
-        'USP: Advancing substantial artistic expression',
-        'Focus: Dissemination and distribution of art',
-      ],
-    },
-  },
-  {
-    id: 'violca',
-    name: 'Violca',
-    tagline: 'Cycling Gear & Adventures',
-    logoUrl: '/venture-logos/violca.png',
-    websiteUrl: 'https://violca.com',
-    description: 'Ecommerce in cycling gear, to prepare you for cycling adventures to get to know oneself',
-    status: 'active',
-    popupContent: {
-      title: 'Violca',
-      description:
-        'Ecommerce platform specializing in cycling gear, preparing customers for cycling adventures that lead to self-discovery.',
-      details: [
-        'Industry: Community & E-commerce for cycling ',
+        'Industry: Nature Exploration /Adventure travel',
         'Business Model: Direct-to-Consumer (B2C)',
-        'USP: Self-discovery through cycling adventures',
-        'Focus: Premium cycling gear and experiences',
-      ],
-    },
-  },
-  {
-    id: 'wojcistics',
-    name: 'Wojcistics',
-    tagline: 'Logistics Tech Distribution',
-    logoUrl: '/venture-logos/wojcistics.png',
-    websiteUrl: 'https://wojcistics.com',
-    description: 'Land transport innovative machine/vehicle distribution company',
-    inactive: true,
-    status: 'discontinued',
-    popupContent: {
-      title: 'Wojcistics',
-      description:
-        'Innovative distribution platform specializing in land transport vehicles and machinery, connecting manufacturers with dealers.',
-      details: [
-        'Industry: Land transport / Logistics',
-        'Business Model: Distribution(B2B)',
-        'USP: Innovative vehicle distribution platform',
-        'Focus: Land transport machinery distribution',
+        'USP: Seamless service connection',
+        'Focus: Adventure travel',
       ],
     },
   },
@@ -107,22 +66,42 @@ const venturesData: Venture[] = [
     },
   },
   {
-    id: 'libelo',
-    name: 'Libelo',
-    tagline: 'Nature Exploration App',
-    logoUrl: '/venture-logos/libelo.png',
-    websiteUrl: 'https://libelo.app',
-    description: 'Empowering you on adventures into the wild',
-    status: 'profit',
+    id: 'violca',
+    name: 'Violca',
+    tagline: 'Cycling Gear & Adventures',
+    logoUrl: '/venture-logos/violca.png',
+    websiteUrl: 'https://violca.com',
+    description: 'Ecommerce in cycling gear, to prepare you for cycling adventures to get to know oneself',
+    status: 'active',
     popupContent: {
-      title: 'Libelo',
+      title: 'Violca',
       description:
-        'Empowering you on adventures into the wild',
+        'Ecommerce platform specializing in cycling gear, preparing customers for cycling adventures that lead to self-discovery.',
       details: [
-        'Industry: Nature Exploration /Adventure travel',
+        'Industry: Community & E-commerce for cycling ',
         'Business Model: Direct-to-Consumer (B2C)',
-        'USP: Seamless service connection',
-        'Focus: Adventure travel',
+        'USP: Self-discovery through cycling adventures',
+        'Focus: Premium cycling gear and experiences',
+      ],
+    },
+  },
+  {
+    id: 'substans',
+    name: 'Substans',
+    tagline: 'Art Institution',
+    logoUrl: '/venture-logos/substans.png',
+    websiteUrl: 'https://www.substans.art',
+    description: 'Institution of art for the furtherment of what really matters – the substance',
+    status: 'active',
+    popupContent: {
+      title: 'Substans',
+      description:
+        'Institution of art for the furtherment of what really matters – the substance, advancing substantial artistic expression through cultural initiatives.',
+      details: [
+        'Industry: Arts & Culture / Performance',
+        'Business Model: Cultural Institution (B2C/Non-profit)',
+        'USP: Advancing substantial artistic expression',
+        'Focus: Dissemination and distribution of art',
       ],
     },
   },
@@ -144,6 +123,47 @@ const venturesData: Venture[] = [
         'Business Model: Marketplace (B2C)',
         'USP: Exclusive limited editions',
         'Focus: Design story narratives',
+      ],
+    },
+  },
+  {
+    id: 'wojcistics',
+    name: 'Wojcistics',
+    tagline: 'Logistics Tech Distribution',
+    logoUrl: '/venture-logos/wojcistics.png',
+    websiteUrl: 'https://wojcistics.com',
+    description: 'Land transport innovative machine/vehicle distribution company',
+    inactive: true,
+    status: 'discontinued',
+    popupContent: {
+      title: 'Wojcistics',
+      description:
+        'Innovative distribution platform specializing in land transport vehicles and machinery, connecting manufacturers with dealers.',
+      details: [
+        'Industry: Land transport / Logistics',
+        'Business Model: Distribution(B2B)',
+        'USP: Innovative vehicle distribution platform',
+        'Focus: Land transport machinery distribution',
+      ],
+    },
+  },
+  {
+    id: 'dominik-lejman',
+    name: 'Dominik Lejman',
+    tagline: 'Artist Portfolio',
+    logoUrl: '/venture-logos/dl_logo.png',
+    websiteUrl: 'https://dlejman.com/',
+    description: 'Portfolio of contemporary artist Dominik Lejman',
+    status: 'active',
+    popupContent: {
+      title: 'Dominik Lejman',
+      description:
+        'Portfolio showcasing the work of contemporary artist Dominik Lejman.',
+      details: [
+        'Industry: Arts & Culture',
+        'Business Model: Artist Portfolio',
+        'USP: Contemporary art practice',
+        'Focus: Visual arts and exhibitions',
       ],
     },
   },
@@ -436,7 +456,7 @@ export default function VenturesCarousel() {
               usia
             </span>
           </h2>
-          <p className='text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-gray-700 font-light max-w-2xl mx-auto px-4'>
+          <p className='text-ovsia-body-xl text-gray-700 font-light max-w-2xl mx-auto px-4'>
             Ventures we have brought to life
           </p>
         </motion.div>
@@ -546,7 +566,9 @@ export default function VenturesCarousel() {
                     height={120}
                     priority
                     className={`object-contain opacity-60 group-hover:opacity-80 transition-opacity duration-300 ${
-                      prev.id === 'objects-gallery'
+                      prev.id === 'dominik-lejman'
+                        ? 'w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48'
+                        : prev.id === 'objects-gallery'
                         ? 'w-20 h-20 sm:w-24 sm:h-24 md:w-30 md:h-30'
                         : 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24'
                     }`}
@@ -588,7 +610,9 @@ export default function VenturesCarousel() {
                       height={240}
                       priority
                       className={`object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300 ${
-                        current.id === 'objects-gallery'
+                        current.id === 'dominik-lejman'
+                          ? 'w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80'
+                          : current.id === 'objects-gallery'
                           ? 'w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-52 xl:h-52'
                           : 'w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40'
                       }`}
@@ -743,7 +767,9 @@ export default function VenturesCarousel() {
                     height={120}
                     priority
                     className={`object-contain opacity-60 group-hover:opacity-80 transition-opacity duration-300 ${
-                      next.id === 'objects-gallery'
+                      next.id === 'dominik-lejman'
+                        ? 'w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48'
+                        : next.id === 'objects-gallery'
                         ? 'w-20 h-20 sm:w-24 sm:h-24 md:w-30 md:h-30'
                         : 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24'
                     }`}

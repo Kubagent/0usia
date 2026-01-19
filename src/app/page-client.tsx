@@ -1,6 +1,6 @@
 'use client';
 
-import { Hero, Footer, PrinciplesSection, ExpertiseShowcase, VenturesCarousel, ThreeCardCTA } from '@/components/sections';
+import { Hero, Footer, PrinciplesSection, ExpertiseShowcase, VenturesCarousel, ContactSection } from '@/components/sections';
 import RotatingWordAnimation from '@/components/RotatingWordAnimation';
 import OptimizedScrollContainer from '@/components/OptimizedScrollContainer';
 import { ImagePreloader } from '@/components/ImagePreloader';
@@ -95,9 +95,9 @@ export default function HomeClient({ siteContent, contentMetadata, children }: H
         <VenturesCarousel />
       </div>
 
-      {/* Section 6: Choose Your Path - Black background */}
+      {/* Section 6: Contact - Black background */}
       <div className="bg-black">
-        <ThreeCardCTA />
+        <ContactSection />
       </div>
 
       {/* Section 7: Stay in Ousia - White background */}

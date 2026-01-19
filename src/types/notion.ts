@@ -306,6 +306,13 @@ export interface ContactSubmissionContent {
   submitted: string;
 }
 
+// Attachment metadata for contact form
+export interface AttachmentMetadata {
+  name: string;
+  size: number;
+  contentType?: string;
+}
+
 // Form submission request types
 export interface ContactFormData {
   name: string;
@@ -313,7 +320,7 @@ export interface ContactFormData {
   phone?: string;
   message?: string;
   formType: 'Partnership' | 'Project' | 'Investment';
-  attachment?: File;
+  attachment?: AttachmentMetadata;
 }
 
 export interface ContactSubmissionResult {

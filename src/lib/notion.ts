@@ -453,13 +453,13 @@ export async function submitContactForm(formData: ContactFormData): Promise<Cont
 
     // Handle file attachment if provided
     if (formData.attachment) {
-      // For now, we'll note that a file was attached
-      // In a full implementation, you'd upload to Notion or external storage first
+      // Note: File is sent via email (Notion API doesn't support direct file uploads)
+      // Record the attachment metadata in Notion for reference
       properties['Internal Notes'] = {
         rich_text: [
           {
             text: {
-              content: `File attachment: ${formData.attachment.name} (${Math.round(formData.attachment.size / 1024)}KB)`,
+              content: `📎 Attachment sent via email: ${formData.attachment.name} (${Math.round(formData.attachment.size / 1024)}KB)${formData.attachment.contentType ? ` [${formData.attachment.contentType}]` : ''}`,
             },
           },
         ],

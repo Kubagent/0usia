@@ -22,6 +22,14 @@ export interface EmailConfig {
   isValidConfig: boolean;
 }
 
+// Attachment data interface
+export interface AttachmentData {
+  filename: string;
+  content: string; // base64 encoded
+  contentType: string;
+  size: number;
+}
+
 // Contact form data interface
 export interface ContactFormData {
   name: string;
@@ -30,6 +38,7 @@ export interface ContactFormData {
   message: string;
   source?: string;
   formType?: string;
+  attachment?: AttachmentData;
 }
 
 // Email template data
@@ -41,6 +50,10 @@ export interface EmailTemplateData {
   source: string;
   formType: string;
   submissionTime: string;
+  attachmentInfo?: {
+    filename: string;
+    size: number;
+  };
 }
 
 // Email response interface
@@ -255,6 +268,7 @@ function createContactEmailHTML(data: EmailTemplateData): string {
             Source: ${data.source}<br>
             Time: ${data.submissionTime}<br>
             ${data.formType === 'Investment' ? '<strong>Priority:</strong> High - Investment Inquiry<br>' : ''}
+            ${data.attachmentInfo ? `<strong>Attachment:</strong> ${data.attachmentInfo.filename} (${Math.round(data.attachmentInfo.size / 1024)}KB) - See attached file<br>` : ''}
         </div>
     </div>
     
@@ -289,6 +303,7 @@ Form Type: ${data.formType}
 Source: ${data.source}
 Time: ${data.submissionTime}
 ${data.formType === 'Investment' ? 'Priority: High - Investment Inquiry' : ''}
+${data.attachmentInfo ? `Attachment: ${data.attachmentInfo.filename} (${Math.round(data.attachmentInfo.size / 1024)}KB) - See attached file` : ''}
 
 ---
 This email was automatically generated from the 0usia contact form.
@@ -339,18 +354,35 @@ class EmailService {
           minute: '2-digit',
           timeZoneName: 'short'
         }),
+        attachmentInfo: data.attachment ? {
+          filename: data.attachment.filename,
+          size: data.attachment.size,
+        } : undefined,
       };
 
-      const subject = `0usia Contact Form - ${templateData.formType} from ${templateData.name}`;
-      
-      const result = await resend.emails.send({
+      const subject = `0usia Contact Form - ${templateData.formType} from ${templateData.name}${data.attachment ? ' [Attachment]' : ''}`;
+
+      // Build email options
+      const emailOptions: any = {
         from: this.config.fromEmail,
         to: [this.config.toEmail],
         subject: subject,
         html: createContactEmailHTML(templateData),
         text: createContactEmailText(templateData),
         replyTo: data.email,
-      });
+      };
+
+      // Add attachment if provided
+      if (data.attachment) {
+        emailOptions.attachments = [
+          {
+            filename: data.attachment.filename,
+            content: data.attachment.content, // base64 string
+          },
+        ];
+      }
+
+      const result = await resend.emails.send(emailOptions);
 
       if (result.error) {
         throw new EmailError(

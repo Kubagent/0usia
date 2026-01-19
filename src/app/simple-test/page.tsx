@@ -1,6 +1,6 @@
 'use client';
 
-import { Hero, Footer, ExpertiseShowcase, VenturesCarousel, ThreeCardCTA } from '@/components/sections';
+import { Hero, Footer, ExpertiseShowcase, VenturesCarousel, ContactSection } from '@/components/sections';
 import RotatingWordAnimation from '@/components/RotatingWordAnimation';
 
 /**
@@ -38,9 +38,9 @@ export default function SimpleTestPage() {
         <VenturesCarousel />
       </div>
       
-      {/* Section 5: Choose Your Path - White background */}
+      {/* Section 5: Contact - White background */}
       <div className="bg-white">
-        <ThreeCardCTA />
+        <ContactSection />
       </div>
       
       {/* Section 6: Stay in Ousia - Black background */}

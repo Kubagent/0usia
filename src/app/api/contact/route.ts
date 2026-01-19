@@ -18,6 +18,14 @@ import { ContactFormData as NotionFormData } from '@/types/notion';
 import { validateContactForm, ContactFormValidationData } from '@/lib/validation';
 import { checkMultipleRateLimits, RATE_LIMIT_CONFIGS } from '@/lib/rate-limit';
 
+// Attachment interface
+interface AttachmentRequest {
+  filename: string;
+  content: string; // base64 encoded
+  contentType: string;
+  size: number;
+}
+
 // Request body interface
 interface ContactFormRequest {
   name: string;
@@ -29,6 +37,7 @@ interface ContactFormRequest {
   honeypot: string; // Anti-spam field
   source?: string;
   formType?: string;
+  attachment?: AttachmentRequest;
 }
 
 // Response interface
@@ -113,6 +122,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<ContactFo
       message: body.message.trim(),
       source: body.source || 'contact_form',
       formType: body.formType || 'Contact',
+      attachment: body.attachment ? {
+        filename: body.attachment.filename,
+        content: body.attachment.content,
+        contentType: body.attachment.contentType,
+        size: body.attachment.size,
+      } : undefined,
     };
 
     // Prepare data for Notion storage
@@ -121,6 +136,11 @@ export async function POST(request: NextRequest): Promise<NextResponse<ContactFo
       email: body.email.trim(),
       message: body.message.trim(),
       formType: (body.formType as 'Partnership' | 'Project' | 'Investment') || 'Project',
+      attachment: body.attachment ? {
+        name: body.attachment.filename,
+        size: body.attachment.size,
+        contentType: body.attachment.contentType,
+      } : undefined,
     };
 
     // Add company if provided

@@ -20,75 +20,74 @@ interface ExpertiseCard {
 
 const expertiseData: ExpertiseCard[] = [
   {
-    id: 'strategic-vision',
-    title: 'Strategic\nVision',
-    overlayTitle: 'Strategic Vision',
-    description: 'We see patterns others miss and craft the narratives that define them. Strategic visioning, brand identity, organizational values, and the foundational belief systems that drive long-term success.',
+    id: 'innovative-strategy',
+    title: 'Innovative\nStrategy',
+    overlayTitle: 'Turn vision into a product people need.',
+    description: "We translate first principles into an executable thesis: what you're building, for whom, why it wins, and what must be true for it to work.",
     details: [
-      'Market pattern recognition',
-      'Brand identity & narrative development', 
-      'Organizational values framework',
-      'Long-term strategic planning'
+      'Strategic positioning & differentiation',
+      'Phased roadmap: scope, team, timeline, milestones, risks',
+      'User journeys, UX flows, prototyping',
+      'KPI model, and validation plan – what to measure and why'
     ]
   },
   {
-    id: 'ai-operations',
-    title: 'AI\nOperations',
-    overlayTitle: 'AI Operations',
-    description: 'Advanced AI integration. Machine learning systems, automation workflows, intelligent decision support.',
+    id: 'brand-narrative',
+    title: 'Brand &\nNarrative',
+    overlayTitle: 'Make your business legible—internally and externally.',
+    description: 'We build the conceptual scaffolding that makes your product inevitable to the right audience: what you stand for, and how you speak with consistency at each contact.',
     details: [
-      'Machine learning implementation',
-      'Automation workflow design',
-      'Intelligent decision systems',
-      'AI-human collaboration frameworks'
+      'Brand philosophy, virtues, and narrative',
+      'Messaging system, content architecture, voice & tone guide',
+      'Landing page, pitch copy (web, deck, outreach)',
+      'Film and photography direction & production'
     ]
   },
   {
-    id: 'capital-optimization',
-    title: 'Capital\nOptimization',
-    overlayTitle: 'Capital Optimization',
-    description: 'Smart capital deployment. Investment strategies, resource allocation, financial engineering.',
+    id: 'user-experiences',
+    title: 'Unique User\nExperiences',
+    overlayTitle: 'Convey your truth convincingly.',
+    description: 'We design interfaces that feel inevitable: minimal where it should be, expressive where it must be. The result is clarity engineered into experience.',
     details: [
-      'Investment strategy development',
-      'Resource allocation optimization',
-      'Financial engineering solutions',
-      'ROI maximization frameworks'
+      'UX architecture (full system wire-framing)',
+      'UI kit, design system foundations',
+      'Complete visual implementations (web and mobile)'
     ]
   },
   {
-    id: 'technology-leadership',
-    title: 'Technology\nLeadership',
-    overlayTitle: 'Technology Leadership',
-    description: 'Cutting-edge technical implementation. Architecture design, scalable systems, innovation execution.',
+    id: 'go-to-market',
+    title: 'Go-to-\nMarket',
+    overlayTitle: 'Distribution is part of the product.',
+    description: 'We help you earn traction through disciplined learning cycles: sharpen the offer, test channels, and build repeatable growth loops.',
     details: [
-      'System architecture design',
-      'Scalable infrastructure',
-      'Innovation execution',
-      'Technical team leadership'
+      'Customer profiling, buyer/user segmentation, offer design',
+      'Channel experiments, growth hack & testing framework',
+      'Campaign plan & creative direction',
+      'Measurement and feedback system to guide iteration'
     ]
   },
   {
-    id: 'partnership-dynamics',
-    title: 'Partnership\nDynamics',
-    overlayTitle: 'Partnership Dynamics',
-    description: 'Strategic relationship building. Ecosystem development, collaborative frameworks, mutual growth.',
+    id: 'team-dynamics',
+    title: 'Team\nDynamics',
+    overlayTitle: 'Upgrade collaboration, not just output.',
+    description: "Your team is the most valuable asset. We help you shape it, diagnose what's blocking momentum, then implement structures that increase velocity.",
     details: [
-      'Ecosystem development',
-      'Strategic alliances',
-      'Collaborative frameworks',
-      'Mutual value creation'
+      'Founder matchmaking, character analysis & coaching',
+      'Team diagnostic — friction, roles, incentives, decision latency',
+      'Decision framework — who decides what, how, and when',
+      'Feedback practices and escalation pathways'
     ]
   },
   {
-    id: 'market-intelligence',
-    title: 'Market\nIntelligence',
-    overlayTitle: 'Market Intelligence',
-    description: 'Deep market understanding. Trend analysis, opportunity identification, competitive intelligence.',
+    id: 'process-architecture',
+    title: 'Process\nArchitecture',
+    overlayTitle: 'Make operations calm, scalable, and visible.',
+    description: 'We map the full operational flow, then eliminate, automate, or standardize—so quality scales without headcount scaling linearly.',
     details: [
-      'Market trend analysis',
-      'Opportunity identification',
-      'Competitive intelligence',
-      'Strategic positioning'
+      'Process maps & standard operating procedures (SOPs)',
+      'System integration plan (tools, APIs, automation)',
+      'eCommerce & marketplace workflow management',
+      'Customer support structure and strategy'
     ]
   }
 ];
@@ -132,11 +131,11 @@ export default function ExpertiseShowcase() {
     <section className="relative min-h-screen flex items-center justify-center py-20">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Title - Minimal */}
-        <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <h2 className="text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
+        <div className="text-center mb-12 md:mb-16 lg:mb-20">
+          <h2 className="text-ovsia-header-4xl font-cormorant tracking-tight text-white mb-4">
             Expertise
           </h2>
-          <p className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl text-white font-light max-w-2xl mx-auto px-4">
+          <p className="text-ovsia-body-xl text-white font-light max-w-2xl mx-auto">
             How we support flourishment
           </p>
         </div>
@@ -176,7 +175,7 @@ export default function ExpertiseShowcase() {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="text-ovsia-body-lg sm:text-ovsia-body-xl md:text-ovsia-body-2xl font-cormorant font-bold tracking-tight text-black leading-snug whitespace-pre-line">
+                  <h3 className="text-ovsia-header-sm md:text-ovsia-header-base font-cormorant font-bold tracking-tight text-black leading-snug whitespace-pre-line">
                     {card.title}
                   </h3>
                 </motion.div>
@@ -227,7 +226,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3
-                          className="text-ovsia-body-xl lg:text-ovsia-body-2xl font-cormorant font-bold text-black mb-3 lg:mb-4 tracking-tight"
+                          className="text-ovsia-header-sm lg:text-ovsia-header-base font-cormorant font-bold tracking-tight text-black mb-3 lg:mb-4"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.1 }}
@@ -236,7 +235,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
 
                         <motion.p
-                          className="text-ovsia-body-base lg:text-ovsia-body-lg text-gray-700 mb-4 lg:mb-5 leading-relaxed max-w-2xl"
+                          className="text-ovsia-body-xl text-gray-700 font-light mb-4 lg:mb-5 leading-relaxed max-w-2xl"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.15 }}
@@ -245,7 +244,7 @@ export default function ExpertiseShowcase() {
                         </motion.p>
 
                         <motion.div
-                          className="grid grid-cols-1 gap-2 lg:gap-3 text-ovsia-body-sm lg:text-ovsia-body-base text-gray-600"
+                          className="grid grid-cols-1 gap-2 lg:gap-3 text-ovsia-body-xl text-gray-600 font-light"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}
@@ -347,7 +346,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3
-                          className="text-ovsia-body-lg font-cormorant font-bold text-black mb-3 tracking-tight pr-8"
+                          className="text-ovsia-header-sm font-cormorant font-bold tracking-tight text-black mb-3 pr-8"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 }}
@@ -356,7 +355,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
 
                         <motion.p
-                          className="text-ovsia-body-base text-gray-700 mb-4 leading-relaxed"
+                          className="text-ovsia-body-xl text-gray-700 font-light mb-4 leading-relaxed"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.15 }}
@@ -378,8 +377,8 @@ export default function ExpertiseShowcase() {
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
-                              <span className="w-1.5 h-1.5 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                              <span className="text-ovsia-body-sm text-gray-600 leading-relaxed">{detail}</span>
+                              <span className="w-1.5 h-1.5 bg-black rounded-full mt-2.5 mr-3 flex-shrink-0"></span>
+                              <span className="text-ovsia-body-xl text-gray-600 font-light leading-relaxed">{detail}</span>
                             </motion.div>
                           ))}
                         </motion.div>

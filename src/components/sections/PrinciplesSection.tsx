@@ -1,9 +1,10 @@
+
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { principlesData } from '@/data/principles';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 // Helper function to convert polar coordinates to cartesian
 const polarToCartesian = (
@@ -78,7 +79,7 @@ export default function PrinciplesSection() {
       {/* Main content container - positioned relative for overlay */}
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-ovsia-header-3xl font-cormorant tracking-tight text-black">
+          <h2 className="text-ovsia-header-4xl font-cormorant tracking-tight text-black">
             Principles
           </h2>
           <p className="text-ovsia-body-xl text-black font-light max-w-2xl mx-auto mt-4">
@@ -127,10 +128,10 @@ export default function PrinciplesSection() {
                       />
                       <text
                         x={centerX + labelPos.x}
-                        y={centerY + labelPos.y}
+                        y={centerY + labelPos.y + (quadrant.id === 'why' || quadrant.id === 'what' ? 5 : -5)}
                         textAnchor="middle"
                         dominantBaseline="middle"
-                        className="text-2xl md:text-3xl font-cormorant font-semibold fill-black select-none"
+                        className="text-4xl md:text-5xl font-cormorant font-semibold fill-black select-none"
                         style={{ pointerEvents: 'none' }}
                       >
                         {quadrant.label}
@@ -154,7 +155,7 @@ export default function PrinciplesSection() {
               exit={{ opacity: 0 }}
             >
               <motion.div
-                className="bg-white border border-black/10 shadow-2xl flex flex-col items-center justify-center p-8 md:p-12 lg:p-16 rounded-full"
+                className="bg-black border border-white/10 shadow-2xl flex flex-col items-center justify-center p-8 md:p-12 lg:p-16 rounded-full"
                 initial={{
                   scale: 0.3,
                   opacity: 0,
@@ -180,35 +181,37 @@ export default function PrinciplesSection() {
                 }}
               >
                 <div className="max-w-3xl text-center overflow-y-auto max-h-full px-8">
-                  <h3 className="text-2xl md:text-3xl font-cormorant font-bold text-black mb-4">
+                  <h3 className="text-ovsia-header-lg font-cormorant tracking-tight text-white mb-4">
                     {hoveredPrinciple.title}
                   </h3>
-                  <p className="text-base text-black mb-4 leading-relaxed">
+                  <p className="text-ovsia-body-xl text-white font-light mb-4 leading-relaxed">
                     {hoveredPrinciple.description}
                   </p>
                   {hoveredPrinciple.image && (
                     <img
                       src={hoveredPrinciple.image}
                       alt="Jakub - 0usia"
-                      className="w-28 h-28 md:w-36 md:h-36 rounded-full object-cover border-2 border-gray-200 shadow-lg mb-6 mx-auto"
+                      className="w-28 h-28 md:w-36 md:h-36 rounded-full object-cover border-2 border-white/20 shadow-lg mb-6 mx-auto"
                     />
                   )}
                   {hoveredPrinciple.id === 'how' ? (
-                    <ul className="text-left space-y-2">
-                      {hoveredPrinciple.details.slice(0, -1).map((detail, index) => (
-                        <li key={index} className="text-base text-black leading-relaxed flex">
-                          <span className="mr-2">•</span>
-                          <span>{detail}</span>
-                        </li>
-                      ))}
-                      <p className="text-base text-black leading-relaxed mt-4">
+                    <>
+                      <ul className="text-left space-y-1 pl-8">
+                        {hoveredPrinciple.details.slice(0, -1).map((detail, index) => (
+                          <li key={index} className="text-ovsia-body-xl text-white font-light leading-snug flex">
+                            <span className="mr-2">•</span>
+                            <span>{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="text-ovsia-body-xl text-white font-light leading-relaxed mt-4 text-center">
                         {hoveredPrinciple.details[hoveredPrinciple.details.length - 1]}
                       </p>
-                    </ul>
+                    </>
                   ) : (
                     <div className="space-y-2">
                       {hoveredPrinciple.details.map((detail, index) => (
-                        <p key={index} className="text-base text-black leading-relaxed">
+                        <p key={index} className="text-ovsia-body-xl text-white font-light leading-relaxed">
                           {detail}
                         </p>
                       ))}
@@ -247,13 +250,13 @@ export default function PrinciplesSection() {
                   <path d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <div className="text-sm font-medium text-gray-500 mb-2 uppercase tracking-wide">
+              <div className="text-ovsia-body-xl font-cormorant font-light text-gray-500 mb-2 uppercase tracking-wide">
                 {clickedPrinciple.label}
               </div>
-              <h3 className="text-2xl font-cormorant font-bold text-black mb-3">
+              <h3 className="text-ovsia-header-lg font-cormorant tracking-tight text-black mb-3">
                 {clickedPrinciple.title}
               </h3>
-              <p className="text-base text-black mb-4 leading-relaxed">
+              <p className="text-ovsia-body-xl text-black font-light mb-4 leading-relaxed">
                 {clickedPrinciple.description}
               </p>
               {clickedPrinciple.image && (
@@ -266,21 +269,23 @@ export default function PrinciplesSection() {
                 </div>
               )}
               {clickedPrinciple.id === 'how' ? (
-                <ul className="text-left space-y-2">
-                  {clickedPrinciple.details.slice(0, -1).map((detail, index) => (
-                    <li key={index} className="text-base text-black leading-relaxed flex">
-                      <span className="mr-2">•</span>
-                      <span>{detail}</span>
-                    </li>
-                  ))}
-                  <p className="text-base text-black leading-relaxed mt-4">
+                <>
+                  <ul className="text-left space-y-1 pl-6">
+                    {clickedPrinciple.details.slice(0, -1).map((detail, index) => (
+                      <li key={index} className="text-ovsia-body-xl text-black font-light leading-snug flex">
+                        <span className="mr-2">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-ovsia-body-xl text-black font-light leading-relaxed mt-4 text-center">
                     {clickedPrinciple.details[clickedPrinciple.details.length - 1]}
                   </p>
-                </ul>
+                </>
               ) : (
                 <div className="space-y-2">
                   {clickedPrinciple.details.map((detail, index) => (
-                    <p key={index} className="text-base text-black leading-relaxed">
+                    <p key={index} className="text-ovsia-body-xl text-black font-light leading-relaxed">
                       {detail}
                     </p>
                   ))}

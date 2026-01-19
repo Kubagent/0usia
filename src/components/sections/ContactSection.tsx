@@ -1,10 +1,11 @@
 'use client';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { getCalApi } from "@calcom/embed-react";
 
 // Contact Form Modal Component
 interface ContactFormModalProps {
-  modalType: 'partnership' | 'project' | 'investment' | null;
+  modalType: 'brief' | null;
   onClose: () => void;
 }
 
@@ -22,7 +23,6 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   // Focus management and keyboard navigation
@@ -97,17 +97,45 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
     setIsSubmitting(true);
 
     try {
-      // Prepare JSON data for API (no file upload support yet)
+      // Helper function to convert File to base64
+      const fileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            // Extract base64 data from data URL (remove "data:mime/type;base64," prefix)
+            const result = reader.result as string;
+            const base64Data = result.split(',')[1];
+            resolve(base64Data);
+          };
+          reader.onerror = (error) => reject(error);
+        });
+      };
+
+      // Prepare attachment data if file is present
+      let attachmentData = undefined;
+      if (formData.attachment) {
+        const base64Content = await fileToBase64(formData.attachment);
+        attachmentData = {
+          filename: formData.attachment.name,
+          content: base64Content,
+          contentType: formData.attachment.type || 'application/octet-stream',
+          size: formData.attachment.size,
+        };
+      }
+
+      // Prepare JSON data for API
       const submitData = {
         name: formData.name,
         email: formData.email,
         company: formData.phone, // Using phone field as company for now
         message: formData.message,
-        formType: modalType === 'partnership' ? 'Partnership' : modalType === 'project' ? 'Project' : 'Investment',
+        formType: 'Project Brief',
         gdprConsent: formData.gdprConsent,
         marketingConsent: formData.marketingConsent,
         honeypot: formData.honeypot,
-        source: 'three_card_cta'
+        source: 'project_brief_cta',
+        attachment: attachmentData,
       };
 
       // Submit to API with proper JSON format
@@ -180,25 +208,11 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
     required?: string[];
   } => {
     switch (modalType) {
-      case 'partnership':
+      case 'brief':
         return {
-          title: 'Start Partnership',
-          fields: ['name', 'email', 'phone', 'message'],
-          attachmentLabel: 'Attachment (coming soon)',
-          required: ['name', 'email']
-        };
-      case 'project':
-        return {
-          title: 'Start Project',
-          fields: ['name', 'email', 'phone', 'message'],
-          attachmentLabel: 'Project brief (coming soon)',
-          required: ['name', 'email']
-        };
-      case 'investment':
-        return {
-          title: 'Submit Pitch',
-          fields: ['name', 'email', 'phone', 'message'],
-          attachmentLabel: 'Pitch deck (coming soon)',
+          title: 'Submit Project Brief',
+          fields: ['name', 'email', 'phone', 'message', 'attachment'],
+          attachmentLabel: 'Attach project brief or relevant documents',
           required: ['name', 'email']
         };
       default:
@@ -224,7 +238,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
             </div>
             <h3 className="text-ovsia-body-2xl font-cormorant mb-4">Thank You!</h3>
             <p className="text-ovsia-body-base text-gray-600 mb-6">
-              We've received your {modalType === 'investment' ? 'pitch' : 'inquiry'} and will be in touch soon.
+              We've received your project brief and will be in touch soon.
             </p>
             {submitError && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -348,25 +362,42 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
                 aria-describedby="message-help"
               />
               <p id="message-help" className="mt-1 text-ovsia-body-xs text-gray-500">
-                Share any details about your {modalType === 'partnership' ? 'partnership goals' : modalType === 'project' ? 'project requirements' : 'investment opportunity'}
+                Share any details about your project requirements and goals
               </p>
             </div>
           )}
 
           {config.fields.includes('attachment') && (
-            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                </svg>
-                <div>
-                  <p className="text-ovsia-body-sm font-medium text-gray-700">
-                    File Upload Coming Soon
-                  </p>
-                  <p className="text-ovsia-body-xs text-gray-500">
-                    For now, please include any details in your message and we'll follow up about file sharing.
-                  </p>
-                </div>
+            <div>
+              <label className="block text-ovsia-body-sm font-medium text-gray-700 mb-2">
+                {config.attachmentLabel}
+              </label>
+              <div className="p-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center space-y-2">
+                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  {formData.attachment ? (
+                    <div className="text-center">
+                      <p className="text-ovsia-body-sm font-medium text-black">{formData.attachment.name}</p>
+                      <p className="text-ovsia-body-xs text-gray-500">Click to change file</p>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <p className="text-ovsia-body-sm text-gray-600">
+                        <span className="font-medium text-black">Click to upload</span> or drag and drop
+                      </p>
+                      <p className="text-ovsia-body-xs text-gray-500">PDF, DOC, DOCX, TXT, PNG, JPG up to 10MB</p>
+                    </div>
+                  )}
+                </label>
               </div>
             </div>
           )}
@@ -472,58 +503,59 @@ interface CTACard {
   title: string;
   description: string;
   buttonText: string;
-  action: 'modal' | 'mailto' | 'investment';
-  bgColor: 'light' | 'dark' | 'medium';
-  mailtoEmail?: string;
+  action: 'modal' | 'cal';
+  bgColor: 'light' | 'dark';
+  calLink?: string;
 }
 
 const ctaCards: CTACard[] = [
   {
-    id: 'partner',
-    title: 'Partner with Us',
-    description: 'Ready to build something extraordinary together?',
-    buttonText: 'Start Partnership',
-    action: 'modal',
-    bgColor: 'light'
+    id: 'schedule',
+    title: 'Schedule a Call',
+    description: 'The quickest way to explore working together. Book a time that suits you.',
+    buttonText: 'Book a Call',
+    action: 'cal',
+    bgColor: 'light',
+    calLink: '0usia/discovery'
   },
   {
-    id: 'support',
-    title: 'Start Project',
-    description: 'Have a project you want to bring to life?',
-    buttonText: 'Start Project',
+    id: 'brief',
+    title: 'Submit a Brief',
+    description: 'Share your project details and we will get back to you with our thoughts.',
+    buttonText: 'Submit Brief',
     action: 'modal',
     bgColor: 'dark'
-  },
-  {
-    id: 'investment',
-    title: 'Seek Investment',
-    description: 'Looking for financing for your venture?',
-    buttonText: 'Submit Pitch',
-    action: 'investment',
-    bgColor: 'medium'
   }
 ];
 
-export default function ThreeCardCTA() {
+export default function ContactSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<'partnership' | 'project' | 'investment' | null>(null);
+  const [modalType, setModalType] = useState<'brief' | null>(null);
+  // Initialize Cal.com embed (EU instance)
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi({ namespace: "discovery", origin: "https://app.cal.eu" });
+      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    })();
+  }, []);
+
+  const openCalModal = useCallback(async () => {
+    const cal = await getCalApi({ namespace: "discovery", origin: "https://app.cal.eu" });
+    cal("modal", {
+      calLink: "0usia/discovery",
+      calOrigin: "https://app.cal.eu",
+      config: { layout: "month_view" }
+    });
+  }, []);
 
   const handleCardAction = useCallback((card: CTACard) => {
-    switch (card.id) {
-      case 'partner':
-        setModalType('partnership');
-        setIsModalOpen(true);
-        break;
-      case 'support':
-        setModalType('project');
-        setIsModalOpen(true);
-        break;
-      case 'investment':
-        setModalType('investment');
-        setIsModalOpen(true);
-        break;
+    if (card.action === 'cal') {
+      openCalModal();
+    } else if (card.action === 'modal') {
+      setModalType('brief');
+      setIsModalOpen(true);
     }
-  }, []);
+  }, [openCalModal]);
 
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
@@ -536,8 +568,6 @@ export default function ThreeCardCTA() {
         return 'bg-gradient-to-br from-white/90 to-gray-50/70 border-4 border-white text-black';
       case 'dark':
         return 'bg-gradient-to-br from-gray-800/90 to-gray-900/80 border-4 border-gray-600 text-white';
-      case 'medium':
-        return 'bg-gradient-to-br from-gray-200/90 to-gray-300/70 border-4 border-gray-400 text-black';
       default:
         return 'bg-gradient-to-br from-white/90 to-gray-50/70 border-4 border-white text-black';
     }
@@ -549,8 +579,6 @@ export default function ThreeCardCTA() {
         return 'bg-black text-white hover:bg-gray-900 focus:ring-2 focus:ring-gray-200';
       case 'dark':
         return 'bg-white text-black hover:bg-gray-100 focus:ring-2 focus:ring-gray-800';
-      case 'medium':
-        return 'bg-black text-white hover:bg-gray-900 focus:ring-2 focus:ring-gray-200';
       default:
         return 'bg-black text-white hover:bg-gray-900';
     }
@@ -572,30 +600,29 @@ export default function ThreeCardCTA() {
     <>
       <section className="min-h-screen flex items-center justify-center py-20">
         <div className="w-full max-w-7xl mx-auto px-4">
-          {/* Section Title - Updated for black background */}
+          {/* Section Title */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h2 className="text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
-              Choose Your Path
+            <h2 className="text-ovsia-header-4xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
+              Get in Touch
             </h2>
-            <p className="text-ovsia-body-base sm:text-ovsia-body-lg text-gray-300 font-light max-w-4xl mx-auto px-4">
-              Every journey begins with a single step. Which path calls to you?
+            <p className="text-ovsia-body-xl text-gray-300 font-light max-w-4xl mx-auto px-4">
+              Ready to explore working together? Choose your preferred way to connect.
             </p>
           </div>
 
-          {/* Three Cards Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 max-w-7xl mx-auto items-center justify-items-center px-4">
-            {ctaCards.map((card, index) => (
+          {/* Two Cards Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 lg:gap-20 max-w-5xl mx-auto items-center justify-items-center px-4">
+            {ctaCards.map((card) => (
               <motion.div
                 key={card.id}
                 className={`
-                  flex flex-col justify-center items-center p-8 sm:p-10 lg:p-16 
+                  flex flex-col justify-center items-center p-10 sm:p-12 lg:p-20
                   aspect-square rounded-full
                   ${getCardStyles(card.bgColor)}
                   backdrop-blur-sm
                   transition-all duration-300 hover:shadow-xl
                   cursor-pointer group
-                  w-full h-full max-w-2xl mx-auto
-                  ${index === 1 && 'md:col-span-2 lg:col-span-1'}
+                  w-full h-full max-w-md lg:max-w-lg mx-auto
                 `}
                 variants={cardVariants}
                 whileHover="hover"
@@ -609,25 +636,48 @@ export default function ThreeCardCTA() {
                   <p className="text-ovsia-body-base sm:text-ovsia-body-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[240px] sm:max-w-[280px]">
                     {card.description}
                   </p>
-                  <button
-                    className={`
-                      inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-lg 
-                      font-medium text-ovsia-body-base sm:text-ovsia-body-lg transition-all duration-300 
-                      focus:outline-none focus:ring-4 
-                      ${getButtonStyles(card.bgColor)}
-                      w-auto mx-auto min-h-[44px]
-                    `}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCardAction(card);
-                  }}
-                  aria-label={`${card.buttonText} - ${card.description}`}
-                >
-                  {card.buttonText}
-                  <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                  </button>
+                  {card.action === 'cal' ? (
+                    <button
+                      className={`
+                        inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-lg
+                        font-medium text-ovsia-body-base sm:text-ovsia-body-lg transition-all duration-300
+                        focus:outline-none focus:ring-4
+                        ${getButtonStyles(card.bgColor)}
+                        w-auto mx-auto min-h-[44px]
+                      `}
+                      onClick={(e) => e.stopPropagation()}
+                      data-cal-namespace="discovery"
+                      data-cal-link="0usia/discovery"
+                      data-cal-origin="https://app.cal.eu"
+                      data-cal-config='{"layout":"month_view"}'
+                      aria-label={`${card.buttonText} - ${card.description}`}
+                    >
+                      {card.buttonText}
+                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </button>
+                  ) : (
+                    <button
+                      className={`
+                        inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-lg
+                        font-medium text-ovsia-body-base sm:text-ovsia-body-lg transition-all duration-300
+                        focus:outline-none focus:ring-4
+                        ${getButtonStyles(card.bgColor)}
+                        w-auto mx-auto min-h-[44px]
+                      `}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCardAction(card);
+                      }}
+                      aria-label={`${card.buttonText} - ${card.description}`}
+                    >
+                      {card.buttonText}
+                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
               </motion.div>
             ))}
