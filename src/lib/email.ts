@@ -530,13 +530,13 @@ class EmailService {
         return { verified: false, domains: [], errors };
       }
 
-      const domains = result.data || [];
+      const domainsData = result.data?.data || [];
       const fromDomain = this.config.fromEmail.split('@')[1];
-      const domainInfo = domains.find(d => d.name === fromDomain);
-      
+      const domainInfo = domainsData.find((d: { name: string; status: string }) => d.name === fromDomain);
+
       return {
         verified: domainInfo ? domainInfo.status === 'verified' : false,
-        domains: domains.map(d => ({ name: d.name, status: d.status })),
+        domains: domainsData.map((d: { name: string; status: string }) => ({ name: d.name, status: d.status })),
         errors,
       };
     } catch (error) {
