@@ -534,13 +534,13 @@ export default function ContactSection() {
   // Initialize Cal.com embed (EU instance)
   useEffect(() => {
     (async function () {
-      const cal = await getCalApi({ namespace: "discovery", origin: "https://app.cal.eu" });
+      const cal = await getCalApi({ namespace: "discovery" });
       cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
     })();
   }, []);
 
   const openCalModal = useCallback(async () => {
-    const cal = await getCalApi({ namespace: "discovery", origin: "https://app.cal.eu" });
+    const cal = await getCalApi({ namespace: "discovery" });
     cal("modal", {
       calLink: "0usia/discovery",
       calOrigin: "https://app.cal.eu",
