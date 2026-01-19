@@ -457,7 +457,7 @@ export default function VenturesCarousel() {
             </span>
           </h2>
           <p className='text-ovsia-body-xl text-gray-700 font-light max-w-2xl mx-auto px-4'>
-            Ventures we have brought to life
+            Ventures we brought to life
           </p>
         </motion.div>
 

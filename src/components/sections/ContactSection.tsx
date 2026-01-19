@@ -606,7 +606,7 @@ export default function ContactSection() {
               Get in Touch
             </h2>
             <p className="text-ovsia-body-xl text-gray-300 font-light max-w-4xl mx-auto px-4">
-              Ready to explore working together? Choose your preferred way to connect.
+              Ready to explore working together?
             </p>
           </div>
 
@@ -630,7 +630,7 @@ export default function ContactSection() {
                 onClick={() => handleCardAction(card)}
               >
                 <div className="text-center flex flex-col items-center space-y-4 sm:space-y-6">
-                  <h3 className="text-ovsia-body-xl sm:text-ovsia-body-2xl font-cormorant font-bold leading-tight">
+                  <h3 className="text-ovsia-header-sm md:text-ovsia-header-base font-cormorant font-bold tracking-tight leading-tight">
                     {card.title}
                   </h3>
                   <p className="text-ovsia-body-base sm:text-ovsia-body-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[240px] sm:max-w-[280px]">

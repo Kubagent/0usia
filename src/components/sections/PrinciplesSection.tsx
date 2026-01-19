@@ -83,7 +83,7 @@ export default function PrinciplesSection() {
             Principles
           </h2>
           <p className="text-ovsia-body-xl text-black font-light max-w-2xl mx-auto mt-4">
-            The foundation of how we create value
+            The foundation of value
           </p>
         </div>
 
