@@ -13,6 +13,9 @@
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
 
+// Use Edge runtime for Cloudflare Pages compatibility
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { emailService, ContactFormData as EmailFormData } from '@/lib/email';
 import { submitContactForm } from '@/lib/notion';

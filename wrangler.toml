@@ -1,7 +1,9 @@
 # Cloudflare Pages Configuration for Ovsia V4
+# Using @cloudflare/next-on-pages for full Next.js support with API routes
 name = "ovsia-v4"
 compatibility_date = "2024-11-20"
-pages_build_output_dir = "out"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
 
 [env.production]
 name = "ovsia-v4"
@@ -10,18 +12,18 @@ name = "ovsia-v4"
 name = "ovsia-v4-preview"
 
 # Build configuration for Cloudflare Pages dashboard:
-# Framework preset: Next.js (Static HTML Export)
+# Framework preset: Next.js
 # Build command: npm run build:cf
-# Build output directory: out
-# Root directory: (leave empty)
+# Build output directory: .vercel/output/static
 # Root directory: (leave empty)
 
 # Environment variables to be configured in Cloudflare Pages dashboard:
 # NODE_ENV=production
 # RESEND_API_KEY=your_resend_api_key_here
-# RESEND_FROM_EMAIL=noreply@yourdomain.com  
+# RESEND_FROM_EMAIL=noreply@yourdomain.com
 # RESEND_TO_EMAIL=hello@yourdomain.com
-# NOTION_TOKEN=your_notion_token (optional)
+# NOTION_TOKEN=your_notion_token
+# NOTION_CONTACT_DB_ID=your_contact_db_id
 # NOTION_VENTURES_DB_ID=your_ventures_db_id (optional)
 # NOTION_CAPABILITIES_DB_ID=your_capabilities_db_id (optional)
 # NOTION_SITE_COPY_DB_ID=your_site_copy_db_id (optional)
