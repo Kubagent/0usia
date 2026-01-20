@@ -252,7 +252,9 @@ export async function checkNotionConnection(): Promise<{
         try {
           console.log(`Testing database ${key} with ID: ${databaseId}`);
           const dbInfo = await notion.databases.retrieve({ database_id: databaseId });
-          console.log(`Database ${key} is accessible:`, dbInfo.title);
+          // Check if it's a full database response (has title property)
+          const dbTitle = 'title' in dbInfo ? dbInfo.title : 'Unknown';
+          console.log(`Database ${key} is accessible:`, dbTitle);
           result.databases[key as keyof NotionDatabaseConfig] = true;
         } catch (error: any) {
           console.warn(`Database ${key} (${databaseId}) is not accessible:`, {
@@ -300,17 +302,21 @@ export async function testContactFormSubmission(): Promise<{
     // Retrieve database info
     const databaseInfo = await notion.databases.retrieve({ database_id: databaseId });
     
+    // Check if it's a full database response (has title and properties)
+    const dbTitle = 'title' in databaseInfo ? databaseInfo.title : 'Unknown';
+    const dbProperties = 'properties' in databaseInfo ? Object.keys(databaseInfo.properties) : [];
+
     console.log('Contact form database info:', {
-      title: databaseInfo.title,
-      properties: Object.keys(databaseInfo.properties || {}),
+      title: dbTitle,
+      properties: dbProperties,
     });
 
     return {
       success: true,
       databaseId,
       databaseInfo: {
-        title: databaseInfo.title,
-        properties: Object.keys(databaseInfo.properties || {}),
+        title: dbTitle,
+        properties: dbProperties,
       }
     };
 

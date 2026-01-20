@@ -518,3 +518,77 @@ export function createRateLimitKey(ip: string, email?: string): string {
 export function validateHoneypot(honeypotValue: string): boolean {
   return !honeypotValue || honeypotValue.trim() === '';
 }
+
+/**
+ * File signature (magic number) definitions for server-side validation
+ * These are the first bytes of each file type that identify the format
+ */
+const FILE_SIGNATURES: Record<string, number[][]> = {
+  // PDF: %PDF
+  'application/pdf': [[0x25, 0x50, 0x44, 0x46]],
+  // JPEG: FFD8FF
+  'image/jpeg': [[0xFF, 0xD8, 0xFF]],
+  // PNG: 89504E47
+  'image/png': [[0x89, 0x50, 0x4E, 0x47]],
+  // GIF: GIF87a or GIF89a
+  'image/gif': [[0x47, 0x49, 0x46, 0x38, 0x37, 0x61], [0x47, 0x49, 0x46, 0x38, 0x39, 0x61]],
+  // WebP: RIFF....WEBP
+  'image/webp': [[0x52, 0x49, 0x46, 0x46]], // First 4 bytes of RIFF container
+  // DOC (old format): D0CF11E0
+  'application/msword': [[0xD0, 0xCF, 0x11, 0xE0]],
+  // DOCX (ZIP-based): PK (504B0304)
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [[0x50, 0x4B, 0x03, 0x04]],
+  // Plain text: No specific signature, allow any
+  'text/plain': [],
+};
+
+/**
+ * Validate file signature (magic numbers) against claimed content type
+ * This provides server-side security to prevent MIME type spoofing
+ *
+ * @param base64Content - Base64 encoded file content
+ * @param claimedContentType - The MIME type claimed by the client
+ * @returns boolean - true if signature matches or type has no signature check
+ */
+export function validateFileSignature(base64Content: string, claimedContentType: string): boolean {
+  // If content type is not in our list, reject it (not an allowed type)
+  if (!(claimedContentType in FILE_SIGNATURES)) {
+    return false;
+  }
+
+  const signatures = FILE_SIGNATURES[claimedContentType];
+
+  // Text files have no specific signature, allow them
+  if (signatures.length === 0) {
+    return true;
+  }
+
+  try {
+    // Decode base64 to get the first bytes
+    // We only need to check the first few bytes for the signature
+    const binaryString = atob(base64Content.slice(0, 100)); // Only decode first 100 base64 chars
+    const bytes: number[] = [];
+
+    for (let i = 0; i < Math.min(binaryString.length, 20); i++) {
+      bytes.push(binaryString.charCodeAt(i));
+    }
+
+    // Check if any of the valid signatures match
+    return signatures.some((signature) => {
+      if (bytes.length < signature.length) {
+        return false;
+      }
+
+      for (let i = 0; i < signature.length; i++) {
+        if (bytes[i] !== signature[i]) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  } catch {
+    // If base64 decoding fails, the content is invalid
+    return false;
+  }
+}
