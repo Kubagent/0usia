@@ -27,7 +27,7 @@ interface RateLimitStore {
 // In-memory store for development
 class MemoryStore implements RateLimitStore {
   private store = new Map<string, { value: number; expires: number }>();
-  private cleanupInterval: NodeJS.Timeout;
+  private cleanupInterval: ReturnType<typeof setInterval>;
 
   constructor() {
     // Cleanup expired entries every minute
@@ -367,21 +367,35 @@ export async function cleanupRateLimit(): Promise<void> {
 }
 
 /**
+ * Hash a string using Web Crypto API (Edge runtime compatible)
+ */
+async function hashString(str: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/**
  * Log rate limit events (GDPR compliant - no personal data)
  */
-export function logRateLimitEvent(
+export async function logRateLimitEvent(
   event: 'hit' | 'exceeded',
   endpoint: string,
   ip: string,
   userAgent?: string
-): void {
-  // Hash IP for privacy (server-side only)
+): Promise<void> {
+  // Hash IP for privacy using Web Crypto API
   let hashedIP = 'unknown';
-  if (typeof window === 'undefined') {
-    const crypto = require('crypto');
-    hashedIP = crypto.createHash('sha256').update(ip).digest('hex').substring(0, 8);
+  try {
+    const fullHash = await hashString(ip);
+    hashedIP = fullHash.substring(0, 8);
+  } catch {
+    // Fallback if crypto not available
+    hashedIP = 'unavailable';
   }
-  
+
   const logData = {
     timestamp: new Date().toISOString(),
     event,
