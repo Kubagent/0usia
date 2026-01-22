@@ -346,7 +346,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3
-                          className="text-ovsia-body-base font-cormorant font-bold tracking-tight text-black mb-2 pr-8"
+                          className="text-ovsia-body-lg font-cormorant font-bold tracking-tight text-black mb-2 pr-8"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 }}
@@ -355,7 +355,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
 
                         <motion.p
-                          className="text-xs text-gray-700 font-light mb-3 leading-relaxed"
+                          className="text-sm text-gray-700 font-light mb-3 leading-relaxed"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.15 }}
@@ -377,8 +377,8 @@ export default function ExpertiseShowcase() {
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
-                              <span className="w-1 h-1 bg-black rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
-                              <span className="text-xs text-gray-600 font-light leading-relaxed">{detail}</span>
+                              <span className="w-1 h-1 bg-black rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                              <span className="text-sm text-gray-600 font-light leading-relaxed">{detail}</span>
                             </motion.div>
                           ))}
                         </motion.div>

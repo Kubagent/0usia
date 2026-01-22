@@ -4,7 +4,7 @@
 import { principlesData } from '@/data/principles';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Helper function to convert polar coordinates to cartesian
 const polarToCartesian = (
@@ -62,14 +62,6 @@ export default function PrinciplesSection() {
   const closeModal = () => {
     setClickedQuadrant(null);
   };
-
-  // Auto-dismiss modal after 5 seconds
-  useEffect(() => {
-    if (clickedQuadrant) {
-      const timer = setTimeout(() => closeModal(), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [clickedQuadrant]);
 
   return (
     <section
@@ -250,13 +242,13 @@ export default function PrinciplesSection() {
                   <path d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <div className="text-xs font-cormorant font-light text-gray-500 mb-1.5 uppercase tracking-wide">
+              <div className="text-sm font-cormorant font-light text-gray-500 mb-1.5 uppercase tracking-wide">
                 {clickedPrinciple.label}
               </div>
-              <h3 className="text-ovsia-body-base font-cormorant tracking-tight text-black mb-2">
+              <h3 className="text-ovsia-body-lg font-cormorant font-bold tracking-tight text-black mb-2">
                 {clickedPrinciple.title}
               </h3>
-              <p className="text-xs text-black font-light mb-3 leading-relaxed">
+              <p className="text-sm text-black font-light mb-3 leading-relaxed">
                 {clickedPrinciple.description}
               </p>
               {clickedPrinciple.image && (
@@ -272,20 +264,20 @@ export default function PrinciplesSection() {
                 <>
                   <ul className="text-left space-y-1 pl-4">
                     {clickedPrinciple.details.slice(0, -1).map((detail, index) => (
-                      <li key={index} className="text-xs text-black font-light leading-snug flex">
+                      <li key={index} className="text-sm text-black font-light leading-snug flex">
                         <span className="mr-1.5">•</span>
                         <span>{detail}</span>
                       </li>
                     ))}
                   </ul>
-                  <p className="text-xs text-black font-light leading-relaxed mt-3 text-center">
+                  <p className="text-sm text-black font-light leading-relaxed mt-3 text-center">
                     {clickedPrinciple.details[clickedPrinciple.details.length - 1]}
                   </p>
                 </>
               ) : (
                 <div className="space-y-1.5">
                   {clickedPrinciple.details.map((detail, index) => (
-                    <p key={index} className="text-xs text-black font-light leading-relaxed">
+                    <p key={index} className="text-sm text-black font-light leading-relaxed">
                       {detail}
                     </p>
                   ))}
