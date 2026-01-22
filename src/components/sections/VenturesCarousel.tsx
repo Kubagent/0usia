@@ -446,7 +446,7 @@ export default function VenturesCarousel() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className='text-ovsia-header-lg sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-2 sm:mb-4'>
+          <h2 className='text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-3xl font-cormorant tracking-tight text-black mb-2 sm:mb-4'>
             Proof of{' '}
             <span className='relative inline-block'>
               <span className='relative inline-block'>

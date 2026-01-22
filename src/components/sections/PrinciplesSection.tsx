@@ -79,7 +79,7 @@ export default function PrinciplesSection() {
       {/* Main content container - positioned relative for overlay */}
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-ovsia-header-4xl font-cormorant tracking-tight text-black">
+          <h2 className="text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-4xl font-cormorant tracking-tight text-black">
             Principles
           </h2>
           <p className="text-ovsia-body-xl text-black font-light max-w-2xl mx-auto mt-4">
@@ -118,7 +118,7 @@ export default function PrinciplesSection() {
                         className="transition-colors duration-300 cursor-pointer"
                         onMouseEnter={() => canHover && setHoveredQuadrant(quadrant.id)}
                         onClick={() => {
-                          if (quadrant.id === 'who') {
+                          if (quadrant.id === 'who' && !isMobile) {
                             window.open('https://www.linkedin.com/in/jm-wojcik/', '_blank');
                           } else if (!canHover || isMobile) {
                             setClickedQuadrant(quadrant.id);
@@ -250,13 +250,13 @@ export default function PrinciplesSection() {
                   <path d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <div className="text-ovsia-body-xl font-cormorant font-light text-gray-500 mb-2 uppercase tracking-wide">
+              <div className="text-xs font-cormorant font-light text-gray-500 mb-1.5 uppercase tracking-wide">
                 {clickedPrinciple.label}
               </div>
-              <h3 className="text-ovsia-header-lg font-cormorant tracking-tight text-black mb-3">
+              <h3 className="text-ovsia-body-base font-cormorant tracking-tight text-black mb-2">
                 {clickedPrinciple.title}
               </h3>
-              <p className="text-ovsia-body-xl text-black font-light mb-4 leading-relaxed">
+              <p className="text-xs text-black font-light mb-3 leading-relaxed">
                 {clickedPrinciple.description}
               </p>
               {clickedPrinciple.image && (
@@ -270,22 +270,22 @@ export default function PrinciplesSection() {
               )}
               {clickedPrinciple.id === 'how' ? (
                 <>
-                  <ul className="text-left space-y-1 pl-6">
+                  <ul className="text-left space-y-1 pl-4">
                     {clickedPrinciple.details.slice(0, -1).map((detail, index) => (
-                      <li key={index} className="text-ovsia-body-xl text-black font-light leading-snug flex">
-                        <span className="mr-2">•</span>
+                      <li key={index} className="text-xs text-black font-light leading-snug flex">
+                        <span className="mr-1.5">•</span>
                         <span>{detail}</span>
                       </li>
                     ))}
                   </ul>
-                  <p className="text-ovsia-body-xl text-black font-light leading-relaxed mt-4 text-center">
+                  <p className="text-xs text-black font-light leading-relaxed mt-3 text-center">
                     {clickedPrinciple.details[clickedPrinciple.details.length - 1]}
                   </p>
                 </>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {clickedPrinciple.details.map((detail, index) => (
-                    <p key={index} className="text-ovsia-body-xl text-black font-light leading-relaxed">
+                    <p key={index} className="text-xs text-black font-light leading-relaxed">
                       {detail}
                     </p>
                   ))}

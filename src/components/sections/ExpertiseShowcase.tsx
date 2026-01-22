@@ -132,7 +132,7 @@ export default function ExpertiseShowcase() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Title - Minimal */}
         <div className="text-center mb-12 md:mb-16 lg:mb-20">
-          <h2 className="text-ovsia-header-4xl font-cormorant tracking-tight text-white mb-4">
+          <h2 className="text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-4xl font-cormorant tracking-tight text-white mb-4">
             Expertise
           </h2>
           <p className="text-ovsia-body-xl text-white font-light max-w-2xl mx-auto">
@@ -175,7 +175,7 @@ export default function ExpertiseShowcase() {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <h3 className="text-ovsia-header-sm md:text-ovsia-header-base font-cormorant font-bold tracking-tight text-black leading-snug whitespace-pre-line">
+                  <h3 className="text-ovsia-body-2xl md:text-ovsia-header-base font-cormorant font-bold tracking-tight text-black leading-snug whitespace-pre-line">
                     {card.title}
                   </h3>
                 </motion.div>
@@ -290,7 +290,7 @@ export default function ExpertiseShowcase() {
                     relative
                     bg-white
                     rounded-2xl
-                    w-full max-w-sm
+                    w-full max-w-lg
                     p-6
                     border-2 border-gray-200
                     shadow-2xl
@@ -346,7 +346,7 @@ export default function ExpertiseShowcase() {
                     return (
                       <>
                         <motion.h3
-                          className="text-ovsia-header-sm font-cormorant font-bold tracking-tight text-black mb-3 pr-8"
+                          className="text-ovsia-body-base font-cormorant font-bold tracking-tight text-black mb-2 pr-8"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 }}
@@ -355,7 +355,7 @@ export default function ExpertiseShowcase() {
                         </motion.h3>
 
                         <motion.p
-                          className="text-ovsia-body-xl text-gray-700 font-light mb-4 leading-relaxed"
+                          className="text-xs text-gray-700 font-light mb-3 leading-relaxed"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.15 }}
@@ -364,7 +364,7 @@ export default function ExpertiseShowcase() {
                         </motion.p>
 
                         <motion.div
-                          className="space-y-2"
+                          className="space-y-1.5"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.2 }}
@@ -377,8 +377,8 @@ export default function ExpertiseShowcase() {
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.25 + idx * 0.05 }}
                             >
-                              <span className="w-1.5 h-1.5 bg-black rounded-full mt-2.5 mr-3 flex-shrink-0"></span>
-                              <span className="text-ovsia-body-xl text-gray-600 font-light leading-relaxed">{detail}</span>
+                              <span className="w-1 h-1 bg-black rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                              <span className="text-xs text-gray-600 font-light leading-relaxed">{detail}</span>
                             </motion.div>
                           ))}
                         </motion.div>

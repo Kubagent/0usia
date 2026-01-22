@@ -122,6 +122,7 @@ module.exports = {
         'ovsia-header-sm': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
         'ovsia-header-base': ['2.25rem', { lineHeight: '2.5rem' }], // 36px
         'ovsia-header-lg': ['2.5rem', { lineHeight: '3rem' }], // 40px
+        'ovsia-header-lg-plus': ['3.125rem', { lineHeight: '3.625rem' }], // 50px
         'ovsia-header-xl': ['3rem', { lineHeight: '3.5rem' }], // 48px
         'ovsia-header-2xl': ['3.5rem', { lineHeight: '4rem' }], // 56px
         'ovsia-header-3xl': ['4rem', { lineHeight: '4.5rem' }], // 64px

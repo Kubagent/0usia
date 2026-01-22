@@ -602,11 +602,11 @@ export default function ContactSection() {
         <div className="w-full max-w-7xl mx-auto px-4">
           {/* Section Title */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h2 className="text-ovsia-header-4xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
+            <h2 className="text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-4xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
               Get in Touch
             </h2>
             <p className="text-ovsia-body-xl text-gray-300 font-light max-w-4xl mx-auto px-4">
-              Ready to explore working together?
+              Ready to create together?
             </p>
           </div>
 
