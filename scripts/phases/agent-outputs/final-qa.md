@@ -1,1 +1,0 @@
-This would be Claude's response after processing the task with code-reviewer's expertise.

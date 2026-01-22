@@ -2,7 +2,6 @@
 
 import { Hero, Footer, PrinciplesSection, ExpertiseShowcase, VenturesCarousel, ContactSection } from '@/components/sections';
 import RotatingWordAnimation from '@/components/RotatingWordAnimation';
-import OptimizedScrollContainer from '@/components/OptimizedScrollContainer';
 import { ImagePreloader } from '@/components/ImagePreloader';
 import type { SiteContent } from '@/types/notion';
 import { transformSiteContentForComponents, createFallbackTransformation } from '@/lib/content-transformers';

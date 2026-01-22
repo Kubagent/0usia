@@ -1,15 +1,15 @@
-# Cloudflare Pages Configuration for Ovsia V4
+# Cloudflare Pages Configuration for 0usia v1.5
 # Using @cloudflare/next-on-pages for full Next.js support with API routes
-name = "ovsia-v4"
+name = "0usia"
 compatibility_date = "2024-11-20"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".vercel/output/static"
 
 [env.production]
-name = "ovsia-v4"
+name = "0usia"
 
 [env.preview]
-name = "ovsia-v4-preview"
+name = "0usia-preview"
 
 # Build configuration for Cloudflare Pages dashboard:
 # Framework preset: Next.js

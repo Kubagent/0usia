@@ -40,24 +40,14 @@ export default function Hero() {
   );
 
   useEffect(() => {
-    console.log('Hero mounted - V3 implementation restored');
-
-    const unsubscribe = scrollYProgress.on('change', value => {
-      console.log('Hero scroll progress:', value);
-      console.log('Background color should be:', value <= 0.4 ? `transitioning (${(value/0.4*100).toFixed(1)}%)` : 'black');
-      console.log('Spring progress:', springProgress.get());
-      console.log('BgColor:', bgColor.get());
-    });
-
     if (willChange.ref.current) {
       willChange.startAnimation();
     }
-    
+
     return () => {
       willChange.endAnimation();
-      unsubscribe();
     };
-  }, [willChange, scrollYProgress]);
+  }, [willChange]);
 
   return (
     <motion.section
