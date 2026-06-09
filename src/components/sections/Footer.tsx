@@ -177,7 +177,7 @@ const Footer: React.FC<FooterProps> = ({ className = '', dark = false }) => {
             viewport={{ once: true }}
           >
             <motion.h2
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11rem] 3xl:text-[12rem] font-cormorant tracking-wide leading-tight text-center relative"
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[11rem] 3xl:text-[12rem] font-cormorant tracking-wide leading-none sm:leading-tight text-center relative"
               animate={{ 
                 opacity: [1, 0.7, 1] 
               }}

@@ -500,7 +500,7 @@ export default function VenturesCarousel({
             <button
               onClick={handlePrev}
               onTouchEnd={handlePrev}
-              className='fixed-nav-button left-2 sm:left-4 md:-left-12 top-1/2 z-10 text-gray-600 hover:text-black transition-colors duration-200 p-3 md:p-2 bg-gray-100 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
+              className='fixed-nav-button left-2 sm:left-4 md:-left-12 top-[88px] sm:top-1/2 z-10 text-gray-600 hover:text-black transition-colors duration-200 p-3 md:p-2 bg-gray-100 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
               style={{
                 position: 'absolute',
                 transform: 'translateY(-50%)',
@@ -529,7 +529,7 @@ export default function VenturesCarousel({
             <button
               onClick={handleNext}
               onTouchEnd={handleNext}
-              className='fixed-nav-button right-2 sm:right-4 md:-right-12 top-1/2 z-10 text-gray-600 hover:text-black transition-colors duration-200 p-3 md:p-2 bg-gray-100 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
+              className='fixed-nav-button right-2 sm:right-4 md:-right-12 top-[88px] sm:top-1/2 z-10 text-gray-600 hover:text-black transition-colors duration-200 p-3 md:p-2 bg-gray-100 md:bg-transparent rounded-full md:rounded-none touch-manipulation'
               style={{
                 position: 'absolute',
                 transform: 'translateY(-50%)',
@@ -618,7 +618,7 @@ export default function VenturesCarousel({
                 <div className='relative'>
                   {/* Logo Container with clipPath */}
                   <div
-                    className='w-28 h-28 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 aspect-square mx-auto mb-3 sm:mb-8 flex items-center justify-center transition-all duration-300 p-3 sm:p-6 md:p-8 lg:p-10 relative shadow-lg transform group-hover:scale-105 overflow-hidden'
+                    className='w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 aspect-square mx-auto mb-3 sm:mb-8 flex items-center justify-center transition-all duration-300 p-4 sm:p-6 md:p-8 lg:p-10 relative shadow-lg transform group-hover:scale-105 overflow-hidden'
                     style={{
                       clipPath:
                         'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)',
@@ -807,7 +807,7 @@ export default function VenturesCarousel({
 
             {/* Progress Indicators - Updated for white background */}
             <motion.div
-              className='flex justify-center space-x-2 mt-4 md:mt-8'
+              className='flex justify-center space-x-1.5 sm:space-x-2 mt-4 md:mt-8'
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -829,7 +829,7 @@ export default function VenturesCarousel({
                     e.stopPropagation();
                     setCurrentIndex(index);
                   }}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 touch-manipulation ${
+                  className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 touch-manipulation ${
                     index === currentIndex
                       ? 'bg-black'
                       : 'bg-gray-300 hover:bg-gray-500'

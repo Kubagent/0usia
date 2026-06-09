@@ -243,15 +243,9 @@ function MobileGrid({ onActivate }: { onActivate: (id: string) => void }) {
     <div className="relative flex flex-col items-stretch w-full">
       {/* Vertical connecting line — sits at the true horizontal center */}
       <div className="absolute left-1/2 top-3 bottom-3 w-px bg-white/12 -translate-x-1/2 pointer-events-none" />
-      {domains.map((d, i) => (
-        <button
-          key={d.id}
-          className="relative flex items-center py-6 w-full"
-          onClick={() => onActivate(d.id)}
-        >
-          {/* Left spacer — mirrors the text side so the dot lands at center */}
-          <div className="flex-1" />
-          {/* Dot — always at horizontal center */}
+      {domains.map((d, i) => {
+        const textRight = i % 2 === 0;
+        const dot = (
           <div className="relative flex items-center justify-center w-3.5 h-3.5 flex-shrink-0">
             <motion.div
               className="absolute inset-0 rounded-full bg-white/20 pointer-events-none"
@@ -260,12 +254,29 @@ function MobileGrid({ onActivate }: { onActivate: (id: string) => void }) {
             />
             <div className="w-3.5 h-3.5 rounded-full bg-white border border-white/30 relative z-10" />
           </div>
-          {/* Text — takes right half, left-aligned off the dot */}
-          <div className="flex-1 pl-5 text-left">
-            <p className="font-cormorant font-light text-white/55 text-base tracking-widest">{d.name}</p>
-          </div>
-        </button>
-      ))}
+        );
+        return (
+          <button key={d.id} className="relative flex items-center py-6 w-full" onClick={() => onActivate(d.id)}>
+            {textRight ? (
+              <>
+                <div className="flex-1" />
+                {dot}
+                <div className="flex-1 pl-5 text-left">
+                  <p className="font-cormorant font-light text-white/55 text-base tracking-widest">{d.name}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex-1 pr-5 text-right">
+                  <p className="font-cormorant font-light text-white/55 text-base tracking-widest">{d.name}</p>
+                </div>
+                {dot}
+                <div className="flex-1" />
+              </>
+            )}
+          </button>
+        );
+      })}
     </div>
   );
 }
