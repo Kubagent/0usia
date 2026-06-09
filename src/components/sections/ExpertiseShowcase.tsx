@@ -1,396 +1,419 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { getCalApi } from '@calcom/embed-react';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
 
-/**
- * ExpertiseShowcase - Interactive Hover Animation Component
- * 
- * Features seamless hover overlay animations with detailed information
- */
-
-interface ExpertiseCard {
+interface ExpertiseDomain {
   id: string;
-  title: string;
-  overlayTitle: string;
+  name: string;
+  hook: string;
   description: string;
-  details: string[];
+  deliverables: string[];
 }
 
-const expertiseData: ExpertiseCard[] = [
+const domains: ExpertiseDomain[] = [
   {
-    id: 'innovative-strategy',
-    title: 'Innovative\nStrategy',
-    overlayTitle: 'Turn vision into a product people need.',
-    description: "We translate first principles into an executable thesis: what you're building, for whom, why it wins, and what must be true for it to work.",
-    details: [
-      'Strategic positioning & differentiation',
-      'Phased roadmap: scope, team, timeline, milestones, risks',
-      'User journeys, UX flows, prototyping',
-      'KPI model, and validation plan – what to measure and why'
-    ]
+    id: 'strategy',
+    name: 'Strategy',
+    hook: 'Clarity precedes all movement.',
+    description:
+      'Before strategy, there is the determination of truth: present and envisioned. We establish the foundational thesis of your undertaking — what you are creating, for whom, and the precise conditions under which you win.',
+    deliverables: [
+      'Strategic positioning',
+      'Business model design',
+      'Roadmap & KPI framework',
+    ],
   },
   {
-    id: 'brand-narrative',
-    title: 'Brand &\nNarrative',
-    overlayTitle: 'Make your business legible—internally and externally.',
-    description: 'We build the conceptual scaffolding that makes your product inevitable to the right audience: what you stand for, and how you speak with consistency at each contact.',
-    details: [
-      'Brand philosophy, virtues, and narrative',
-      'Messaging system, content architecture, voice & tone guide',
-      'Landing page, pitch copy (web, deck, outreach)',
-      'Film and photography direction & production'
-    ]
+    id: 'communication',
+    name: 'Communication',
+    hook: 'Present your truth thoroughly.',
+    description:
+      'Re-presentation to others is finding the exact form in which your venture\'s truth becomes visible to its new community. We build the conceptual scaffolding: your virtues, your story, how you communicate it to the world, and whom it targets.',
+    deliverables: [
+      'Brand philosophy & book',
+      'Voice, tone & messaging',
+      'Copy, film & photography',
+    ],
   },
   {
-    id: 'user-experiences',
-    title: 'Unique User\nExperiences',
-    overlayTitle: 'Convey your truth convincingly.',
-    description: 'We design interfaces that feel inevitable: minimal where it should be, expressive where it must be. The result is clarity engineered into experience.',
-    details: [
-      'UX architecture (full system wire-framing)',
-      'UI kit, design system foundations',
-      'Complete visual implementations (web and mobile)'
-    ]
+    id: 'community',
+    name: 'Community',
+    hook: 'From your team to your world.',
+    description:
+      'An organisation is as coherent as its people are connected — those inside it and those it is built for. We shape the conditions under which teams align, audiences gather, and joy is shared.',
+    deliverables: [
+      'Founder & team analysis',
+      'Decision framework',
+      'Community-led GTM',
+    ],
   },
   {
-    id: 'go-to-market',
-    title: 'Go-to-\nMarket',
-    overlayTitle: 'Distribution is part of the product.',
-    description: 'We help you earn traction through disciplined learning cycles: sharpen the offer, test channels, and build repeatable growth loops.',
-    details: [
-      'Customer profiling, buyer/user segmentation, offer design',
-      'Channel experiments, growth hack & testing framework',
-      'Campaign plan & creative direction',
-      'Measurement and feedback system to guide iteration'
-    ]
+    id: 'operations',
+    name: 'Operations',
+    hook: 'Build a system that flows.',
+    description:
+      'Before we build anything, we understand your establihsed practices, your present needs and will toward the future. Then we design something better: a system that automates intelligently, scales your business, and is built to be enjoyed.',
+    deliverables: [
+      'Process audit & design',
+      'Systems & automation',
+      'Workflow architecture',
+    ],
   },
   {
-    id: 'team-dynamics',
-    title: 'Team\nDynamics',
-    overlayTitle: 'Upgrade collaboration, not just output.',
-    description: "Your team is the most valuable asset. We help you shape it, diagnose what's blocking momentum, then implement structures that increase velocity.",
-    details: [
-      'Founder matchmaking, character analysis & coaching',
-      'Team diagnostic — friction, roles, incentives, decision latency',
-      'Decision framework — who decides what, how, and when',
-      'Feedback practices and escalation pathways'
-    ]
+    id: 'function',
+    name: 'Function',
+    hook: 'Innovate your essence.',
+    description:
+      'What and how you are may change. We help you innovate. \n We develop the features, moves, and evolution that expand your reach, deepen your presence and leave the right footprint on the communities you belong to.',
+    deliverables: [
+      'Product strategy & roadmap',
+      'UX & UI design system',
+      'Feature development',
+    ],
   },
-  {
-    id: 'process-architecture',
-    title: 'Process\nArchitecture',
-    overlayTitle: 'Make operations calm, scalable, and visible.',
-    description: 'We map the full operational flow, then eliminate, automate, or standardize—so quality scales without headcount scaling linearly.',
-    details: [
-      'Process maps & standard operating procedures (SOPs)',
-      'System integration plan (tools, APIs, automation)',
-      'eCommerce & marketplace workflow management',
-      'Customer support structure and strategy'
-    ]
-  }
 ];
 
+// Floating content — no circle, no container. Text lives in the open black space.
+// pointer-events-auto overrides parent's pointer-events-none; clicking the background dismisses.
+function DomainContent({
+  domain,
+  onDismiss,
+  onBookCall,
+}: {
+  domain: ExpertiseDomain;
+  onDismiss: () => void;
+  onBookCall: () => void;
+}) {
+  return (
+    <motion.div
+      className="relative flex flex-col items-center text-center max-w-2xl px-8 pointer-events-auto cursor-pointer"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      onClick={onDismiss}
+      onMouseLeave={onDismiss}
+    >
+      {/* Dark radial vignette behind text for legibility against varied backgrounds */}
+      <div
+        className="absolute -inset-x-20 -inset-y-14 pointer-events-none -z-10"
+        style={{ background: 'radial-gradient(ellipse 78% 92% at center, rgba(0,0,0,0.48) 10%, transparent 78%)' }}
+      />
+
+      <motion.p
+        className="font-cormorant font-light text-lg tracking-widest text-white mb-5"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.85 }}
+        transition={{ duration: 0.5, delay: 1.0 }}
+      >
+        {domain.name}
+      </motion.p>
+
+      <motion.h3
+        className="text-4xl md:text-5xl font-cormorant italic text-white leading-snug mb-6"
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.06, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        {domain.hook}
+      </motion.h3>
+
+      <motion.div
+        className="h-px bg-white/25 mb-6"
+        initial={{ width: 0 }}
+        animate={{ width: 48 }}
+        transition={{ duration: 0.45, delay: 0.16, ease: 'easeOut' }}
+      />
+
+      <motion.p
+        className="text-base font-light text-white/70 leading-relaxed mb-8 max-w-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.24 }}
+      >
+        {domain.description}
+      </motion.p>
+
+      {/* Deliverables as clickable action panels — 3 columns keeps vertical height low */}
+      <motion.div
+        className="grid grid-cols-3 gap-1.5 w-full max-w-xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.34 }}
+      >
+        {domain.deliverables.map((item, i) => (
+          <motion.button
+            key={i}
+            className="group flex items-center justify-center px-3 py-2.5 text-center border border-white/15 rounded-sm hover:border-white/35 hover:bg-white/[0.05] transition-all duration-200 cursor-pointer"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.28, delay: 0.38 + i * 0.055 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onBookCall();
+            }}
+          >
+            <span className="text-xs font-light text-white/60 group-hover:text-white/85 transition-colors duration-200 leading-none whitespace-nowrap">
+              {item}
+            </span>
+          </motion.button>
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function DotTrack({
+  activeDomain,
+  onActivate,
+  canHover,
+}: {
+  activeDomain: string | null;
+  onActivate: (id: string | null) => void;
+  canHover: boolean;
+}) {
+  return (
+    // grid-cols-5 gives each domain an equal column — the full column width is the hover zone,
+    // so moving across the track smoothly switches domains even when content is already expanded.
+    <div className="relative grid grid-cols-5 w-full max-w-[50.4rem] mx-auto pointer-events-auto">
+      <div className="absolute top-2 left-0 right-0 h-px bg-white/12 pointer-events-none" />
+
+      {domains.map((domain, index) => (
+        <div
+          key={domain.id}
+          className="flex flex-col items-center py-2 cursor-pointer"
+          onMouseEnter={() => canHover && onActivate(domain.id)}
+        >
+          {/* Dot + rings wrapper */}
+          <div className="relative w-4 h-4 flex items-center justify-center">
+            {/* Idle pulse ring */}
+            {!activeDomain && (
+              <motion.div
+                className="absolute inset-0 rounded-full bg-white/20 pointer-events-none"
+                animate={{ scale: [1, 2.6, 1], opacity: [0, 0.2, 0] }}
+                transition={{ duration: 4, repeat: Infinity, delay: index * 0.6, ease: 'easeInOut' }}
+              />
+            )}
+
+            {/* One-shot exhale ring: blooms once when this dot becomes active */}
+            {activeDomain === domain.id && (
+              <motion.div
+                className="absolute inset-0 rounded-full border border-white/30 pointer-events-none"
+                initial={{ scale: 1, opacity: 0.5 }}
+                animate={{ scale: 4, opacity: 0 }}
+                transition={{ duration: 0.7, ease: 'easeOut' }}
+              />
+            )}
+
+            <motion.button
+              className="w-4 h-4 rounded-full bg-white border border-white/30 relative z-10"
+              animate={{
+                scale: activeDomain === domain.id ? 0 : activeDomain ? 0.65 : 1,
+                opacity: activeDomain === domain.id ? 0 : activeDomain ? 0.15 : 1,
+              }}
+              transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+              aria-label={`View ${domain.name} expertise`}
+              style={{ display: 'block' }}
+            />
+          </div>
+
+          <motion.p
+            className="font-cormorant font-light text-lg tracking-widest select-none mt-5 text-white"
+            animate={{
+              opacity: activeDomain === domain.id ? 0 : activeDomain ? 0.12 : 0.85,
+            }}
+            transition={{
+              duration: activeDomain === domain.id ? 0.4 : 0.3,
+              delay: activeDomain === domain.id ? 1.0 : 0,
+            }}
+          >
+            {domain.name}
+          </motion.p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MobileGrid({ onActivate }: { onActivate: (id: string) => void }) {
+  return (
+    <div className="relative flex flex-col items-center">
+      {/* Vertical connecting line */}
+      <div className="absolute left-1/2 top-3 bottom-3 w-px bg-white/12 -translate-x-1/2 pointer-events-none" />
+      {domains.map((d, i) => (
+        <button
+          key={d.id}
+          className="relative flex items-center gap-6 py-7 w-48"
+          onClick={() => onActivate(d.id)}
+        >
+          <div className="relative flex items-center justify-center w-3.5 h-3.5 flex-shrink-0">
+            <motion.div
+              className="absolute inset-0 rounded-full bg-white/20 pointer-events-none"
+              animate={{ scale: [1, 2.4, 1], opacity: [0, 0.18, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: i * 0.6, ease: 'easeInOut' }}
+            />
+            <div className="w-3.5 h-3.5 rounded-full bg-white border border-white/30 relative z-10" />
+          </div>
+          <p className="font-cormorant font-light text-white/55 text-base tracking-widest">{d.name}</p>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function BottomSheet({ domain, onClose }: { domain: ExpertiseDomain; onClose: () => void }) {
+  return (
+    <motion.div
+      className="fixed inset-0 z-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[82vh] overflow-y-auto"
+        initial={{ y: '100%' }}
+        animate={{ y: 0 }}
+        exit={{ y: '100%' }}
+        transition={{ type: 'spring', stiffness: 300, damping: 32 }}
+        drag="y"
+        dragConstraints={{ top: 0 }}
+        dragElastic={{ top: 0.04, bottom: 0.4 }}
+        onDragEnd={(_, info) => {
+          if (info.velocity.y > 400 || info.offset.y > 180) onClose();
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-center pt-4 pb-2">
+          <div className="w-8 h-0.5 rounded-full bg-black/15" />
+        </div>
+        <div className="px-8 pb-12 flex flex-col items-center text-center">
+          <p className="text-xs font-light tracking-[0.25em] text-black/30 uppercase mb-3 mt-2">{domain.name}</p>
+          <h3 className="text-2xl font-cormorant italic text-black leading-snug mb-5 max-w-xs">{domain.hook}</h3>
+          <div className="w-6 h-px bg-black/20 mb-5" />
+          <p className="text-sm font-light text-black/60 leading-relaxed mb-6 max-w-sm">{domain.description}</p>
+          <div className="flex flex-col items-center gap-2 w-full max-w-sm">
+            {domain.deliverables.map((item, i) => (
+              <p key={i} className="text-xs text-black/40 font-light tracking-wide leading-snug">{item}</p>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function ExpertiseShowcase() {
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const [clickedCard, setClickedCard] = useState<string | null>(null);
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [activeDomain, setActiveDomain] = useState<string | null>(null);
+  const [titleInView, setTitleInView] = useState(false);
   const { isMobile, canHover } = useMobileDetection();
+  const activeData = domains.find((d) => d.id === activeDomain) ?? null;
 
-  // Auto-hide overlay on mobile after 3 seconds (only for hover, not click)
+  // Cooldown prevents dot-hover from immediately re-activating after a dismiss.
+  // Without this, moving the cursor down from the content into the dot track fires
+  // both onMouseLeave (dismiss) and onMouseEnter (re-activate) in the same frame,
+  // making it impossible to collapse by moving down or up.
+  const dismissCooldownRef = useRef(false);
+
+  const dismiss = useCallback(() => {
+    setActiveDomain(null);
+    dismissCooldownRef.current = true;
+    setTimeout(() => { dismissCooldownRef.current = false; }, 150);
+  }, []);
+
+  const safeActivate = useCallback((id: string | null) => {
+    if (id !== null && dismissCooldownRef.current) return;
+    setActiveDomain(id);
+  }, []);
+
   useEffect(() => {
-    if (isMobile && hoveredCard && !clickedCard) {
-      const timer = setTimeout(() => {
-        setHoveredCard(null);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isMobile, hoveredCard, clickedCard]);
+    (async () => {
+      const cal = await getCalApi({ namespace: 'discovery' });
+      cal('ui', { hideEventTypeDetails: false, layout: 'month_view' });
+    })();
+  }, []);
 
-  // Handle card click with position tracking
-  const handleCardClick = (cardId: string, event: React.MouseEvent) => {
-    if (isMobile) {
-      event.stopPropagation();
-      const rect = event.currentTarget.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
-      
-      setModalPosition({ x, y });
-      setClickedCard(cardId);
-      setHoveredCard(null); // Clear hover state when clicking
-    }
-  };
-
-  // Handle click outside to close modal
-  const handleBackdropClick = () => {
-    setClickedCard(null);
-  };
+  const openCalModal = useCallback(async () => {
+    const cal = await getCalApi({ namespace: 'discovery' });
+    cal('modal', {
+      calLink: '0usia/discovery',
+      calOrigin: 'https://app.cal.eu',
+      config: { layout: 'month_view' },
+    });
+  }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center py-20">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section Title - Minimal */}
-        <div className="text-center mb-12 md:mb-16 lg:mb-20">
-          <h2 className="text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-4xl font-cormorant tracking-tight text-white mb-4">
-            Expertise
-          </h2>
-          <p className="text-ovsia-body-xl text-white font-light max-w-2xl mx-auto">
-            How we support flourishment
-          </p>
-        </div>
-
-        {/* Cards Grid - With Rectangle Overlay */}
-        <div className="relative">
-          {/* Background Grid - All Cards - 2x3 on mobile, responsive on larger screens */}
-          <motion.div 
-            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 md:gap-12 lg:gap-16 max-w-7xl mx-auto"
-            animate={{ 
-              opacity: (hoveredCard || clickedCard) ? 0.2 : 1,
-              scale: (hoveredCard || clickedCard) ? 0.95 : 1 
-            }}
-            transition={{ duration: 0.4 }}
+    <section
+      className="relative min-h-screen flex flex-col items-center justify-center py-20 overflow-hidden"
+      onMouseLeave={dismiss}
+    >
+      {/* Floating content — desktop. Top is anchored at calc(50vh - 320px) so the content
+          always ends ~48px above the dot track, regardless of viewport height. */}
+      <AnimatePresence>
+        {activeDomain && activeData && !isMobile && (
+          <motion.div
+            key="expertise-content"
+            className="absolute inset-0 z-10 flex items-start justify-center pointer-events-none"
+            style={{ paddingTop: 'max(32px, calc(50vh - 320px))' }}
           >
-            {expertiseData.map((card, index) => (
-              <motion.div
-                key={card.id}
-                className="aspect-square relative cursor-pointer"
-                onHoverStart={() => canHover && !clickedCard && setHoveredCard(card.id)}
-                onHoverEnd={() => canHover && !clickedCard && setHoveredCard(null)}
-                onClick={(e) => handleCardClick(card.id, e)}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <motion.div
-                  className="
-                    w-full h-full
-                    bg-gradient-to-br from-white/90 to-gray-100/80
-                    border-2 border-white/40
-                    flex items-center justify-center text-center p-8
-                    backdrop-blur-sm
-                    shadow-lg shadow-white/10
-                  "
-                  style={{clipPath: 'polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)'}}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <h3 className="text-ovsia-body-2xl md:text-ovsia-header-base font-cormorant font-bold tracking-tight text-black leading-snug whitespace-pre-line">
-                    {card.title}
-                  </h3>
-                </motion.div>
-              </motion.div>
-            ))}
+            <DomainContent key={activeDomain} domain={activeData} onDismiss={dismiss} onBookCall={openCalModal} />
           </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Hover Overlay for Desktop */}
-          <AnimatePresence>
-            {hoveredCard && !isMobile && (
-              <motion.div
-                className="
-                  absolute inset-0 
-                  flex items-center justify-center
-                  pointer-events-none
-                  z-10
-                "
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                onHoverStart={() => setHoveredCard(hoveredCard)}
-                onHoverEnd={() => setHoveredCard(null)}
-              >
-                <motion.div
-                  className="
-                    bg-white/95
-                    backdrop-blur-md
-                    rounded-2xl
-                    w-[96%] max-w-5xl
-                    h-[88%] max-h-[38rem] sm:max-h-[40rem] lg:max-h-[38rem]
-                    flex flex-col items-center justify-center text-center
-                    p-6 sm:p-7 md:p-8 lg:p-10
-                    border-2 border-gray-200
-                    shadow-2xl shadow-black/20
-                    ring-1 ring-gray-300
-                    mx-2 sm:mx-0
-                  "
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.9, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                >
-                  {(() => {
-                    const card = expertiseData.find(c => c.id === hoveredCard);
-                    if (!card) return null;
+      {/* Dismiss zones — sides + top + bottom strip below dots.
+          z-30 so they fire; dot track container is z-40 pointer-events-none so it doesn't
+          block these, while its grid cells (pointer-events-auto) fire above them. */}
+      {activeDomain && !isMobile && (
+        <>
+          <div className="absolute left-0 top-0 bottom-0 w-1/4 z-30 cursor-default" onMouseEnter={dismiss} />
+          <div className="absolute right-0 top-0 bottom-0 w-1/4 z-30 cursor-default" onMouseEnter={dismiss} />
+          <div className="absolute top-0 left-1/4 right-1/4 h-32 z-30 cursor-default" onMouseEnter={dismiss} />
+          <div className="absolute bottom-0 left-1/4 right-1/4 h-16 z-30 cursor-default" onMouseEnter={dismiss} />
+        </>
+      )}
 
-                    return (
-                      <>
-                        <motion.h3
-                          className="text-ovsia-header-sm lg:text-ovsia-header-base font-cormorant font-bold tracking-tight text-black mb-3 lg:mb-4"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.1 }}
-                        >
-                          {card.overlayTitle}
-                        </motion.h3>
+      {/* Title — uses onViewportEnter so animate prop can independently control opacity */}
+      <motion.div
+        className="text-center mb-24 md:mb-32 relative z-0"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{
+          opacity: !titleInView ? 0 : activeDomain ? 0 : 1,
+          y: !titleInView ? 20 : 0,
+        }}
+        transition={{ duration: activeDomain ? 0.3 : 0.6 }}
+        onViewportEnter={() => setTitleInView(true)}
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <h2 className="text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-4xl font-cormorant tracking-tight text-white">
+          Expertise
+        </h2>
+        <p className="text-ovsia-body-xl text-white font-light max-w-2xl mx-auto mt-4">
+          How we support flourishment
+        </p>
+      </motion.div>
 
-                        <motion.p
-                          className="text-ovsia-body-xl text-gray-700 font-light mb-4 lg:mb-5 leading-relaxed max-w-2xl"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.15 }}
-                        >
-                          {card.description}
-                        </motion.p>
-
-                        <motion.div
-                          className="grid grid-cols-1 gap-2 lg:gap-3 text-ovsia-body-xl text-gray-600 font-light"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.2 }}
-                        >
-                          {card.details.slice(0, 4).map((detail, idx) => (
-                            <motion.div
-                              key={idx}
-                              className="flex items-center justify-center"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ delay: 0.25 + idx * 0.05 }}
-                            >
-                              <span className="w-1 h-1 bg-black rounded-full mr-2 flex-shrink-0"></span>
-                              <span>{detail}</span>
-                            </motion.div>
-                          ))}
-                        </motion.div>
-                      </>
-                    );
-                  })()}
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Mobile Click Modal */}
-          <AnimatePresence>
-            {clickedCard && isMobile && (
-              <motion.div
-                className="fixed inset-0 z-50 flex items-center justify-center p-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                onClick={handleBackdropClick}
-              >
-                {/* Backdrop */}
-                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-                
-                {/* Modal Content */}
-                <motion.div
-                  className="
-                    relative
-                    bg-white
-                    rounded-2xl
-                    w-full max-w-lg
-                    p-6
-                    border-2 border-gray-200
-                    shadow-2xl
-                    mx-4
-                  "
-                  initial={{
-                    scale: 0.8,
-                    opacity: 0,
-                    x: modalPosition.x - window.innerWidth / 2,
-                    y: modalPosition.y - window.innerHeight / 2
-                  }}
-                  animate={{
-                    scale: 1,
-                    opacity: 1,
-                    x: 0,
-                    y: 0
-                  }}
-                  exit={{
-                    scale: 0.8,
-                    opacity: 0,
-                    x: modalPosition.x - window.innerWidth / 2,
-                    y: modalPosition.y - window.innerHeight / 2
-                  }}
-                  transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {/* Close Button */}
-                  <button
-                    onClick={handleBackdropClick}
-                    className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
-                    aria-label="Close modal"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-
-                  {(() => {
-                    const card = expertiseData.find(c => c.id === clickedCard);
-                    if (!card) return null;
-
-                    return (
-                      <>
-                        <motion.h3
-                          className="text-ovsia-body-lg font-cormorant font-bold tracking-tight text-black mb-2 pr-8"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.1 }}
-                        >
-                          {card.overlayTitle}
-                        </motion.h3>
-
-                        <motion.p
-                          className="text-sm text-gray-700 font-light mb-3 leading-relaxed"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.15 }}
-                        >
-                          {card.description}
-                        </motion.p>
-
-                        <motion.div
-                          className="space-y-1.5"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 }}
-                        >
-                          {card.details.map((detail, idx) => (
-                            <motion.div
-                              key={idx}
-                              className="flex items-start"
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.25 + idx * 0.05 }}
-                            >
-                              <span className="w-1 h-1 bg-black rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                              <span className="text-sm text-gray-600 font-light leading-relaxed">{detail}</span>
-                            </motion.div>
-                          ))}
-                        </motion.div>
-                      </>
-                    );
-                  })()}
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+      {/* Dot track — z-40 pointer-events-none on the container so it doesn't block side dismiss zones;
+          grid root inside re-enables pointer-events-auto for the actual cells */}
+      <div className="hidden md:block w-full px-20 lg:px-32 relative z-40 pointer-events-none">
+        <DotTrack activeDomain={activeDomain} onActivate={safeActivate} canHover={canHover} />
       </div>
+
+      {/* Mobile grid */}
+      <div className="md:hidden w-full px-8 relative z-20">
+        <MobileGrid onActivate={setActiveDomain} />
+      </div>
+
+      {/* Mobile bottom sheet */}
+      <AnimatePresence>
+        {activeDomain && activeData && isMobile && (
+          <BottomSheet key={`sheet-${activeDomain}`} domain={activeData} onClose={() => setActiveDomain(null)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

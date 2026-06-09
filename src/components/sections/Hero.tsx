@@ -19,23 +19,21 @@ export default function Hero() {
   // Optimized spring for smooth background transition
   const springProgress = createOptimizedSpring(scrollYProgress, 'cinematic');
   
-  // Background fades from white to black with optimized transform
   const bgColor = useTransform(
     springProgress,
-    [0, 0.4], // Complete transition in first 40% of scroll
+    [0, 0.3],
     ["#ffffff", "#000000"]
   );
 
-  // Optimized opacity for logo inversion
   const logoOpacity = createOptimizedOpacityTransform(
     springProgress,
-    [0, 0.2, 0.4],
+    [0, 0.15, 0.3],
     [1, 0.8, 0]
   );
 
   const logoInvertOpacity = createOptimizedOpacityTransform(
     springProgress,
-    [0, 0.2, 0.4],
+    [0, 0.15, 0.3],
     [0, 0.2, 1]
   );
 

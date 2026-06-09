@@ -17,14 +17,12 @@ export const principlesData: PrincipleQuadrant[] = [
   {
     id: 'why',
     label: 'Why',
-    angle: 270, // Top-left quadrant
+    angle: 270,
     title: 'Ousia Means Substance',
-    description: "That which remains when you remove noise, hype, and busyness.",
-    
+    description: 'That which remains when noise, hype, and busyness are removed.\nA distinct thesis, a truthful narrative, operations that compound.',
     details: [
-      "We help creators and their teams build real ventures with a clear thesis, a truthful narrative, and operations that don't collapse under growth.",
-      'We believe the best companies are created from substance: ⨀ to 1.',
-      'We build for long-term compounding—of value, capability, and trust—through innovative technology, sound decisions, and partners who take full responsibility for outcomes. Not by copying the market, but by committing to a distinct point of view and discipled execution.'
+      'From ⨀ to 1: substance before scale, clarity before execution.',
+      'Long-term compounding of value, capability, and trust — nothing less.',
     ],
     color: {
       base: '#f9fafb',
@@ -35,13 +33,12 @@ export const principlesData: PrincipleQuadrant[] = [
   {
     id: 'what',
     label: 'What',
-    angle: 0, // Top-right quadrant
-    title: 'Intersecting Physical & Digital',
-    description: 'We build digital businesses—where commerce, community, and software intersect: marketplaces, eCommerce, SaaS, social platforms, and hybrids.',
+    angle: 0,
+    title: 'Vision, Virtue, Venture',
+    description: 'We are craftsmen of vision, driven by virtues, to create true ventures. From insight to the coherence of its execution, built with good intent, designed for lasting exchange.',
     details: [
-      '1. Equity Partnership: Shared ownership and responsibility for creation.',
-      '2. Your MVP: System with fixed scope, clear timeline–ready to scale.',
-      '3. Ongoing Support: Retainer engagement based on your needs.',
+      'Equity partnership, scoped MVP, or ongoing retainer — structured for your stage.',
+      'The model serves the mission; the structure serves the builder.',
     ],
     color: {
       base: '#f3f4f6',
@@ -52,12 +49,12 @@ export const principlesData: PrincipleQuadrant[] = [
   {
     id: 'who',
     label: 'Who',
-    angle: 180, // Bottom-left quadrant
-    title: 'Interdisciplinary Venture Studio',
-    description: "Strategy, narrative, product, and operations tuned in the same direction. Your company should reflect unison of will, rather than a collection of disconnected efforts.",
+    angle: 180,
+    title: 'Interdisciplinary Vision Studio',
+    description: 'Strategy for actualising vision, communication of identity, community of shared experience, scalable operations, and function that delivers value, held in harmony by Kuba Wójcik.',
     details: [
-      'We partner with entrepreneurs, operators, designers, marketers, and makers to bring businesses of the present to life—grounded in clarity, fairness, and high standards.',
-      'Undertakings are led by Jakub Wójcik, a serial creator, focused on taking visions from principles to people. Every venture is a partnership; every partnership is a new vision of virtue, made operational.',
+      'We partner with entrepreneurs, operators, and creators and artists who build with intention.',
+      'Every venture is a partnership; every partnership is a new vision of virtue.',
     ],
     color: {
       base: '#f9fafb',
@@ -68,17 +65,12 @@ export const principlesData: PrincipleQuadrant[] = [
   {
     id: 'how',
     label: 'How',
-    angle: 90, // Bottom-right quadrant
+    angle: 90,
     title: 'Truth to Thesis to Execution',
-    description: 'We focus on the substance. Our ethos:',
+    description: 'Find the secret. Architect the narrative. Build the Minimum Lovable Product. \nProve distribution. Operationalise & Automate. Scale and share love.',
     details: [
-      'Find the secret: the insight that makes your offer truly distinct',
-      'Architect the narrative: an honest and coherent story for all to follow',
-      'Minimum Lovable Product: fewer features, strong intent, real value',
-      'With integration in mind: the simple and efficient stack that scales',
-      'Prove distribution: GTM loops until the product earns growth',
-      'Operationalise: structured processes reflecting natural rhythms',
-      'We commit to clear decisions, fair collaboration, and craftsmanship-level attention to detail–and we routinely deliver more than required of us. Outcomes matter more than optics.',
+      'Start with love: fewer features, strong intent, real value from the first user.',
+      'Clear decisions, fair collaboration, craftsmanship-level attention to outcomes — always.',
     ],
     color: {
       base: '#f3f4f6',

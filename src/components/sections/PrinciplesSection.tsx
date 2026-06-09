@@ -4,9 +4,8 @@
 import { principlesData } from '@/data/principles';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useRef, useLayoutEffect } from 'react';
 
-// Helper function to convert polar coordinates to cartesian
 const polarToCartesian = (
   centerX: number,
   centerY: number,
@@ -20,7 +19,6 @@ const polarToCartesian = (
   };
 };
 
-// Helper function to create SVG path for a quadrant
 const createQuadrantPath = (
   centerX: number,
   centerY: number,
@@ -40,7 +38,6 @@ const createQuadrantPath = (
   ].join(' ');
 };
 
-// Helper function to get label position
 const getLabelPosition = (angle: number, radius: number) => {
   const labelRadius = radius * 0.6;
   const labelAngle = angle + 45;
@@ -56,34 +53,67 @@ export default function PrinciplesSection() {
   const [clickedQuadrant, setClickedQuadrant] = useState<string | null>(null);
   const { canHover, isMobile } = useMobileDetection();
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [at, setAt] = useState('50% 50%');
+
+  useLayoutEffect(() => {
+    const update = () => {
+      if (!svgRef.current || !sectionRef.current) return;
+      const svgRect = svgRef.current.getBoundingClientRect();
+      const secRect = sectionRef.current.getBoundingClientRect();
+      const x = Math.round(svgRect.left + svgRect.width / 2 - secRect.left);
+      const y = Math.round(svgRect.top + svgRect.height / 2 - secRect.top);
+      setAt(`${x}px ${y}px`);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
   const hoveredPrinciple = principlesData.find((q) => q.id === hoveredQuadrant);
   const clickedPrinciple = principlesData.find((q) => q.id === clickedQuadrant);
+  const closeModal = () => setClickedQuadrant(null);
 
-  const closeModal = () => {
-    setClickedQuadrant(null);
-  };
+  const circleClosed = `circle(0px at ${at})`;
+  const circleOpen = `circle(2000px at ${at})`;
 
   return (
     <section
+      ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center py-20"
-      aria-label="Principles - Interactive quadrant circle"
+      aria-label="Purpose - Interactive quadrant circle"
     >
-      {/* Main content container - positioned relative for overlay */}
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-4xl font-cormorant tracking-tight text-black">
-            Principles
+            Purpose
           </h2>
           <p className="text-ovsia-body-xl text-black font-light max-w-2xl mx-auto mt-4">
             The foundation of value
           </p>
         </div>
 
-        {/* Quadrant Circle Container */}
-        <div
-          className="flex items-center justify-center relative"
-          onMouseLeave={() => canHover && setHoveredQuadrant(null)}
-        >
+        {/* Desktop: circle flanked by side labels; Mobile: circle above 2×2 grid */}
+        <div className="flex flex-col items-center gap-10">
+        <div className="flex flex-row items-center gap-10 lg:gap-20">
+
+          {/* Left column: Why (top) + Who (bottom) — desktop only */}
+          <div className="hidden md:flex flex-col justify-between py-[110px] text-right w-48 lg:w-64 h-[400px] lg:h-[500px]">
+            {(['why', 'who'] as const).map((id) => {
+              const p = principlesData.find((d) => d.id === id)!;
+              return (
+                <div key={id} className="transition-opacity duration-300" style={{ opacity: hoveredQuadrant && hoveredQuadrant !== id ? 0.12 : 1 }}>
+                  <p className="text-lg lg:text-xl font-cormorant italic text-black/70 leading-snug whitespace-nowrap">{p.title}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div
+            className="flex items-center justify-center relative"
+            onMouseLeave={() => canHover && setHoveredQuadrant(null)}
+          >
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
             whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -91,6 +121,7 @@ export default function PrinciplesSection() {
             transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             <svg
+              ref={svgRef}
               viewBox="0 0 400 400"
               className="w-[280px] h-[280px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px]"
             >
@@ -137,86 +168,78 @@ export default function PrinciplesSection() {
           </motion.div>
         </div>
 
-        {/* Desktop Hover Overlay - Static Expanding Circle (positioned relative to section content) */}
-        <AnimatePresence>
-          {hoveredPrinciple && canHover && (
-            <motion.div
-              className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="bg-black border border-white/10 shadow-2xl flex flex-col items-center justify-center p-8 md:p-12 lg:p-16 rounded-full"
-                initial={{
-                  scale: 0.3,
-                  opacity: 0,
-                }}
-                animate={{
-                  scale: 1,
-                  opacity: 1,
-                }}
-                exit={{
-                  scale: 0.3,
-                  opacity: 0,
-                }}
-                transition={{
-                  duration: 0.4,
-                  ease: [0.4, 0, 0.2, 1],
-                }}
-                style={{
-                  width: '880px',
-                  height: '880px',
-                  maxWidth: '90vw',
-                  maxHeight: '90vw',
-                  aspectRatio: '1 / 1',
-                }}
-              >
-                <div className="max-w-3xl text-center overflow-y-auto max-h-full px-8">
-                  <h3 className="text-ovsia-header-lg font-cormorant tracking-tight text-white mb-4">
-                    {hoveredPrinciple.title}
-                  </h3>
-                  <p className="text-ovsia-body-xl text-white font-light mb-4 leading-relaxed">
-                    {hoveredPrinciple.description}
-                  </p>
-                  {hoveredPrinciple.image && (
-                    <img
-                      src={hoveredPrinciple.image}
-                      alt="Jakub - 0usia"
-                      className="w-28 h-28 md:w-36 md:h-36 rounded-full object-cover border-2 border-white/20 shadow-lg mb-6 mx-auto"
-                    />
-                  )}
-                  {hoveredPrinciple.id === 'how' ? (
-                    <>
-                      <ul className="text-left space-y-1 pl-8">
-                        {hoveredPrinciple.details.slice(0, -1).map((detail, index) => (
-                          <li key={index} className="text-ovsia-body-xl text-white font-light leading-snug flex">
-                            <span className="mr-2">•</span>
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <p className="text-ovsia-body-xl text-white font-light leading-relaxed mt-4 text-center">
-                        {hoveredPrinciple.details[hoveredPrinciple.details.length - 1]}
-                      </p>
-                    </>
-                  ) : (
-                    <div className="space-y-2">
-                      {hoveredPrinciple.details.map((detail, index) => (
-                        <p key={index} className="text-ovsia-body-xl text-white font-light leading-relaxed">
-                          {detail}
-                        </p>
-                      ))}
-                    </div>
-                  )}
+          {/* Right column: What (top) + How (bottom) — desktop only */}
+          <div className="hidden md:flex flex-col justify-between py-[110px] text-left w-48 lg:w-64 h-[400px] lg:h-[500px]">
+            {(['what', 'how'] as const).map((id) => {
+              const p = principlesData.find((d) => d.id === id)!;
+              return (
+                <div key={id} className="transition-opacity duration-300" style={{ opacity: hoveredQuadrant && hoveredQuadrant !== id ? 0.12 : 1 }}>
+                  <p className="text-lg lg:text-xl font-cormorant italic text-black/70 leading-snug whitespace-nowrap">{p.title}</p>
                 </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              );
+            })}
+          </div>
+
+        </div>{/* end desktop three-column row */}
+
+
+        </div>{/* end flex-col */}
       </div>
 
-      {/* Mobile Modal */}
+      {/* Desktop iris — on section, expands from measured SVG center */}
+      <AnimatePresence>
+        {hoveredPrinciple && canHover && (
+          <motion.div
+            key={hoveredPrinciple.id}
+            className="absolute inset-0 z-50 bg-black pointer-events-none flex items-center justify-center"
+            initial={{ clipPath: circleClosed }}
+            animate={{ clipPath: circleOpen }}
+            exit={{ clipPath: circleClosed }}
+            transition={{ type: 'spring', stiffness: 200, damping: 28, mass: 0.85 }}
+          >
+            <div className="max-w-[920px] text-center px-8">
+              <motion.h3
+                className="text-ovsia-header-lg font-cormorant tracking-tight text-white mb-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.22 }}
+              >
+                {hoveredPrinciple.title}
+              </motion.h3>
+              <motion.p
+                className="text-ovsia-body-xl text-white font-light mb-4 leading-relaxed whitespace-pre-line"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+              >
+                {hoveredPrinciple.description}
+              </motion.p>
+              {hoveredPrinciple.image && (
+                <img
+                  src={hoveredPrinciple.image}
+                  alt="Jakub - 0usia"
+                  className="w-28 h-28 md:w-36 md:h-36 rounded-full object-cover border-2 border-white/20 shadow-lg mb-6 mx-auto"
+                />
+              )}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.38 }}
+              >
+                <div className="space-y-2">
+                  {hoveredPrinciple.details.map((detail, index) => (
+                    <p key={index} className="text-ovsia-body-xl text-white font-light leading-relaxed">
+                      {detail}
+                    </p>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile modal */}
       <AnimatePresence>
         {clickedPrinciple && (!canHover || isMobile) && (
           <motion.div
@@ -248,7 +271,7 @@ export default function PrinciplesSection() {
               <h3 className="text-ovsia-body-lg font-cormorant font-bold tracking-tight text-black mb-2">
                 {clickedPrinciple.title}
               </h3>
-              <p className="text-sm text-black font-light mb-3 leading-relaxed">
+              <p className="text-sm text-black font-light mb-3 leading-relaxed whitespace-pre-line">
                 {clickedPrinciple.description}
               </p>
               {clickedPrinciple.image && (
@@ -260,29 +283,13 @@ export default function PrinciplesSection() {
                   />
                 </div>
               )}
-              {clickedPrinciple.id === 'how' ? (
-                <>
-                  <ul className="text-left space-y-1 pl-4">
-                    {clickedPrinciple.details.slice(0, -1).map((detail, index) => (
-                      <li key={index} className="text-sm text-black font-light leading-snug flex">
-                        <span className="mr-1.5">•</span>
-                        <span>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="text-sm text-black font-light leading-relaxed mt-3 text-center">
-                    {clickedPrinciple.details[clickedPrinciple.details.length - 1]}
+              <div className="space-y-1.5">
+                {clickedPrinciple.details.map((detail, index) => (
+                  <p key={index} className="text-sm text-black font-light leading-relaxed">
+                    {detail}
                   </p>
-                </>
-              ) : (
-                <div className="space-y-1.5">
-                  {clickedPrinciple.details.map((detail, index) => (
-                    <p key={index} className="text-sm text-black font-light leading-relaxed">
-                      {detail}
-                    </p>
-                  ))}
-                </div>
-              )}
+                ))}
+              </div>
             </motion.div>
           </motion.div>
         )}

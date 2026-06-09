@@ -528,9 +528,10 @@ const ctaCards: CTACard[] = [
   }
 ];
 
-export default function ContactSection() {
+export default function ContactSection({ dark = true }: { dark?: boolean }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'brief' | null>(null);
+  const [briefHovered, setBriefHovered] = useState(false);
   // Initialize Cal.com embed (EU instance)
   useEffect(() => {
     (async function () {
@@ -562,130 +563,97 @@ export default function ContactSection() {
     setModalType(null);
   }, []);
 
-  const getCardStyles = (bgColor: string) => {
-    switch (bgColor) {
-      case 'light':
-        return 'bg-gradient-to-br from-white/90 to-gray-50/70 border-4 border-white text-black';
-      case 'dark':
-        return 'bg-gradient-to-br from-gray-800/90 to-gray-900/80 border-4 border-gray-600 text-white';
-      default:
-        return 'bg-gradient-to-br from-white/90 to-gray-50/70 border-4 border-white text-black';
-    }
-  };
-
-  const getButtonStyles = (bgColor: string) => {
-    switch (bgColor) {
-      case 'light':
-        return 'bg-black text-white hover:bg-gray-900 focus:ring-2 focus:ring-gray-200';
-      case 'dark':
-        return 'bg-white text-black hover:bg-gray-100 focus:ring-2 focus:ring-gray-800';
-      default:
-        return 'bg-black text-white hover:bg-gray-900';
-    }
-  };
-
-  // Simplified animation variants - only for hover effects
-  const cardVariants = {
-    hover: { 
-      scale: 1.05,
-      transition: { duration: 0.3, ease: "easeOut" }
-    },
-    tap: { 
-      scale: 0.95,
-      transition: { duration: 0.1, ease: "easeOut" }
-    }
-  };
-
   return (
     <>
       <section className="min-h-screen flex items-center justify-center py-20">
         <div className="w-full max-w-7xl mx-auto px-4">
-          {/* Section Title */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h2 className="text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-4xl font-cormorant tracking-tight text-white mb-2 sm:mb-4">
+            <h2 className={`text-ovsia-header-lg-plus sm:text-ovsia-header-xl md:text-ovsia-header-2xl lg:text-ovsia-header-4xl font-cormorant tracking-tight mb-2 sm:mb-4 ${dark ? 'text-white' : 'text-black'}`}>
               Get in Touch
             </h2>
-            <p className="text-ovsia-body-xl text-gray-300 font-light max-w-4xl mx-auto px-4">
+            <p className={`text-ovsia-body-xl font-light max-w-4xl mx-auto px-4 ${dark ? 'text-white' : 'text-black'}`}>
               Ready to create together?
             </p>
           </div>
 
-          {/* Two Cards Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 lg:gap-20 max-w-5xl mx-auto items-center justify-items-center px-4">
-            {ctaCards.map((card) => (
-              <motion.div
-                key={card.id}
-                className={`
-                  flex flex-col justify-center items-center p-10 sm:p-12 lg:p-20
-                  aspect-square rounded-full
-                  ${getCardStyles(card.bgColor)}
-                  backdrop-blur-sm
-                  transition-all duration-300 hover:shadow-xl
-                  cursor-pointer group
-                  w-full h-full max-w-md lg:max-w-lg mx-auto
-                `}
-                variants={cardVariants}
-                whileHover="hover"
-                whileTap="tap"
-                onClick={() => handleCardAction(card)}
-              >
-                <div className="text-center flex flex-col items-center space-y-4 sm:space-y-6">
-                  <h3 className="text-ovsia-header-sm md:text-ovsia-header-base font-cormorant font-bold tracking-tight leading-tight">
-                    {card.title}
-                  </h3>
-                  <p className="text-ovsia-body-base sm:text-ovsia-body-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[240px] sm:max-w-[280px]">
-                    {card.description}
-                  </p>
-                  {card.action === 'cal' ? (
-                    <button
-                      className={`
-                        inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-lg
-                        font-medium text-ovsia-body-base sm:text-ovsia-body-lg transition-all duration-300
-                        focus:outline-none focus:ring-4
-                        ${getButtonStyles(card.bgColor)}
-                        w-auto mx-auto min-h-[44px]
-                      `}
-                      onClick={(e) => e.stopPropagation()}
-                      data-cal-namespace="discovery"
-                      data-cal-link="0usia/discovery"
-                      data-cal-origin="https://app.cal.eu"
-                      data-cal-config='{"layout":"month_view"}'
-                      aria-label={`${card.buttonText} - ${card.description}`}
-                    >
-                      {card.buttonText}
-                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </button>
-                  ) : (
-                    <button
-                      className={`
-                        inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-lg
-                        font-medium text-ovsia-body-base sm:text-ovsia-body-lg transition-all duration-300
-                        focus:outline-none focus:ring-4
-                        ${getButtonStyles(card.bgColor)}
-                        w-auto mx-auto min-h-[44px]
-                      `}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCardAction(card);
-                      }}
-                      aria-label={`${card.buttonText} - ${card.description}`}
-                    >
-                      {card.buttonText}
-                      <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </button>
-                  )}
-                </div>
-              </motion.div>
-            ))}
+            {ctaCards.map((card) => {
+              // When hovering Submit Brief, swap the effective background of both cards
+              const effectiveBg: 'light' | 'dark' = briefHovered
+                ? (card.id === 'brief' ? 'light' : 'dark')
+                : card.bgColor;
+
+              return (
+                <motion.div
+                  key={card.id}
+                  className={`
+                    flex flex-col justify-center items-center p-10 sm:p-12 lg:p-20
+                    aspect-square rounded-full cursor-pointer group
+                    w-full h-full max-w-md lg:max-w-lg mx-auto
+                    transition-all duration-500
+                    ${effectiveBg === 'light'
+                      ? (dark ? 'bg-[#F8F7F5] text-black' : 'bg-black text-white')
+                      : (dark ? 'border border-white/20 text-[#EDE6DB]' : 'border border-black/15 text-black')}
+                  `}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  onHoverStart={card.id === 'brief' ? () => setBriefHovered(true) : undefined}
+                  onHoverEnd={card.id === 'brief' ? () => setBriefHovered(false) : undefined}
+                  onClick={() => handleCardAction(card)}
+                >
+                  <div className="text-center flex flex-col items-center space-y-5 sm:space-y-7">
+                    <h3 className="text-ovsia-header-sm md:text-ovsia-header-base font-cormorant tracking-tight leading-tight">
+                      {card.title}
+                    </h3>
+                    <p className={`text-ovsia-body-base sm:text-ovsia-body-lg leading-relaxed max-w-[240px] sm:max-w-[280px] transition-colors duration-500 ${
+                      effectiveBg === 'light'
+                        ? (dark ? 'text-black/50' : 'text-white/50')
+                        : (dark ? 'text-[#D8CFC2]' : 'text-black/50')
+                    }`}>
+                      {card.description}
+                    </p>
+                    {card.action === 'cal' ? (
+                      <button
+                        className={`text-[10px] tracking-[0.22em] uppercase pb-0.5 border-b transition-colors duration-500 ${
+                          effectiveBg === 'light'
+                            ? (dark ? 'border-black/25 text-black/50 hover:border-black/60 hover:text-black'
+                                    : 'border-white/25 text-white/50 hover:border-white/60 hover:text-white')
+                            : (dark ? 'border-[#D8CFC2]/30 text-[#D8CFC2]/60 hover:border-[#D8CFC2]/70 hover:text-[#D8CFC2]'
+                                    : 'border-black/25 text-black/50 hover:border-black/60 hover:text-black')
+                        }`}
+                        onClick={(e) => e.stopPropagation()}
+                        data-cal-namespace="discovery"
+                        data-cal-link="0usia/discovery"
+                        data-cal-origin="https://app.cal.eu"
+                        data-cal-config='{"layout":"month_view"}'
+                        aria-label={`${card.buttonText} - ${card.description}`}
+                      >
+                        {card.buttonText}
+                      </button>
+                    ) : (
+                      <button
+                        className={`text-[10px] tracking-[0.22em] uppercase pb-0.5 border-b transition-colors duration-500 ${
+                          effectiveBg === 'light'
+                            ? (dark ? 'border-black/25 text-black/50 hover:border-black/60 hover:text-black'
+                                    : 'border-white/25 text-white/50 hover:border-white/60 hover:text-white')
+                            : (dark ? 'border-[#D8CFC2]/30 text-[#D8CFC2]/60 hover:border-[#D8CFC2]/70 hover:text-[#D8CFC2]'
+                                    : 'border-black/25 text-black/50 hover:border-black/60 hover:text-black')
+                        }`}
+                        onClick={(e) => { e.stopPropagation(); handleCardAction(card); }}
+                        aria-label={`${card.buttonText} - ${card.description}`}
+                      >
+                        {card.buttonText}
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Contact Form Modal */}
       {isModalOpen && <ContactFormModal modalType={modalType} onClose={closeModal} />}
     </>
   );

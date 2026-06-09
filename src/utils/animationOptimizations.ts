@@ -113,11 +113,10 @@ export function createGPUTransform(
  * High-performance spring configuration optimized for 60fps
  */
 export const OPTIMIZED_SPRING_CONFIG = {
-  // Ultra-smooth for hero animations (slower, more cinematic)
   cinematic: {
-    stiffness: 100,
-    damping: 20,
-    mass: 1.2,
+    stiffness: 180,
+    damping: 22,
+    mass: 0.9,
     velocity: 0,
   },
   // Standard smooth for most UI animations

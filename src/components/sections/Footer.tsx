@@ -20,6 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface FooterProps {
   className?: string;
+  dark?: boolean;
 }
 
 // Utility function to get Berlin time
@@ -40,7 +41,7 @@ const getBerlinTime = (): string => {
   }
 };
 
-const Footer: React.FC<FooterProps> = ({ className = '' }) => {
+const Footer: React.FC<FooterProps> = ({ className = '', dark = false }) => {
   const [currentYear] = useState(new Date().getFullYear());
   const [berlinTime, setBerlinTime] = useState<string>('');
   const [mounted, setMounted] = useState(false);
@@ -83,7 +84,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
   return (
     <motion.footer
-      className={`min-h-screen w-full text-black relative px-6 ${className}`}
+      className={`min-h-screen w-full relative px-6 ${dark ? 'text-white' : 'text-black'} ${className}`}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
@@ -102,7 +103,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         >
           <motion.button
             onClick={handleMailClick}
-            className="text-gray-600 hover:text-black transition-colors duration-300 block relative"
+            className={`transition-colors duration-300 block relative ${dark ? 'text-white/40 hover:text-white' : 'text-gray-600 hover:text-black'}`}
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Copy email address"
@@ -128,7 +129,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 exit={{ opacity: 0, y: -5 }}
                 transition={{ duration: 0.3 }}
               >
-                <p className="text-ovsia-body-xs sm:text-ovsia-body-sm font-cormorant text-black">
+                <p className={`text-ovsia-body-xs sm:text-ovsia-body-sm font-cormorant ${dark ? 'text-white' : 'text-black'}`}>
                   address copied
                 </p>
               </motion.div>
@@ -147,7 +148,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             href="https://www.linkedin.com/company/0usia"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-600 hover:text-black transition-colors duration-300 block"
+            className={`transition-colors duration-300 block ${dark ? 'text-white/40 hover:text-white' : 'text-gray-600 hover:text-black'}`}
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Connect with us on LinkedIn"
@@ -187,7 +188,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               }}
             >
               Stay in <span className="relative inline-block">
-                <span className="relative inline-block">O<span className="absolute top-1/2 left-1/2 w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-3 md:h-3 lg:w-4 lg:h-4 bg-black rounded-full transform -translate-x-1/2 -translate-y-1/2"></span></span>usia
+                <span className="relative inline-block">O<span className={`absolute top-1/2 left-1/2 w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-3 md:h-3 lg:w-4 lg:h-4 rounded-full transform -translate-x-1/2 -translate-y-1/2 ${dark ? 'bg-white' : 'bg-black'}`}></span></span>usia
               </span>
             </motion.h2>
           </motion.div>
@@ -214,7 +215,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none mt-1 sm:mt-2 uppercase"
                 style={{ transform: 'translateX(0px)' }}
               >
-                BERLIN
+                Berlin Europa
               </p>
             </motion.div>
           )}
@@ -230,20 +231,20 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
           viewport={{ once: true }}
         >
           <div className="text-center">
-            <p className="text-gray-500 text-ovsia-body-xs sm:text-ovsia-body-sm font-light mb-2">
+            <p className={`text-ovsia-body-xs sm:text-ovsia-body-sm font-light mb-2 ${dark ? 'text-white/25' : 'text-gray-500'}`}>
               © {currentYear} 0usia ⨀
             </p>
             <div className="flex space-x-4 sm:space-x-6 text-ovsia-body-xs">
               <motion.button
                 onClick={() => openModal('privacy')}
-                className="text-gray-500 hover:text-gray-700 transition-colors duration-300 cursor-pointer"
+                className={`transition-colors duration-300 cursor-pointer ${dark ? 'text-white/25 hover:text-white/55' : 'text-gray-500 hover:text-gray-700'}`}
                 whileHover={{ y: -1 }}
               >
                 Privacy
               </motion.button>
               <motion.button
                 onClick={() => openModal('terms')}
-                className="text-gray-500 hover:text-gray-700 transition-colors duration-300 cursor-pointer"
+                className={`transition-colors duration-300 cursor-pointer ${dark ? 'text-white/25 hover:text-white/55' : 'text-gray-500 hover:text-gray-700'}`}
                 whileHover={{ y: -1 }}
               >
                 Terms
@@ -335,7 +336,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                       <strong>Data Use:</strong> Information is used solely to respond to inquiries and provide our services. We do not sell or share personal data with third parties.
                     </p>
                     <p>
-                      <strong>Data Storage:</strong> Data is stored securely in the UK and EU, complying with GDPR requirements.
+                      <strong>Data Storage:</strong> Data is stored securely in the EU, complying with GDPR requirements.
                     </p>
                     <p>
                       <strong>Your Rights:</strong> You may request access, correction, or deletion of your personal data at any time by contacting us.
@@ -352,7 +353,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
               {activeModal === 'terms' && (
                 <>
-                  <motion.h3 
+                  <motion.h3
                     className="text-ovsia-body-xl font-cormorant text-black mb-4 tracking-tight pr-8"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -360,7 +361,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                   >
                     Terms of Service
                   </motion.h3>
-                  
+
                   <motion.div
                     className="text-ovsia-body-xs text-gray-700 leading-relaxed space-y-3"
                     initial={{ opacity: 0, y: 10 }}
@@ -368,22 +369,22 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                     transition={{ delay: 0.15 }}
                   >
                     <p>
-                      <strong>Service Provision:</strong> 0usia provides venture studio and consulting services as described on this website.
+                      <strong>Services:</strong> 0usia provides venture-building, strategy, communication, and operations services. Submitting an enquiry or booking a call does not constitute a binding contract.
                     </p>
                     <p>
-                      <strong>Intellectual Property:</strong> All content on this website is owned by 0usia or used with permission. Unauthorized use is prohibited.
+                      <strong>Intellectual Property:</strong> All works created by 0usia remain our intellectual property unless expressly transferred or licensed in a written engagement agreement. No rights pass by implication or by payment alone.
                     </p>
                     <p>
-                      <strong>Limitation of Liability:</strong> Services are provided "as is." 0usia is not liable for indirect or consequential damages.
+                      <strong>Liability:</strong> Our liability is limited to fees paid in the preceding 3 months. We are not liable for indirect or consequential damages.
                     </p>
                     <p>
-                      <strong>Governing Law:</strong> These terms are governed by UK law. Disputes will be resolved in UK courts.
+                      <strong>Governing Law:</strong> These terms are governed by Polish law. Disputes are subject to the jurisdiction of Polish courts.
                     </p>
                     <p>
-                      <strong>Contact:</strong> For terms inquiries, email contact@0usia.com
+                      <strong>Contact:</strong> hello@0usia.com
                     </p>
                     <p className="text-ovsia-body-xs text-gray-500 mt-4">
-                      Last updated: {new Date().toLocaleDateString()}
+                      Full terms at <a href="/terms" className="underline hover:text-gray-900">0usia.com/terms</a> · Last updated: 9 June 2025
                     </p>
                   </motion.div>
                 </>

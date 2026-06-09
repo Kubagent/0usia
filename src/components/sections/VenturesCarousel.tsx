@@ -26,7 +26,7 @@ const venturesData: Venture[] = [
   {
     id: 'libelo',
     name: 'Libelo',
-    tagline: 'Nature Exploration App',
+    tagline: 'the nature platform',
     logoUrl: '/venture-logos/libelo.png',
     websiteUrl: 'https://libelo.app',
     description: 'Empowering you on adventures into the wild',
@@ -46,7 +46,7 @@ const venturesData: Venture[] = [
   {
     id: 'fix',
     name: 'Fix',
-    tagline: 'Maintenance Services Marketplace',
+    tagline: 'maintenance service marketplace',
     logoUrl: '/venture-logos/fix.png',
     websiteUrl: 'https://fix-platform.com',
     description: 'Connecting facility management professionals with customers as smoothly as Uber gets you rides',
@@ -68,7 +68,7 @@ const venturesData: Venture[] = [
   {
     id: 'violca',
     name: 'Violca',
-    tagline: 'Cycling Gear & Adventures',
+    tagline: 'cycling apparel and adventures',
     logoUrl: '/venture-logos/violca.png',
     websiteUrl: 'https://violca.com',
     description: 'Ecommerce in cycling gear, to prepare you for cycling adventures to get to know oneself',
@@ -88,7 +88,7 @@ const venturesData: Venture[] = [
   {
     id: 'substans',
     name: 'Substans',
-    tagline: 'Art Institution',
+    tagline: 'arts-performance collective berlin',
     logoUrl: '/venture-logos/substans.png',
     websiteUrl: 'https://www.substans.art',
     description: 'Institution of art for the furtherment of what really matters – the substance',
@@ -108,7 +108,7 @@ const venturesData: Venture[] = [
   {
     id: 'objects-gallery',
     name: 'Objects Gallery',
-    tagline: 'Curated Design Collection',
+    tagline: 'curated design collection',
     logoUrl: '/venture-logos/objectsgallery.png',
     websiteUrl: 'https://objectsgallery.com',
     description: 'Discovering exceptional design objects',
@@ -129,7 +129,7 @@ const venturesData: Venture[] = [
   {
     id: 'wojcistics',
     name: 'Wojcistics',
-    tagline: 'Logistics Tech Distribution',
+    tagline: 'land transport innovations',
     logoUrl: '/venture-logos/wojcistics.png',
     websiteUrl: 'https://wojcistics.com',
     description: 'Land transport innovative machine/vehicle distribution company',
@@ -150,7 +150,7 @@ const venturesData: Venture[] = [
   {
     id: 'dominik-lejman',
     name: 'Dominik Lejman',
-    tagline: 'Artist Portfolio',
+    tagline: 'time-based painting',
     logoUrl: '/venture-logos/dl_logo.png',
     websiteUrl: 'https://dlejman.com/',
     description: 'Portfolio of contemporary artist Dominik Lejman',
@@ -164,6 +164,25 @@ const venturesData: Venture[] = [
         'Business Model: Artist Portfolio',
         'USP: Contemporary art practice',
         'Focus: Visual arts and exhibitions',
+      ],
+    },
+  },
+  {
+    id: 'chokosol',
+    name: 'ChokoSol',
+    tagline: 'pure choko love',
+    logoUrl: '/venture-logos/SchokoSol.png',
+    websiteUrl: 'https://chokosol.com',
+    description: 'Small-batch artisan chocolate, crafted with intention',
+    status: 'active',
+    popupContent: {
+      title: 'ChokoSol',
+      description: 'Small-batch artisan chocolate experience.',
+      details: [
+        'Industry: Food & Beverage / Artisan',
+        'Business Model: Direct-to-Consumer (B2C)',
+        'USP: Small-batch, intentional craft chocolate',
+        'Focus: Artisan chocolate production',
       ],
     },
   },
@@ -227,7 +246,13 @@ function StatusTag({ status, className = '' }: StatusTagProps) {
   );
 }
 
-export default function VenturesCarousel() {
+export default function VenturesCarousel({
+  onTogglePraxis,
+  praxisOpen = false,
+}: {
+  onTogglePraxis?: () => void;
+  praxisOpen?: boolean;
+}) {
   // Start with Substans (now at index 0)
   const [currentIndex, setCurrentIndex] = useState(0);
   // Auto-play is now always enabled - removed toggle functionality
@@ -456,7 +481,7 @@ export default function VenturesCarousel() {
               usia
             </span>
           </h2>
-          <p className='text-ovsia-body-xl text-gray-700 font-light max-w-2xl mx-auto px-4'>
+          <p className='text-ovsia-body-xl text-black font-light max-w-2xl mx-auto px-4'>
             Ventures we brought to life
           </p>
         </motion.div>
@@ -570,6 +595,8 @@ export default function VenturesCarousel() {
                         ? 'w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48'
                         : prev.id === 'objects-gallery'
                         ? 'w-20 h-20 sm:w-24 sm:h-24 md:w-30 md:h-30'
+                        : prev.id === 'chokosol'
+                        ? 'w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36'
                         : 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24'
                     }`}
                   />
@@ -614,6 +641,8 @@ export default function VenturesCarousel() {
                           ? 'w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80'
                           : current.id === 'objects-gallery'
                           ? 'w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-52 xl:h-52'
+                          : current.id === 'chokosol'
+                          ? 'w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 lg:w-68 lg:h-68 xl:w-72 xl:h-72'
                           : 'w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40'
                       }`}
                     />
@@ -771,6 +800,8 @@ export default function VenturesCarousel() {
                         ? 'w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48'
                         : next.id === 'objects-gallery'
                         ? 'w-20 h-20 sm:w-24 sm:h-24 md:w-30 md:h-30'
+                        : next.id === 'chokosol'
+                        ? 'w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28'
                         : 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24'
                     }`}
                   />
@@ -817,6 +848,36 @@ export default function VenturesCarousel() {
                 />
               ))}
             </motion.div>
+          </motion.div>
+        )}
+
+        {/* Praxis toggle */}
+        {onTogglePraxis && (
+          <motion.div
+            className="flex justify-center mt-16"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <button
+              onClick={onTogglePraxis}
+              className="flex flex-col items-center gap-3 group"
+              aria-label={praxisOpen ? 'Collapse Praxis section' : 'Expand Praxis section'}
+            >
+              <span className="font-cormorant font-light text-base tracking-[0.28em] uppercase text-black/55 group-hover:text-black/85 transition-colors duration-300">
+                Praxis
+              </span>
+              <motion.div
+                animate={{ rotate: praxisOpen ? 180 : 0 }}
+                transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
+                className="text-black/45 group-hover:text-black/75 transition-colors duration-300"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </motion.div>
+            </button>
           </motion.div>
         )}
 
@@ -890,6 +951,8 @@ export default function VenturesCarousel() {
                         className={`object-contain mx-auto ${
                           venture.id === 'objects-gallery'
                             ? 'w-24 h-24 sm:w-30 sm:h-30'
+                            : venture.id === 'chokosol'
+                            ? 'w-20 h-20 sm:w-24 sm:h-24'
                             : 'w-20 h-20 sm:w-24 sm:h-24'
                         }`}
                       />
