@@ -22,8 +22,8 @@ const SITE_DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: '0usia Vision Studio',
-    template: '%s | 0usia',
+    default: '⊙usia for you',
+    template: '%s | ⊙usia',
   },
   description: SITE_DESCRIPTION,
   keywords: [
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     apple: '/0usia_black.png',
   },
   openGraph: {
-    title: '0usia Vision Studio',
+    title: '⊙usia Vision Studio',
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: '0usia',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '0usia Vision Studio',
+    title: '⊙usia Vision Studio',
     description: SITE_DESCRIPTION,
     images: ['/0usia_black.png'],
   },
