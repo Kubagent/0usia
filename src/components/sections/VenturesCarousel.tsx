@@ -439,7 +439,7 @@ export default function VenturesCarousel({
   );
 
   return (
-    <section className='relative min-h-screen flex items-center justify-center py-20'>
+    <section className='relative min-h-screen flex items-center justify-center py-12 md:py-20'>
       {/* Fixed navigation button styles */}
       <style jsx>{`
         .fixed-nav-button {
@@ -461,7 +461,7 @@ export default function VenturesCarousel({
       <div className='max-w-7xl mx-auto px-6 w-full'>
         {/* Section Title - Updated for white background */}
         <motion.div
-          className='text-center mb-8 sm:mb-12 md:mb-16'
+          className='text-center mb-4 sm:mb-12 md:mb-16'
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -556,7 +556,7 @@ export default function VenturesCarousel({
             </button>
 
             {/* Ventures Display */}
-            <div className='flex items-center justify-center sm:justify-between max-w-6xl mx-auto py-8 sm:py-10 md:py-12 px-2 sm:px-4 md:px-0'>
+            <div className='flex items-center justify-center sm:justify-between max-w-6xl mx-auto py-4 sm:py-10 md:py-12 px-2 sm:px-4 md:px-0'>
               {/* Previous Venture - Left Side */}
               <motion.div
                 key={`prev-${prevIndex}`}
@@ -618,7 +618,7 @@ export default function VenturesCarousel({
                 <div className='relative'>
                   {/* Logo Container with clipPath */}
                   <div
-                    className='w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 aspect-square mx-auto mb-6 sm:mb-8 flex items-center justify-center transition-all duration-300 p-4 sm:p-6 md:p-8 lg:p-10 relative shadow-lg transform group-hover:scale-105 overflow-hidden'
+                    className='w-28 h-28 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 aspect-square mx-auto mb-3 sm:mb-8 flex items-center justify-center transition-all duration-300 p-3 sm:p-6 md:p-8 lg:p-10 relative shadow-lg transform group-hover:scale-105 overflow-hidden'
                     style={{
                       clipPath:
                         'polygon(50% 0%, 75% 6.7%, 93.3% 25%, 100% 50%, 93.3% 75%, 75% 93.3%, 50% 100%, 25% 93.3%, 6.7% 75%, 0% 50%, 6.7% 25%, 25% 6.7%)',
@@ -807,7 +807,7 @@ export default function VenturesCarousel({
 
             {/* Progress Indicators - Updated for white background */}
             <motion.div
-              className='flex justify-center space-x-2 mt-8'
+              className='flex justify-center space-x-2 mt-4 md:mt-8'
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -850,7 +850,7 @@ export default function VenturesCarousel({
         {/* Praxis toggle */}
         {onTogglePraxis && (
           <motion.div
-            className="flex justify-center mt-16"
+            className="flex justify-center mt-8 md:mt-16"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}

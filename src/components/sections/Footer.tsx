@@ -212,7 +212,7 @@ const Footer: React.FC<FooterProps> = ({ className = '', dark = false }) => {
 
               {/* Cities - Below Clock */}
               <p
-                className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none mt-4 sm:mt-5 uppercase text-center"
+                className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none mt-8 sm:mt-12 md:mt-16 uppercase text-center"
               >
                 Berlin Europa
               </p>

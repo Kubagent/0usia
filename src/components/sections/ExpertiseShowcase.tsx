@@ -240,15 +240,18 @@ function DotTrack({
 
 function MobileGrid({ onActivate }: { onActivate: (id: string) => void }) {
   return (
-    <div className="relative flex flex-col items-center">
-      {/* Vertical connecting line */}
+    <div className="relative flex flex-col items-stretch w-full">
+      {/* Vertical connecting line — sits at the true horizontal center */}
       <div className="absolute left-1/2 top-3 bottom-3 w-px bg-white/12 -translate-x-1/2 pointer-events-none" />
       {domains.map((d, i) => (
         <button
           key={d.id}
-          className="relative flex items-center gap-6 py-7 w-48"
+          className="relative flex items-center py-6 w-full"
           onClick={() => onActivate(d.id)}
         >
+          {/* Left spacer — mirrors the text side so the dot lands at center */}
+          <div className="flex-1" />
+          {/* Dot — always at horizontal center */}
           <div className="relative flex items-center justify-center w-3.5 h-3.5 flex-shrink-0">
             <motion.div
               className="absolute inset-0 rounded-full bg-white/20 pointer-events-none"
@@ -257,7 +260,10 @@ function MobileGrid({ onActivate }: { onActivate: (id: string) => void }) {
             />
             <div className="w-3.5 h-3.5 rounded-full bg-white border border-white/30 relative z-10" />
           </div>
-          <p className="font-cormorant font-light text-white/55 text-base tracking-widest">{d.name}</p>
+          {/* Text — takes right half, left-aligned off the dot */}
+          <div className="flex-1 pl-5 text-left">
+            <p className="font-cormorant font-light text-white/55 text-base tracking-widest">{d.name}</p>
+          </div>
         </button>
       ))}
     </div>
