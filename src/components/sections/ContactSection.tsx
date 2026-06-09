@@ -108,7 +108,7 @@ function ContactFormModal({ modalType, onClose }: ContactFormModalProps) {
             const base64Data = result.split(',')[1];
             resolve(base64Data);
           };
-          reader.onerror = (error) => reject(error);
+          reader.onerror = () => reject(new Error(reader.error?.message ?? 'Failed to read file'));
         });
       };
 

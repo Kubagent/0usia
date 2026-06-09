@@ -9,7 +9,7 @@ interface Venture {
   name: string;
   tagline: string;
   logoUrl: string;
-  websiteUrl: string;
+  websiteUrl?: string;
   description?: string;
   inactive?: boolean;
   acquired?: boolean;
@@ -70,9 +70,6 @@ const venturesData: Venture[] = [
     name: 'Violca',
     tagline: 'cycling apparel and adventures',
     logoUrl: '/venture-logos/violca.png',
-    websiteUrl: 'https://violca.com',
-    description: 'Ecommerce in cycling gear, to prepare you for cycling adventures to get to know oneself',
-    status: 'active',
     popupContent: {
       title: 'Violca',
       description:
@@ -360,8 +357,7 @@ export default function VenturesCarousel({
       if (venture.inactive && venture.popupContent) {
         // If clicking current venture and it's inactive, show popup
         setActivePopup(venture.id);
-      } else {
-        // If clicking current venture and it's active, navigate to website
+      } else if (venture.websiteUrl) {
         const link = document.createElement('a');
         link.href = venture.websiteUrl;
         link.target = '_blank';

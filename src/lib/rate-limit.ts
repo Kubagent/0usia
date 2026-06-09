@@ -13,7 +13,6 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { appConfig } from './env-config';
 
 // Rate limit store interface
 interface RateLimitStore {
