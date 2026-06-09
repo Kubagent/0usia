@@ -204,7 +204,7 @@ const Footer: React.FC<FooterProps> = ({ className = '', dark = false }) => {
             >
               {/* Clock - Above Cities */}
               <p
-                className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none tabular-nums"
+                className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none tabular-nums text-center"
                 aria-label={`Current time: ${berlinTime}`}
               >
                 {berlinTime}
@@ -212,8 +212,7 @@ const Footer: React.FC<FooterProps> = ({ className = '', dark = false }) => {
 
               {/* Cities - Below Clock */}
               <p
-                className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none mt-1 sm:mt-2 uppercase"
-                style={{ transform: 'translateX(0px)' }}
+                className="text-ovsia-header-xl sm:text-ovsia-header-2xl md:text-ovsia-header-3xl font-cormorant tracking-tight leading-none mt-4 sm:mt-5 uppercase text-center"
               >
                 Berlin Europa
               </p>
